@@ -15,7 +15,6 @@ test.describe("Animations", () => {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
     for (const name of [
-      /L’art\s*du regard/,
       /Je suis Alessia/,
       /Sur mesure\s*pour votre regard/,
       /Les regards/,

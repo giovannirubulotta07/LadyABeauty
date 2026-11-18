@@ -6,7 +6,7 @@ type Variant = "primary" | "light" | "outline" | "outline-light";
 type Size = "md" | "lg";
 
 const base =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-control px-6 text-center font-sans text-[0.8125rem] font-medium uppercase tracking-[0.16em] transition-colors duration-300 disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-pill px-6 text-center font-sans text-[0.8125rem] font-medium uppercase tracking-[0.16em] transition-colors duration-300 disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
   primary: "bg-espresso-900 text-ivory hover:bg-caramel-700",

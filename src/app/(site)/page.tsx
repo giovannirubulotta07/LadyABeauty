@@ -28,20 +28,23 @@ function Shell({
 }: {
   id?: string;
   label?: string;
-  tone?: "espresso" | "mocha" | "deep";
+  /** Dark tones for the editorial story, light ones for practical information. */
+  tone?: "espresso" | "mocha" | "deep" | "sand" | "ivory";
   className?: string;
   children: ReactNode;
 }) {
-  const bg = {
-    espresso: "bg-espresso-900",
-    mocha: "bg-mocha",
-    deep: "bg-espresso-950",
+  const look = {
+    espresso: "surface-dark bg-espresso-900 text-ivory",
+    mocha: "surface-dark bg-mocha text-ivory",
+    deep: "surface-dark bg-espresso-950 text-ivory",
+    sand: "bg-sand-100 text-ink",
+    ivory: "bg-ivory text-ink",
   }[tone];
   return (
     <section
       id={id}
       aria-label={label}
-      className={`surface-dark relative overflow-hidden ${bg} text-ivory ${className}`}
+      className={`relative overflow-hidden ${look} ${className}`}
     >
       {children}
     </section>
@@ -173,11 +176,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 3 · Manifesto -------------------------------------------------------- */}
+      {/* 3 · L’esprit du studio: quote and two real photos -------------- */}
       <Shell tone="mocha" label="L’esprit du studio">
-        <div className={`${wrap} py-28 text-center sm:py-40`}>
-          <p className="label text-sand-100">L’esprit du studio</p>
-          <blockquote className="mx-auto mt-10 max-w-5xl">
+        <div className={`${wrap} py-24 sm:py-36`}>
+          <p className="label text-center text-sand-100">L’esprit du studio</p>
+          <blockquote className="mx-auto mt-10 max-w-5xl text-center">
             <p
               data-reveal="lines"
               className="font-display text-quote text-ivory"
@@ -193,58 +196,42 @@ export default async function HomePage() {
               Alessia
             </footer>
           </blockquote>
-        </div>
-      </Shell>
-
-      {/* 4 · Parallax collage -------------------------------------------------- */}
-      <Shell tone="mocha" label="L’art du regard" className="min-h-[115svh]">
-        {gallery[5] ? (
-          <div
-            className="absolute top-[9%] right-[6%] w-[36vw] sm:w-[19vw]"
-            data-parallax="0.6"
-          >
-            <div
-              data-reveal="mask"
-              className="relative aspect-[4/5] overflow-hidden"
-            >
-              <Image
-                src="/editorial/regard-06-editorial.jpg"
-                alt={gallery[5].alt}
-                fill
-                sizes="(min-width: 640px) 19vw, 36vw"
-                className="object-cover"
-              />
+          {gallery[2] && gallery[5] ? (
+            <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 items-start gap-4 sm:mt-24 sm:gap-10">
+              {[
+                {
+                  src: "/editorial/regard-03-editorial.jpg",
+                  alt: gallery[2].alt,
+                  position: "object-[55%_50%]",
+                },
+                {
+                  src: "/editorial/regard-06-editorial.jpg",
+                  alt: gallery[5].alt,
+                  position: "object-[52%_32%]",
+                },
+              ].map((photo, i) => (
+                <div
+                  key={photo.src}
+                  className={i === 1 ? "mt-12 sm:mt-24" : ""}
+                  data-parallax={i === 1 ? "0.2" : undefined}
+                >
+                  <div
+                    data-reveal="mask"
+                    data-delay={i * 0.12}
+                    className="relative aspect-[4/5] overflow-hidden"
+                  >
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      fill
+                      sizes="(min-width: 896px) 26rem, 46vw"
+                      className={`object-cover ${photo.position}`}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-        ) : null}
-        {gallery[2] ? (
-          <div
-            className="absolute bottom-[12%] left-[6%] w-[34vw] sm:w-[17vw]"
-            data-parallax="0.35"
-          >
-            <div
-              data-reveal="mask"
-              className="relative aspect-[3/4] overflow-hidden"
-            >
-              <Image
-                src="/editorial/regard-03-editorial.jpg"
-                alt={gallery[2].alt}
-                fill
-                sizes="(min-width: 640px) 17vw, 34vw"
-                className="object-cover"
-              />
-            </div>
-          </div>
-        ) : null}
-        <div className="relative flex min-h-[115svh] items-center justify-center px-gutter text-center">
-          <h2
-            data-reveal="lines"
-            className="font-sans text-headline font-light tracking-[0.04em] text-ivory uppercase"
-          >
-            L’art
-            <br />
-            du regard
-          </h2>
+          ) : null}
         </div>
       </Shell>
 
@@ -316,11 +303,9 @@ export default async function HomePage() {
               <p className="label text-sand-100">Prestations</p>
               <h2
                 data-reveal="lines"
-                className="mt-6 font-sans text-headline font-light tracking-[0.04em] text-ivory uppercase"
+                className="mt-6 max-w-3xl font-display text-[clamp(3rem,7vw,6rem)] leading-[0.95] text-ivory"
               >
-                Sur mesure
-                <br />
-                pour votre regard
+                Sur mesure pour votre regard
               </h2>
             </div>
             <Link
@@ -365,7 +350,13 @@ export default async function HomePage() {
               Voir la galerie
             </Link>
           </div>
-          <ul className="-mx-gutter mt-16 flex snap-x snap-mandatory gap-4 overflow-x-auto px-gutter pb-4 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-8 sm:overflow-visible sm:px-0">
+          <p
+            aria-hidden="true"
+            className="mt-12 text-xs tracking-[0.2em] text-sand-100/80 uppercase sm:hidden"
+          >
+            Faites glisser →
+          </p>
+          <ul className="-mx-gutter mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-gutter pb-4 sm:mx-0 sm:mt-16 sm:grid sm:grid-cols-3 sm:gap-8 sm:overflow-visible sm:px-0">
             {gallery.slice(0, 3).map((img, i) => (
               <li
                 key={img.id}
@@ -392,37 +383,37 @@ export default async function HomePage() {
       </Shell>
 
       {/* 8 · FAQ -------------------------------------------------------------- */}
-      <Shell tone="mocha" label="Questions fréquentes">
+      <Shell tone="sand" label="Questions fréquentes">
         <div
           className={`${wrap} grid gap-14 py-28 sm:py-36 lg:grid-cols-[1fr_1.4fr]`}
         >
           <div>
-            <p className="label text-sand-100">Bon à savoir</p>
+            <p className="label text-caramel-700">Bon à savoir</p>
             <h2
               data-reveal="lines"
-              className="mt-6 font-display text-[clamp(2.6rem,5vw,4.5rem)] leading-[1] text-ivory"
+              className="mt-6 font-display text-[clamp(2.6rem,5vw,4.5rem)] leading-[1] text-espresso-900"
             >
               Questions fréquentes
             </h2>
           </div>
-          <div className="border-t border-ivory/20">
+          <div className="border-t border-espresso-900/15">
             {faq.map((item, i) => (
               <details
                 key={item.q}
-                className="group border-b border-ivory/20"
+                className="group border-b border-espresso-900/15"
                 data-reveal="fade"
                 data-delay={i * 0.05}
               >
-                <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 text-left font-sans text-sm tracking-[0.14em] text-ivory uppercase [&::-webkit-details-marker]:hidden">
+                <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 text-left font-display text-xl text-espresso-900 sm:text-2xl [&::-webkit-details-marker]:hidden">
                   {item.q}
                   <span
                     aria-hidden="true"
-                    className="text-xl font-light transition-transform duration-500 group-open:rotate-45"
+                    className="font-sans text-2xl font-light text-caramel-700 transition-transform duration-500 group-open:rotate-45"
                   >
                     +
                   </span>
                 </summary>
-                <p className="max-w-2xl pb-7 leading-relaxed text-sand-100">
+                <p className="max-w-2xl pb-7 leading-relaxed text-espresso-700">
                   {item.a}
                 </p>
               </details>
@@ -434,53 +425,58 @@ export default async function HomePage() {
       {/* 9 · Studio ----------------------------------------------------------- */}
       <Shell
         id="studio"
-        tone="espresso"
+        tone="ivory"
         label="Le studio"
-        className="scroll-mt-16"
+        className="scroll-mt-16 border-t border-espresso-900/10"
       >
         <div>
-          <div className={`${wrap} flex flex-col py-24 sm:py-32`}>
-            <p className="label text-sand-100">Le studio</p>
-            <h2
-              data-reveal="lines"
-              className="mt-6 font-display text-[clamp(2.6rem,5vw,4.5rem)] leading-[1] text-ivory"
-            >
-              Venir au studio
-            </h2>
-            <address
-              data-reveal="fade"
-              className="mt-10 text-xl leading-relaxed text-ivory not-italic"
-            >
-              {addressLines(business.address).map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
-            </address>
-            <div data-reveal="fade" data-delay="0.1" className="mt-10 max-w-md">
-              <OpeningHoursList hours={hours} tone="dark" />
-            </div>
-            <div
-              data-reveal="fade"
-              data-delay="0.2"
-              className="mt-10 flex flex-wrap gap-x-8 gap-y-2 text-sm tracking-[0.2em] uppercase"
-            >
-              <a
-                href={mapsUrl(business.name, business.address)}
-                rel="noopener"
-                className="inline-flex min-h-11 items-center link-underline text-ivory"
+          <div
+            className={`${wrap} grid gap-12 py-24 sm:py-32 lg:grid-cols-[1fr_1fr] lg:gap-24`}
+          >
+            <div>
+              <p className="label text-caramel-700">Le studio</p>
+              <h2
+                data-reveal="lines"
+                className="mt-6 font-display text-[clamp(2.6rem,5vw,4.5rem)] leading-[1] text-espresso-900"
               >
-                Itinéraire
-              </a>
-              {business.instagramUrl ? (
+                Venir au studio
+              </h2>
+              <address
+                data-reveal="fade"
+                className="mt-10 text-xl leading-relaxed text-espresso-900 not-italic"
+              >
+                {addressLines(business.address).map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+              </address>
+              <div
+                data-reveal="fade"
+                data-delay="0.2"
+                className="mt-8 flex flex-wrap gap-x-8 gap-y-2 text-sm tracking-[0.2em] uppercase"
+              >
                 <a
-                  href={business.instagramUrl}
+                  href={mapsUrl(business.name, business.address)}
                   rel="noopener"
-                  className="inline-flex min-h-11 items-center link-underline text-ivory"
+                  className="inline-flex min-h-11 items-center link-underline text-espresso-900"
                 >
-                  {instagramHandle(business.instagramUrl)}
+                  Itinéraire
                 </a>
-              ) : null}
+                {business.instagramUrl ? (
+                  <a
+                    href={business.instagramUrl}
+                    rel="noopener"
+                    className="inline-flex min-h-11 items-center link-underline text-espresso-900"
+                  >
+                    {instagramHandle(business.instagramUrl)}
+                  </a>
+                ) : null}
+              </div>
+            </div>
+            <div data-reveal="fade" data-delay="0.1" className="lg:pt-24">
+              <h3 className="label text-caramel-700">Horaires</h3>
+              <OpeningHoursList hours={hours} className="mt-4 text-lg" />
             </div>
           </div>
         </div>

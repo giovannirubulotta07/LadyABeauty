@@ -15,7 +15,6 @@ test.describe("Accueil", () => {
     await expect(cta).toHaveAttribute("href", "/reserver");
 
     for (const section of [
-      /L’art\s*du regard/,
       /Je suis Alessia/,
       /Sur mesure\s*pour votre regard/,
       /Les regards/,

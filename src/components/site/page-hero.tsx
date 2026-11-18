@@ -17,7 +17,7 @@ export function PageHero({
     >
       <div className="relative mx-auto w-full max-w-[90rem] px-gutter pt-40 pb-20 sm:px-8 sm:pt-48 sm:pb-28">
         <p className="hero-fade label text-sand-100">{label}</p>
-        <h1 className="mt-6 font-sans text-headline font-light tracking-[0.04em] text-ivory uppercase">
+        <h1 className="mt-6 font-display text-[clamp(3.2rem,9vw,7.5rem)] leading-[0.95] text-ivory">
           <span className="hero-line">
             <span>{title}</span>
           </span>

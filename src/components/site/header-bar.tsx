@@ -30,7 +30,7 @@ export function HeaderBar({
   return (
     <header
       ref={ref}
-      className="site-header surface-dark sticky inset-x-0 top-0 z-40 border-b border-ivory/10 bg-espresso-950/85 text-ivory backdrop-blur-md transition-[background-color,border-color,backdrop-filter] duration-500"
+      className="site-header surface-dark sticky inset-x-0 top-0 z-40 border-b border-ivory/10 bg-espresso-950 text-ivory backdrop-blur-md transition-[background-color,border-color,backdrop-filter] duration-500"
     >
       <div className="mx-auto grid h-16 max-w-[90rem] grid-cols-[1fr_auto_1fr] items-center gap-4 px-gutter sm:px-8 lg:h-20">
         <div className="justify-self-start">{menu}</div>

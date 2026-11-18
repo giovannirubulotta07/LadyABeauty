@@ -171,3 +171,8 @@ html.lenis body {
     scroll-behavior: auto !important;
   }
 }
+
+/* The home page shows address and hours in « Venir au studio »: no repeat in the footer. */
+body:has(#studio) .footer-info {
+  display: none;
+}

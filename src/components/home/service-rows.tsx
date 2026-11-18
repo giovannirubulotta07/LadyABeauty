@@ -71,7 +71,7 @@ export function ServiceRows({ rows }: { rows: ServiceRow[] }) {
               onPointerEnter={() => setActive(i)}
               className="group grid grid-cols-[1fr_auto] items-baseline gap-4 py-7 transition-colors duration-500 sm:grid-cols-[1fr_auto_auto] sm:py-9"
             >
-              <span className="font-sans text-[clamp(1.5rem,4vw,3.25rem)] leading-tight font-light tracking-wide text-ivory uppercase transition-transform duration-700 ease-[var(--ease-expo)] group-hover:translate-x-3">
+              <span className="font-display text-[clamp(1.75rem,4.5vw,3.5rem)] leading-tight text-ivory transition-transform duration-700 ease-[var(--ease-expo)] group-hover:translate-x-3">
                 {row.name}
               </span>
               <span className="hidden text-sm text-sand-100 sm:block">

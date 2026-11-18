@@ -47,7 +47,7 @@ export default async function PrestationsPage() {
                   >
                     <details className="group">
                       <summary className="grid min-h-20 cursor-pointer list-none grid-cols-[1fr_auto] items-baseline gap-4 py-7 sm:grid-cols-[1fr_auto_auto] [&::-webkit-details-marker]:hidden">
-                        <h2 className="font-sans text-[clamp(1.35rem,3.2vw,2.6rem)] leading-tight font-light tracking-wide text-ivory uppercase">
+                        <h2 className="font-display text-[clamp(1.6rem,3.6vw,3rem)] leading-tight text-ivory">
                           {service.name}
                         </h2>
                         <span className="hidden text-sm text-sand-100 sm:block">

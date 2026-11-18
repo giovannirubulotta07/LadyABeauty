@@ -53,37 +53,42 @@ export async function Footer() {
         </Container>
       </section>
 
-      <Container className="grid max-w-[90rem] gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
+      {/* Practical details. The home page already shows them in « Venir au
+          studio », so they are hidden there (globals.css: .footer-info). */}
+      <Container className="grid max-w-[90rem] gap-x-12 gap-y-10 py-14 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.4fr]">
+        <div className="footer-info">
           <h2 className="label text-sand-100/80">Le studio</h2>
-          <address className="mt-5 leading-relaxed text-ivory not-italic">
-            {addressLines(business.address).map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+          <address className="mt-4 leading-relaxed text-ivory not-italic">
+            {addressLines(business.address).join(", ")}
           </address>
-          <a
-            href={mapsUrl(business.name, business.address)}
-            className={`${link} text-sm`}
-            rel="noopener"
-          >
-            Itinéraire
-          </a>
+          <div className="mt-1 flex flex-wrap gap-x-6 text-sm">
+            <a
+              href={mapsUrl(business.name, business.address)}
+              className={link}
+              rel="noopener"
+            >
+              Itinéraire
+            </a>
+            {business.instagramUrl ? (
+              <a href={business.instagramUrl} className={link} rel="noopener">
+                {instagramHandle(business.instagramUrl)}
+              </a>
+            ) : null}
+          </div>
         </div>
 
-        <div>
+        <div className="footer-info">
           <h2 className="label text-sand-100/80">Horaires</h2>
           <OpeningHoursList
             hours={hours}
             tone="dark"
-            className="mt-3 text-sm"
+            className="mt-2 text-sm"
           />
         </div>
 
         <nav aria-label="Liens du pied de page">
           <h2 className="label text-sand-100/80">Navigation</h2>
-          <ul className="mt-3 text-sm">
+          <ul className="mt-2 grid grid-cols-2 gap-x-6 text-sm">
             {[BOOKING_LINK, ...MAIN_NAV, ACCOUNT_LINK].map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className={link}>
@@ -93,20 +98,6 @@ export async function Footer() {
             ))}
           </ul>
         </nav>
-
-        <div>
-          <h2 className="label text-sand-100/80">Suivre</h2>
-          {business.instagramUrl ? (
-            <a
-              href={business.instagramUrl}
-              className={`${link} mt-3 text-sm`}
-              rel="noopener"
-            >
-              {instagramHandle(business.instagramUrl)}
-            </a>
-          ) : null}
-          <p className="mt-6 text-sm leading-relaxed">{business.tagline}</p>
-        </div>
       </Container>
 
       <div className="border-t border-ivory/10">
