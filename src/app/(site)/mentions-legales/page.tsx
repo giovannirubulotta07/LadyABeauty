@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { LegalPage } from "@/components/legal/legal-page";
 import { addressLines } from "@/lib/address";
 import { getBusinessInfo } from "@/server/content/queries";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Mentions légales",
-  alternates: { canonical: "/mentions-legales" },
-};
+  description:
+    "Mentions légales du site Lady A Beauty : éditrice, immatriculation, hébergement et propriété intellectuelle.",
+  path: "/mentions-legales",
+});
 
 /** "98404011300016" → "984 040 113 00016" */
 const formatSiret = (siret: string) =>

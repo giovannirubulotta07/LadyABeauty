@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { LegalPage } from "@/components/legal/legal-page";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Cookies",
   description:
-    "Lady A Beauty n'utilise que des cookies techniques nécessaires.",
-  alternates: { canonical: "/cookies" },
-};
+    "Lady A Beauty n’utilise que des cookies techniques nécessaires au fonctionnement du site : pas de publicité, pas de suivi.",
+  path: "/cookies",
+});
 
 export default function CookiesPage() {
   return (

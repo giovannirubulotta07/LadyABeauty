@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { LegalPage } from "@/components/legal/legal-page";
 import { addressLines } from "@/lib/address";
 import { getBusinessInfo } from "@/server/content/queries";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Politique de confidentialité",
-  description: "Comment Lady A Beauty traite vos données personnelles (RGPD).",
-  alternates: { canonical: "/confidentialite" },
-};
+  description:
+    "Comment Lady A Beauty traite vos données personnelles : finalités, durées de conservation et vos droits (RGPD).",
+  path: "/confidentialite",
+});
 
 export default async function ConfidentialitePage() {
   const business = await getBusinessInfo();

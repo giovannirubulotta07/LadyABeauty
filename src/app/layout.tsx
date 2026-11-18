@@ -7,11 +7,12 @@ import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const business = await getBusinessInfo();
-  const description = `${business.tagline}. Extension de cils, rehaussement, browlift et soins du regard — réservation en ligne.`;
+  // What people search for: the service and the town (Annemasse, near Geneva).
+  const description = `${business.name}, studio du regard à Annemasse, près de Genève : extension de cils, rehaussement, browlift et sourcils sur mesure. Réservation en ligne, confirmation immédiate.`;
   return {
     metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
     title: {
-      default: `${business.name} — ${business.tagline}`,
+      default: `${business.name} · Extension de cils & sourcils à Annemasse`,
       template: `%s · ${business.name}`,
     },
     description,
@@ -20,12 +21,14 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: "website",
       locale: "fr_FR",
+      url: "/",
       siteName: business.name,
       title: business.name,
       description,
     },
     twitter: { card: "summary_large_image" },
     alternates: { canonical: "/" },
+    appleWebApp: { title: business.name, statusBarStyle: "black-translucent" },
   };
 }
 

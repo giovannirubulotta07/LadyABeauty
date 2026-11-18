@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { BookingFlow } from "@/components/booking/booking-flow";
@@ -11,12 +12,12 @@ import { getSessionUser } from "@/server/auth/session";
 import { findClientForUser } from "@/server/clients/service";
 import { getBusinessInfo, getServices } from "@/server/content/queries";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Prendre rendez-vous",
   description:
-    "Réservez en ligne votre extension de cils, rehaussement ou browlift chez Lady A Beauty à Annemasse.",
-  alternates: { canonical: "/reserver" },
-};
+    "Réservez en ligne votre extension de cils, rehaussement ou browlift à Annemasse : choisissez la prestation, le jour et l’heure, confirmation immédiate.",
+  path: "/reserver",
+});
 
 export default function ReserverPage() {
   return (

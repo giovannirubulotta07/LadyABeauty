@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { BOOKING_LINK } from "@/components/site/navigation";
 import { PageHero } from "@/components/site/page-hero";
@@ -6,12 +7,12 @@ import { priceLabel } from "@/domain/catalog/price";
 import { formatDuration } from "@/lib/format";
 import { getServices } from "@/server/content/queries";
 
-export const metadata: Metadata = {
-  title: "Prestations",
+export const metadata: Metadata = pageMetadata({
+  title: "Prestations & tarifs",
   description:
-    "Extension de cils, remplissage, rehaussement, browlift, sourcils : durées et tarifs.",
-  alternates: { canonical: "/prestations" },
-};
+    "Extension de cils, remplissage, rehaussement de cils, browlift, épilation et teinture des sourcils à Annemasse, près de Genève : durées, tarifs et réservation en ligne.",
+  path: "/prestations",
+});
 
 export default async function PrestationsPage() {
   const services = await getServices();

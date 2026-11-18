@@ -89,7 +89,13 @@ export default async function HomePage() {
   return (
     <>
       <JsonLd
-        data={beautySalonJsonLd(business, hours, env.NEXT_PUBLIC_SITE_URL)}
+        data={beautySalonJsonLd(
+          business,
+          hours,
+          env.NEXT_PUBLIC_SITE_URL,
+          services,
+          gallery,
+        )}
       />
 
       {/* 1 · Hero ------------------------------------------------------------ */}
@@ -142,7 +148,7 @@ export default async function HomePage() {
                   className={i === 1 ? "pl-[14vw]" : undefined}
                 >
                   {line}
-                </span>
+                </span>{" "}
               </span>
             ))}
           </h1>

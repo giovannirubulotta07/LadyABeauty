@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { PageHero } from "@/components/site/page-hero";
 import { getGallery } from "@/server/content/queries";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Galerie",
   description:
-    "Les réalisations de Lady A Beauty : extensions de cils, rehaussement et sourcils.",
-  alternates: { canonical: "/galerie" },
-};
+    "Extensions de cils, rehaussements et sourcils réalisés par Alessia au studio Lady A Beauty, à Annemasse, près de Genève.",
+  path: "/galerie",
+});
 
 export default async function GaleriePage() {
   const images = await getGallery();
