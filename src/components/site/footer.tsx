@@ -1,5 +1,4 @@
 import { cacheLife } from "next/cache";
-import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { addressLines, instagramHandle, mapsUrl } from "@/lib/address";
@@ -112,16 +111,7 @@ export async function Footer() {
 
       <div className="border-t border-ivory/10">
         <Container className="flex max-w-[90rem] flex-col gap-3 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
-          <p className="flex items-center gap-3">
-            {business.logoUrl ? (
-              <Image
-                src={business.logoUrl}
-                alt=""
-                width={24}
-                height={24}
-                className="rounded-[2px] opacity-80"
-              />
-            ) : null}
+          <p>
             © <CurrentYear /> {business.name}
           </p>
           <ul className="flex flex-wrap gap-x-6">

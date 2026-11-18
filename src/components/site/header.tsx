@@ -16,7 +16,6 @@ export async function Header() {
           booking={BOOKING_LINK}
           addressLines={addressLines(business.address)}
           instagramUrl={business.instagramUrl}
-          logoUrl={business.logoUrl}
         />
       }
     />

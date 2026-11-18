@@ -71,6 +71,9 @@ export type GalleryImage = {
   height: number;
 };
 
+/** Logos retired by the owner: never shown, even if an old database still has them. */
+const RETIRED_LOGOS = new Set(["/brand/logo-actuel.jpg"]);
+
 class ContentError extends Error {
   constructor(what: string, cause: unknown) {
     super(`Impossible de charger ${what}`, { cause });
@@ -100,7 +103,8 @@ export async function getBusinessInfo(): Promise<BusinessInfo> {
     email: data.email,
     phone: data.phone,
     instagramUrl: data.instagram_url,
-    logoUrl: data.logo_url,
+    logoUrl:
+      data.logo_url && !RETIRED_LOGOS.has(data.logo_url) ? data.logo_url : null,
     address: {
       line1: data.address_line1,
       line2: data.address_line2,

@@ -12,7 +12,6 @@ type Props = {
   booking: NavLink;
   addressLines: string[];
   instagramUrl: string | null;
-  logoUrl: string | null;
 };
 
 /**
@@ -25,7 +24,6 @@ export function MobileNav({
   booking,
   addressLines,
   instagramUrl,
-  logoUrl,
 }: Props) {
   const panel = useRef<HTMLDivElement>(null);
 
@@ -129,15 +127,6 @@ export function MobileNav({
               <span />
             )}
             <div className="flex items-center gap-4 sm:justify-self-end">
-              {logoUrl ? (
-                <Image
-                  src={logoUrl}
-                  alt=""
-                  width={40}
-                  height={40}
-                  className="rounded-[3px] opacity-90"
-                />
-              ) : null}
               <Link
                 href={booking.href}
                 className="inline-flex min-h-12 items-center rounded-pill border border-ivory/40 px-6 text-[0.75rem] tracking-[0.2em] uppercase transition-colors hover:border-caramel-300 hover:text-caramel-300"
