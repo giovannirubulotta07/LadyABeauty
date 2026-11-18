@@ -1,5 +1,6 @@
 import { cacheLife } from "next/cache";
 import Link from "next/link";
+import { FurLayer } from "@/components/fur/fur-layer";
 import { Container } from "@/components/ui/container";
 import { addressLines, instagramHandle, mapsUrl } from "@/lib/address";
 import { getBusinessInfo, getOpeningHours } from "@/server/content/queries";
@@ -27,6 +28,7 @@ export async function Footer() {
         aria-labelledby="footer-cta"
         className="relative overflow-hidden border-b border-ivory/10"
       >
+        <FurLayer pattern="leopard" veil="band" />
         <Container className="relative flex max-w-[90rem] flex-col items-start gap-10 py-20 sm:py-28 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="label text-sand-100">Réservation en ligne</p>

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { FurLayer } from "@/components/fur/fur-layer";
 import { useRef, type MouseEvent } from "react";
 import { CloseIcon } from "@/components/ui/icons";
 import type { NavLink } from "./navigation";
@@ -56,7 +57,8 @@ export function MobileNav({
         className="menu-panel surface-dark fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-y-auto bg-espresso-950 p-0 text-ivory"
         onClick={closeOnLink}
       >
-        <div className="mx-auto grid min-h-full max-w-[90rem] grid-rows-[auto_1fr_auto] px-gutter sm:px-8">
+        <FurLayer pattern="leopard" veil="strong" />
+        <div className="relative mx-auto grid min-h-full max-w-[90rem] grid-rows-[auto_1fr_auto] px-gutter sm:px-8">
           <div className="flex h-16 items-center lg:h-20">
             <button
               type="button"

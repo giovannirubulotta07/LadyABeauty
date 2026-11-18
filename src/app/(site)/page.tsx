@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FurField } from "@/components/home/fur-field";
+import { FurLayer } from "@/components/fur/fur-layer";
 import { ServiceRows } from "@/components/home/service-rows";
 import { BOOKING_LINK } from "@/components/site/navigation";
 import { JsonLd } from "@/components/site/json-ld";
@@ -30,7 +30,7 @@ function Shell({
   id?: string;
   label?: string;
   /** Dark tones for the editorial story, light ones for practical information. */
-  tone?: "espresso" | "mocha" | "deep" | "sand" | "ivory";
+  tone?: "espresso" | "mocha" | "deep" | "rose" | "sand" | "ivory";
   className?: string;
   children: ReactNode;
 }) {
@@ -38,6 +38,7 @@ function Shell({
     espresso: "surface-dark bg-espresso-900 text-ivory",
     mocha: "surface-dark bg-mocha text-ivory",
     deep: "surface-dark bg-espresso-950 text-ivory",
+    rose: "surface-dark bg-rose-950 text-ivory",
     sand: "bg-sand-100 text-ink",
     ivory: "bg-ivory text-ink",
   }[tone];
@@ -109,12 +110,7 @@ export default async function HomePage() {
         className="surface-dark relative h-svh min-h-[38rem] overflow-hidden bg-espresso-950 text-ivory"
       >
         {/* Fur that the visitor strokes with the pointer or a finger. */}
-        <FurField />
-        {/* Veil: keeps the title and the buttons readable over the coat. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgb(31_19_13/0.92)_0%,rgb(31_19_13/0.55)_38%,rgb(31_19_13/0.15)_70%,rgb(31_19_13/0.45)_100%)]"
-        />
+        <FurLayer pattern="leopard" veil="hero" />
         {gallery[0] ? (
           <div
             className="absolute top-[13%] right-[7vw] w-[40vw] max-w-[22rem] sm:w-[28vw] lg:top-[17%] lg:right-[6vw] lg:w-[19vw]"
@@ -185,7 +181,9 @@ export default async function HomePage() {
       </section>
 
       {/* 3 · L’esprit du studio: quote and two real photos -------------- */}
-      <Shell tone="mocha" label="L’esprit du studio">
+      <Shell tone="rose" label="L’esprit du studio">
+        {/* The pink fur: the soft accent of the page, stroked like the hero. */}
+        <FurLayer pattern="rose" veil="strong" />
         <div className={`${wrap} relative py-24 sm:py-36`}>
           <p className="label text-center text-sand-100">L’esprit du studio</p>
           <blockquote className="mx-auto mt-10 max-w-5xl text-center">

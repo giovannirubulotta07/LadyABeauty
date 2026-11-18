@@ -10,6 +10,8 @@
   --color-espresso-900: #2b1a12; /* dominant: bands, navigation, primary buttons */
   --color-espresso-700: #4a3226;
   --color-espresso-500: #614839; /* muted text on light surfaces */
+  --color-rose-950: #6e3743; /* pink-fur sections: shown until the fur appears, or without WebGL */
+  --color-rose-300: #e7a9b4; /* pink accent on dark backgrounds */
   --color-mocha: #664a34; /* cinematic mid-brown sections (ivory/sand text) */
 
   --color-sand-50: #f4ece2;

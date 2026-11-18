@@ -1,3 +1,4 @@
+import { FurStrip } from "@/components/site/page-hero";
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -26,14 +27,19 @@ export default function WaitlistOfferPage({
   params,
 }: PageProps<"/liste-attente/[token]">) {
   return (
-    <Container className="max-w-2xl py-12 sm:py-16">
-      <p className="label text-caramel-700">Liste d’attente</p>
-      <Suspense
-        fallback={<p className="mt-10 text-espresso-500">Chargement…</p>}
-      >
-        <Offer params={params} />
-      </Suspense>
-    </Container>
+    <>
+      <FurStrip fur="rose" />
+      <Container className="relative -mt-24 max-w-2xl pb-16 sm:-mt-28 sm:pb-24">
+        <div className="rounded-card bg-ivory px-6 py-10 shadow-card sm:px-10 sm:py-12">
+          <p className="label text-caramel-700">Liste d’attente</p>
+          <Suspense
+            fallback={<p className="mt-10 text-espresso-500">Chargement…</p>}
+          >
+            <Offer params={params} />
+          </Suspense>
+        </div>
+      </Container>
+    </>
   );
 }
 

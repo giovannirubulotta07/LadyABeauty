@@ -23,6 +23,7 @@ export default async function PrestationsPage() {
         label="Prestations"
         title="Prestations & tarifs"
         intro="Chaque prestation est réalisée sur mesure, selon votre regard et vos envies."
+        fur="rose"
       />
       <section className="surface-dark bg-espresso-950 text-ivory">
         <div className="mx-auto w-full max-w-[90rem] px-gutter pb-28 sm:px-8 sm:pb-36">

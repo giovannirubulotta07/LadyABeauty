@@ -1,3 +1,4 @@
+import { PageHero } from "@/components/site/page-hero";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { connection } from "next/server";
@@ -21,17 +22,19 @@ export const metadata: Metadata = pageMetadata({
 
 export default function ReserverPage() {
   return (
-    <Container className="max-w-3xl py-12 sm:py-16">
-      <header className="mb-8 sm:mb-10">
-        <p className="label text-caramel-700">Réservation</p>
-        <h1 className="mt-3 text-title text-espresso-900">
-          Prendre rendez-vous
-        </h1>
-      </header>
-      <Suspense fallback={<FlowSkeleton />}>
-        <BookingLoader />
-      </Suspense>
-    </Container>
+    <>
+      <PageHero
+        size="compact"
+        fur="rose"
+        label="Réservation"
+        title="Prendre rendez-vous"
+      />
+      <Container className="relative -mt-14 max-w-3xl pb-16 sm:-mt-20 sm:pb-24">
+        <Suspense fallback={<FlowSkeleton />}>
+          <BookingLoader />
+        </Suspense>
+      </Container>
+    </>
   );
 }
 

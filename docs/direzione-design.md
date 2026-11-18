@@ -103,3 +103,21 @@ Richiesta del committente: sulla prima schermata, passando il puntatore deve sem
   - con « riduci movimento » i peli non oscillano, ma rispondono comunque ai gesti del visitatore;
   - un velo scuro graduato mantiene leggibili titolo e pulsanti;
   - il canvas è nascosto ai lettori di schermo.
+
+### La pelliccia in tutto il sito (18/11/2026)
+
+Tre manti, tutti interattivi: **leopardato** (marchio), **rosa** (accento morbido, rosa cipria) e **tigrato** (disponibile, non usato).
+
+| Dove                                                                     | Manto      |
+| ------------------------------------------------------------------------ | ---------- |
+| Accueil: prima schermata                                                 | leopardato |
+| Accueil: citazione di Alessia                                            | rosa       |
+| Prestations · Réserver · Liste d'attente · Confirmation · 404            | rosa       |
+| Galerie · Mon espace · pagine legali · Mon rendez-vous · Compte supprimé | leopardato |
+| Invito finale prima del footer (tutte le pagine)                         | leopardato |
+| Menu a schermo intero                                                    | leopardato |
+
+- **Pagine pratiche:** apertura compatta in pelliccia con il titolo in Bodoni. Il contenuto (prenotazione, testi legali, messaggi) sta su un foglio avorio che si sovrappone alla pelliccia.
+- **Velo di leggibilità:** è tinto come il manto (marrone sul leopardato, rosa scuro sul rosa). Sul rosa è più leggero, perché il manto resti rosa e non vada sul prugna; un'ombra morbida tiene nitido il titolo.
+- **Fallback:** senza WebGL, o con rendering software, le sezioni restano in tinta unita: `espresso-950` o `rose-950`.
+- **Indirizzi sconosciuti:** mostrano la stessa pagina 404 del sito, con header, pelliccia e footer.

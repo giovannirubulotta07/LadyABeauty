@@ -1,3 +1,4 @@
+import { FurStrip } from "@/components/site/page-hero";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -19,17 +20,22 @@ export default function ConfirmationPage({
   searchParams,
 }: PageProps<"/reserver/confirmation">) {
   return (
-    <Container className="max-w-2xl py-12 sm:py-16">
-      <Suspense
-        fallback={
-          <p role="status" className="py-16 text-center text-espresso-500">
-            Chargement de votre rendez-vous…
-          </p>
-        }
-      >
-        <Confirmation searchParams={searchParams} />
-      </Suspense>
-    </Container>
+    <>
+      <FurStrip fur="rose" />
+      <Container className="relative -mt-24 max-w-2xl pb-16 sm:-mt-28 sm:pb-24">
+        <div className="rounded-card bg-ivory px-6 py-10 shadow-card sm:px-10 sm:py-12">
+          <Suspense
+            fallback={
+              <p role="status" className="py-16 text-center text-espresso-500">
+                Chargement de votre rendez-vous…
+              </p>
+            }
+          >
+            <Confirmation searchParams={searchParams} />
+          </Suspense>
+        </div>
+      </Container>
+    </>
   );
 }
 

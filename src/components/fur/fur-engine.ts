@@ -12,7 +12,8 @@
  * the root of each hair, so the pattern is soft-edged like real fur.
  */
 
-export type FurPattern = "leopard" | "tiger";
+/** leopard: tawny with rosettes · tiger: tawny with stripes · rose: soft pink fur, no marks. */
+export type FurPattern = "leopard" | "tiger" | "rose";
 
 export type FurOptions = {
   pattern: FurPattern;
@@ -77,7 +78,7 @@ in vec2 vRoot;
 in float vSeed;
 in float vSheen;
 in float vPress;
-uniform float uPattern;   // 0 leopard, 1 tiger
+uniform float uPattern;   // 0 leopard, 1 tiger, 2 rose
 uniform float uScale;     // pattern size in px
 out vec4 outColor;
 
@@ -127,18 +128,27 @@ float tiger(vec2 p) {
 
 void main() {
   vec2 p = vRoot / uScale;
-  float m = uPattern < 0.5 ? leopard(p) : tiger(p);
-
-  vec3 coat = mix(vec3(0.56, 0.36, 0.19), vec3(0.62, 0.42, 0.22), vSeed);
-  vec3 col = coat;
-  col = mix(col, vec3(0.05, 0.03, 0.02), clamp(m, 0.0, 1.0));
-  col = mix(col, vec3(0.45, 0.24, 0.11), clamp(-m, 0.0, 1.0));
+  vec3 col;
+  vec3 tint = vec3(0.95, 0.78, 0.55);
+  if (uPattern > 1.5) {
+    // Soft pink faux fur: powder pink tips, deeper rose in the hollows, tonal waves.
+    float tone = noise(p * 1.4) * 0.65 + noise(p * 4.0) * 0.2 + vSeed * 0.15;
+    col = mix(vec3(0.86, 0.52, 0.60), vec3(1.0, 0.82, 0.86), tone);
+    tint = vec3(1.0, 0.86, 0.88);
+  } else {
+    float m = uPattern < 0.5 ? leopard(p) : tiger(p);
+    col = mix(vec3(0.56, 0.36, 0.19), vec3(0.62, 0.42, 0.22), vSeed);
+    col = mix(col, vec3(0.05, 0.03, 0.02), clamp(m, 0.0, 1.0));
+    col = mix(col, vec3(0.45, 0.24, 0.11), clamp(-m, 0.0, 1.0));
+  }
 
   // Depth: roots in shadow, tips lit; fine strand-to-strand variation.
-  col *= mix(0.28, 1.0, smoothstep(0.0, 1.0, vT)) * (0.82 + vSeed * 0.3);
+  // A pale pink coat keeps lighter hollows, or it would read as plum.
+  float rootShade = uPattern > 1.5 ? 0.62 : 0.28;
+  col *= mix(rootShade, 1.0, smoothstep(0.0, 1.0, vT)) * (0.86 + vSeed * 0.22);
   // Velvet sheen: changes with the hair direction, so strokes leave a trail.
   float sheen = pow(max(vSheen, 0.0), 2.5) * vT;
-  col += sheen * vec3(0.95, 0.78, 0.55) * (0.2 + vPress * 0.45);
+  col += sheen * tint * (0.2 + vPress * 0.45);
   // Stroked fur shows a lighter, glossier trail, like velvet brushed the wrong way.
   col *= 1.0 + vPress * 0.5 * vT;
 
@@ -197,7 +207,10 @@ export function startFur(
   const uTime = u("uTime");
   const uSway = u("uSway");
   const uWidth = u("uWidth");
-  gl.uniform1f(u("uPattern"), pattern === "tiger" ? 1 : 0);
+  gl.uniform1f(
+    u("uPattern"),
+    pattern === "tiger" ? 1 : pattern === "rose" ? 2 : 0,
+  );
   gl.uniform1i(u("uField"), 0);
 
   // One hair = a tapered strip of 5 rows (10 vertices).
@@ -232,7 +245,8 @@ export function startFur(
 
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-  gl.clearColor(0.09, 0.055, 0.035, 1);
+  if (pattern === "rose") gl.clearColor(0.55, 0.3, 0.36, 1);
+  else gl.clearColor(0.09, 0.055, 0.035, 1);
 
   let width = 0;
   let height = 0;

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ButtonLink } from "@/components/ui/button";
+import { PageHero } from "@/components/site/page-hero";
 import { Container } from "@/components/ui/container";
 
 export const metadata: Metadata = {
@@ -9,17 +10,24 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <Container className="flex min-h-[60vh] flex-col items-center justify-center py-section text-center">
-      <p className="label text-caramel-700">Page introuvable</p>
-      <h1 className="mt-4 text-title text-espresso-900">
-        Cette page n’existe pas
-      </h1>
-      <p className="mt-5 max-w-md text-espresso-500">
-        Le lien est peut-être incomplet, ou la page a été déplacée.
-      </p>
-      <ButtonLink href="/" className="mt-10">
-        Retour à l’accueil
-      </ButtonLink>
-    </Container>
+    <>
+      <PageHero
+        size="compact"
+        fur="rose"
+        label="Page introuvable"
+        title="Cette page n’existe pas"
+      />
+      <Container className="flex flex-col items-start py-16 sm:py-20">
+        <p className="max-w-md text-lg text-espresso-700">
+          Le lien est peut-être incomplet, ou la page a été déplacée.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <ButtonLink href="/">Retour à l’accueil</ButtonLink>
+          <ButtonLink href="/reserver" variant="outline">
+            Prendre rendez-vous
+          </ButtonLink>
+        </div>
+      </Container>
+    </>
   );
 }

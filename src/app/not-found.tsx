@@ -1,19 +1,17 @@
-import { ButtonLink } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
+import type { Metadata } from "next";
+import SiteLayout from "./(site)/layout";
+import SiteNotFound from "./(site)/not-found";
 
+export const metadata: Metadata = {
+  title: "Page introuvable",
+  robots: { index: false },
+};
+
+/** Unknown addresses get the same page as the site's own 404: header, fur, footer. */
 export default function NotFound() {
   return (
-    <Container className="flex min-h-dvh flex-col items-center justify-center py-section text-center">
-      <p className="label text-caramel-700">Page introuvable</p>
-      <h1 className="mt-4 text-title text-espresso-900">
-        Cette page n’existe pas
-      </h1>
-      <p className="mt-5 max-w-md text-espresso-500">
-        Le lien est peut-être incomplet, ou la page a été déplacée.
-      </p>
-      <ButtonLink href="/" className="mt-10">
-        Retour à l’accueil
-      </ButtonLink>
-    </Container>
+    <SiteLayout params={Promise.resolve({})}>
+      <SiteNotFound />
+    </SiteLayout>
   );
 }

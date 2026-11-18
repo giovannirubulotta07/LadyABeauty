@@ -1,3 +1,4 @@
+import { PageHero } from "@/components/site/page-hero";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { connection } from "next/server";
@@ -34,21 +35,20 @@ export default function MonEspacePage({
   searchParams,
 }: PageProps<"/mon-espace">) {
   return (
-    <Container className="max-w-3xl py-12 sm:py-16">
-      <header>
-        <p className="label text-caramel-700">Mon espace</p>
-        <h1 className="mt-3 text-title text-espresso-900">Mes rendez-vous</h1>
-      </header>
-      <Suspense
-        fallback={
-          <p role="status" className="mt-10 text-espresso-500">
-            Chargement de votre espace…
-          </p>
-        }
-      >
-        <Account searchParams={searchParams} />
-      </Suspense>
-    </Container>
+    <>
+      <PageHero size="compact" label="Mon espace" title="Mes rendez-vous" />
+      <Container className="max-w-3xl py-12 sm:py-16">
+        <Suspense
+          fallback={
+            <p role="status" className="mt-10 text-espresso-500">
+              Chargement de votre espace…
+            </p>
+          }
+        >
+          <Account searchParams={searchParams} />
+        </Suspense>
+      </Container>
+    </>
   );
 }
 
