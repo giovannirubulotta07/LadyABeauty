@@ -147,14 +147,14 @@ isOneToOne: false
                   ]
                 },"notification_log": {
                   Row: {
-                    "appointment_id": string | null,"channel": string,"created_at": string,"error": string | null,"id": string,"idempotency_key": string,"kind": string,"offer_id": string | null,"provider_message_id": string | null,"recipient": string,"sent_at": string | null,"status": Database["public"]['Enums']["notification_status"]
+                    "appointment_id": string | null,"attempts": number,"channel": string,"created_at": string,"error": string | null,"id": string,"idempotency_key": string,"kind": string,"last_attempt_at": string | null,"offer_id": string | null,"provider_message_id": string | null,"recipient": string,"sent_at": string | null,"status": Database["public"]['Enums']["notification_status"],"subject": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "appointment_id"?: string | null,"channel": string,"created_at"?: string,"error"?: string | null,"id"?: string,"idempotency_key": string,"kind": string,"offer_id"?: string | null,"provider_message_id"?: string | null,"recipient": string,"sent_at"?: string | null,"status"?: Database["public"]['Enums']["notification_status"]
+                    "appointment_id"?: string | null,"attempts"?: number,"channel": string,"created_at"?: string,"error"?: string | null,"id"?: string,"idempotency_key": string,"kind": string,"last_attempt_at"?: string | null,"offer_id"?: string | null,"provider_message_id"?: string | null,"recipient": string,"sent_at"?: string | null,"status"?: Database["public"]['Enums']["notification_status"],"subject"?: string | null
                   }
                   Update: {
-                    "appointment_id"?: string | null,"channel"?: string,"created_at"?: string,"error"?: string | null,"id"?: string,"idempotency_key"?: string,"kind"?: string,"offer_id"?: string | null,"provider_message_id"?: string | null,"recipient"?: string,"sent_at"?: string | null,"status"?: Database["public"]['Enums']["notification_status"]
+                    "appointment_id"?: string | null,"attempts"?: number,"channel"?: string,"created_at"?: string,"error"?: string | null,"id"?: string,"idempotency_key"?: string,"kind"?: string,"last_attempt_at"?: string | null,"offer_id"?: string | null,"provider_message_id"?: string | null,"recipient"?: string,"sent_at"?: string | null,"status"?: Database["public"]['Enums']["notification_status"],"subject"?: string | null
                   }
                   Relationships: [
                     {
@@ -273,6 +273,20 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"studio_private_settings": {
+                  Row: {
+                    "id": boolean,"notification_email": string | null,"notify_owner_on_booking": boolean,"notify_owner_on_cancellation": boolean,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: boolean,"notification_email"?: string | null,"notify_owner_on_booking"?: boolean,"notify_owner_on_cancellation"?: boolean,"updated_at"?: string
+                  }
+                  Update: {
+                    "id"?: boolean,"notification_email"?: string | null,"notify_owner_on_booking"?: boolean,"notify_owner_on_cancellation"?: boolean,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"waitlist_entries": {
                   Row: {
                     "client_id": string,"created_at": string,"day": string,"duration_min": number,"id": string,"service_id": string,"status": Database["public"]['Enums']["waitlist_status"],"updated_at": string,"variant_id": string | null
@@ -331,7 +345,10 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "create_appointment":
+            "claim_notification":
+{ Args: { "p_appointment_id"?: string,"p_channel": string,"p_key": string,"p_kind": string,"p_max_attempts"?: number,"p_offer_id"?: string,"p_recipient": string }; Returns: string
+                           },
+"create_appointment":
 { Args: { "p_client_id": string,"p_client_note"?: string,"p_created_by"?: string,"p_duration_min": number,"p_hold_offer_id"?: string,"p_price_cents": number,"p_service_id": string,"p_service_name": string,"p_source": Database["public"]['Enums']["appointment_source"],"p_start": string,"p_variant_id": string,"p_variant_name": string }; Returns: string
                            },
 "create_block":
@@ -351,6 +368,9 @@ isOneToOne: false
                            },
 "lock_calendar_range":
 { Args: { "p_period": unknown }; Returns: undefined
+                           },
+"schedule_studio_jobs":
+{ Args: { "p_site_url": string }; Returns: undefined
                            }
           }
           Enums: {

@@ -9,7 +9,14 @@ import { defineConfig } from "vitest/config";
  */
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
 
-const required = ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "SUPABASE_SECRET_KEY"];
+const required = [
+  "NEXT_PUBLIC_SUPABASE_URL",
+  "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+  "SUPABASE_SECRET_KEY",
+  "APP_SECRET",
+  "CRON_SECRET",
+  "EMAIL_FROM",
+];
 const missing = required.filter((name) => !process.env[name]);
 if (missing.length) {
   throw new Error(`test:db — variables manquantes (voir .env.example) : ${missing.join(", ")}`);
@@ -21,6 +28,7 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
       // `server-only` throws outside React Server Components; tests run in plain Node.
       "server-only": fileURLToPath(new URL("./tests/db/server-only-stub.ts", import.meta.url)),
+      "next/cache": fileURLToPath(new URL("./tests/db/next-cache-stub.ts", import.meta.url)),
     },
   },
   test: {
@@ -36,6 +44,11 @@ export default defineConfig({
       NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL!,
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
       SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY!,
+      APP_SECRET: process.env.APP_SECRET!,
+      CRON_SECRET: process.env.CRON_SECRET!,
+      EMAIL_FROM: process.env.EMAIL_FROM!,
+      // Delivery is verified through notification_log; nothing is actually sent.
+      EMAIL_TRANSPORT: "log",
     },
   },
 });

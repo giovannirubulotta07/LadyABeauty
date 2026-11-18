@@ -6,7 +6,7 @@ export default defineConfig({
     alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
   },
   test: {
-    include: ["src/**/*.test.ts", "tests/unit/**/*.test.ts"],
+    include: ["src/**/*.test.{ts,tsx}", "tests/unit/**/*.test.ts"],
     environment: "node",
     // Domain logic must never depend on the machine's timezone: run the
     // suite in an extreme one (UTC+14) to catch any accidental local-time use.

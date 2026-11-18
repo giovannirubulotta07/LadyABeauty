@@ -1,5 +1,6 @@
 "use server";
 
+import { after } from "next/server";
 import { z } from "zod";
 import {
   type Slot,
@@ -21,6 +22,7 @@ import {
   upsertClientForUser,
 } from "@/server/clients/service";
 import { createAdminClient } from "@/server/db/admin-client";
+import { notifyBookingConfirmed } from "@/server/notifications/events";
 import {
   RATE_RULES,
   underIpLimit,
@@ -194,7 +196,9 @@ export async function confirmBooking(input: unknown): Promise<BookingResult> {
       throw error;
     }
 
-    return { ok: true, appointmentId: appointmentId as string };
+    const id = appointmentId as string;
+    after(() => notifyBookingConfirmed(id));
+    return { ok: true, appointmentId: id };
   } catch (error) {
     if (
       error instanceof AvailabilityError &&

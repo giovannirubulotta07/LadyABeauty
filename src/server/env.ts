@@ -8,6 +8,15 @@ const schema = z.object({
   SUPABASE_SECRET_KEY: z.string().min(1),
   /** Signs email links and hashes rate-limit keys. At least 32 random characters. */
   APP_SECRET: z.string().min(32),
+  /** Protects /api/cron/* (sent as "Authorization: Bearer …" by pg_cron / Vercel Cron). */
+  CRON_SECRET: z.string().min(32),
+  /** Sender, e.g. "Lady A Beauty <rendez-vous@ladyabeauty.fr>" (domain verified in Resend). */
+  EMAIL_FROM: z.string().min(3),
+  EMAIL_REPLY_TO: z.email().optional(),
+  RESEND_API_KEY: z.string().optional(),
+  /** resend (production) | mailpit (local inbox) | log (console only). Defaults: resend if a key is set, else mailpit. */
+  EMAIL_TRANSPORT: z.enum(["resend", "mailpit", "log"]).optional(),
+  MAILPIT_URL: z.url().default("http://127.0.0.1:54324"),
 });
 
 /** Validated server environment. Fails fast with a readable message. */

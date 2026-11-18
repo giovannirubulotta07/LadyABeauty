@@ -2,7 +2,6 @@
 
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { canClientCancel } from "@/domain/booking/cancellation";
 import { parseTstzRange } from "@/domain/time/range";
 import { fullNameSchema, phoneSchema } from "@/lib/validation";
 import { createSessionClient } from "@/server/auth/server-client";
@@ -11,9 +10,15 @@ import {
   findClientForUser,
   upsertClientForUser,
 } from "@/server/clients/service";
-import { getBusinessInfo } from "@/server/content/queries";
+import { cancelAsClient } from "@/server/appointments/cancel";
 import { createAdminClient } from "@/server/db/admin-client";
-import { RATE_RULES, underLimit } from "@/server/security/rate-limit";
+import { notifyAppointmentCancelled } from "@/server/notifications/events";
+import { readLinkToken } from "@/server/security/tokens";
+import {
+  RATE_RULES,
+  underIpLimit,
+  underLimit,
+} from "@/server/security/rate-limit";
 import {
   type ActionResult,
   GENERIC_ERROR,
@@ -79,40 +84,30 @@ export async function cancelMyAppointment(
   const client = await findClientForUser(user);
   if (!client) return fail("Rendez-vous introuvable.");
 
-  const db = createAdminClient();
-  const { data: appointment } = await db
-    .from("appointments")
-    .select("id, period, status")
-    .eq("id", parsed.data.appointmentId)
-    .eq("client_id", client.id)
-    .maybeSingle();
-  if (!appointment) return fail("Rendez-vous introuvable.");
-  if (appointment.status !== "confirmed")
-    return fail("Ce rendez-vous est déjà annulé ou passé.");
+  const result = await cancelAsClient(parsed.data.appointmentId, {
+    clientId: client.id,
+    actorUserId: user.id,
+  });
+  return result.ok ? { ok: true } : fail(result.error);
+}
 
-  const { policy } = await getBusinessInfo();
-  const { start } = parseTstzRange(appointment.period as string);
-  if (!canClientCancel(start, new Date(), policy.cancellationCutoffHours)) {
+/** Cancellation from the signed "Gérer mon rendez-vous" link in e-mails (no login needed). */
+export async function cancelWithManageLink(
+  input: unknown,
+): Promise<ActionResult> {
+  const parsed = z
+    .object({ token: z.string().min(10).max(1000) })
+    .safeParse(input);
+  if (!parsed.success) return fail("Lien invalide.");
+  const appointmentId = readLinkToken(parsed.data.token, "manage");
+  if (!appointmentId)
     return fail(
-      `L'annulation en ligne n'est plus possible moins de ${policy.cancellationCutoffHours} h avant le rendez-vous. Contactez Alessia directement.`,
+      "Ce lien a expiré. Connectez-vous à votre espace pour gérer vos rendez-vous.",
     );
-  }
+  if (!(await underIpLimit(RATE_RULES.loginPerIp))) return fail(TOO_MANY);
 
-  const { error } = await db
-    .from("appointments")
-    .update({
-      status: "cancelled",
-      cancelled_at: new Date().toISOString(),
-      cancelled_by: user.id,
-      cancellation_reason: "Annulé par la cliente",
-    })
-    .eq("id", appointment.id)
-    .eq("status", "confirmed");
-  if (error) {
-    console.error("cancelMyAppointment", error);
-    return fail(GENERIC_ERROR);
-  }
-  return { ok: true };
+  const result = await cancelAsClient(appointmentId);
+  return result.ok ? { ok: true } : fail(result.error);
 }
 
 /**
@@ -155,6 +150,15 @@ export async function deleteMyAccount(input: unknown): Promise<ActionResult> {
             cancellation_reason: "Compte supprimé par la cliente",
           })
           .in("id", futureIds);
+        // Tell Alessia now, while the client's name is still known.
+        await Promise.all(
+          futureIds.map((id) =>
+            notifyAppointmentCancelled(id, {
+              by: "client",
+              notifyClient: false,
+            }),
+          ),
+        );
       }
       // Notes, waitlist entries cascade; appointments keep no link to the person.
       await db.from("clients").delete().eq("id", client.id);

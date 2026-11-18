@@ -78,3 +78,30 @@ export async function signInDuringBooking(
     page.getByRole("heading", { name: "Récapitulatif" }),
   ).toBeVisible({ timeout: 20_000 });
 }
+
+/** Waits for an e-mail to `to` whose subject matches, received after `since`. Returns its text. */
+export async function waitForEmail(
+  to: string,
+  subject: RegExp,
+  since: number,
+): Promise<{ subject: string; text: string }> {
+  for (let attempt = 0; attempt < 40; attempt++) {
+    const res = await fetch(
+      `${MAILPIT}/api/v1/search?query=${encodeURIComponent(`to:${to}`)}&limit=50`,
+    );
+    const { messages = [] } = (await res.json()) as {
+      messages?: Array<{ ID: string; Created: string; Subject: string }>;
+    };
+    const match = messages.find(
+      (m) => Date.parse(m.Created) >= since && subject.test(m.Subject),
+    );
+    if (match) {
+      const full = (await (
+        await fetch(`${MAILPIT}/api/v1/message/${match.ID}`)
+      ).json()) as { Text: string };
+      return { subject: match.Subject, text: full.Text };
+    }
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  throw new Error(`No e-mail "${subject}" for ${to}`);
+}

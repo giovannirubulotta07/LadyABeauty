@@ -50,3 +50,4 @@ supabase/.branches
 /blob-report/
 
 !.env.example
+.email-preview/

@@ -4,7 +4,7 @@ Sito di prenotazione online dello studio **Lady A Beauty** (Annemasse): extensio
 Next.js (App Router) · TypeScript strict · Tailwind CSS v4 · Supabase · Vitest · Playwright.
 
 > Il README completo (deploy su Vercel e Supabase, dominio, SPF/DKIM) arriverà nella fase 7.
-> Analisi e decisioni: [`docs/sito-attuale.md`](docs/sito-attuale.md), [`docs/decisioni.md`](docs/decisioni.md), [`docs/proposta-tecnica.md`](docs/proposta-tecnica.md), [`docs/motore-slot.md`](docs/motore-slot.md).
+> Analisi e decisioni: [`docs/sito-attuale.md`](docs/sito-attuale.md), [`docs/decisioni.md`](docs/decisioni.md), [`docs/proposta-tecnica.md`](docs/proposta-tecnica.md), [`docs/motore-slot.md`](docs/motore-slot.md), [`docs/notifiche.md`](docs/notifiche.md).
 
 ## Avvio in locale
 
@@ -19,7 +19,7 @@ cp .env.example .env.local  # poi incolla URL e chiavi stampate da `supabase sta
 npm run dev                 # http://localhost:3000
 ```
 
-Le email (codici di accesso) in locale non partono davvero: si leggono in **Mailpit** su http://127.0.0.1:54324.
+Le email (codici di accesso, conferme, promemoria) in locale non partono davvero: si leggono in **Mailpit** su http://127.0.0.1:54324.
 
 Se il registro ECR di Supabase non è raggiungibile, usa Docker Hub:
 `SUPABASE_INTERNAL_IMAGE_REGISTRY=docker.io npx supabase start`.
@@ -33,6 +33,8 @@ Se il registro ECR di Supabase non è raggiungibile, usa Docker Hub:
 | `npm run test:e2e` | test end-to-end (Playwright, mobile + desktop) su `npm run build && npm run start`, con Supabase locale avviato: prenotazione completa con codice e-mail, conflitto di slot, annullamento, eliminazione account |
 | `npm run typecheck` / `npm run lint` | controlli statici |
 | `npm run db:types` | rigenera i tipi TypeScript dal database locale |
+| `npm run cron` | esegue una volta il job pianificato (promemoria, pulizia dei dati) |
+| `npm run email:preview` | renderizza i template email in `.email-preview/` |
 | `npm run images:gallery` | ritaglia le foto originali della galleria in `public/galerie` |
 | `npx tsx scripts/generate-leopard.mts` | rigenera il pattern leopardato `public/patterns/leopard.svg` |
 

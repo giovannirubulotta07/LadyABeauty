@@ -30,6 +30,11 @@ insert into public.business_settings (
   )
 );
 
+-- Where Alessia receives booking/cancellation notifications (admin only).
+insert into public.studio_private_settings (id, notification_email)
+values (true, 'alessiarubu98@gmail.com')
+on conflict (id) do update set notification_email = excluded.notification_email;
+
 -- ---------------------------------------------------------------------------
 -- Opening hours (brief): Mon–Fri 10:00–14:00 & 14:30–20:00, Sat 10:00–14:30
 -- ---------------------------------------------------------------------------
