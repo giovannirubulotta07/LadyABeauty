@@ -305,7 +305,17 @@ export function startFur(
   // --- Brushing ------------------------------------------------------------
   let last: { x: number; y: number; t: number } | null = null;
   let lastInput = 0;
+  // A finger (or trackpad) that is scrolling the page is not stroking the fur:
+  // ignoring it keeps the scroll smooth and the coat still.
+  let lastScroll = 0;
+  const onScroll = () => {
+    lastScroll = performance.now();
+    last = null;
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+
   function brush(clientX: number, clientY: number) {
+    if (performance.now() - lastScroll < 180) return;
     const rect = canvas.getBoundingClientRect();
     const x = clientX - rect.left;
     const y = clientY - rect.top;
@@ -459,6 +469,7 @@ export function startFur(
     document.removeEventListener("visibilitychange", onVisibility);
     window.removeEventListener("pointermove", onPointer);
     window.removeEventListener("touchmove", onTouch);
+    window.removeEventListener("scroll", onScroll);
     gl.getExtension("WEBGL_lose_context")?.loseContext();
   };
 }

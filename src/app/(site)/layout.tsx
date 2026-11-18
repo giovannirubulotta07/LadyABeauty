@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Footer } from "@/components/site/footer";
 import { Header } from "@/components/site/header";
 import { MotionProvider } from "@/components/motion/motion-provider";
+import { ScrollManager } from "@/components/motion/scroll-manager";
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
@@ -20,6 +21,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       {/* Reads the route to re-bind animations after client navigations. */}
       <Suspense fallback={null}>
         <MotionProvider />
+        <ScrollManager />
       </Suspense>
     </>
   );

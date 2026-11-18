@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FurLayer } from "@/components/fur/fur-layer";
-import { useRef, type MouseEvent } from "react";
+import { useEffect, useRef, type MouseEvent } from "react";
+import { getLenis } from "@/components/motion/motion-provider";
 import { CloseIcon } from "@/components/ui/icons";
 import type { NavLink } from "./navigation";
 
@@ -27,6 +28,26 @@ export function MobileNav({
   instagramUrl,
 }: Props) {
   const panel = useRef<HTMLDivElement>(null);
+
+  // While the menu is open the page behind it must not scroll (smooth scroll
+  // paused), and the menu itself scrolls with the wheel (data-lenis-prevent).
+  useEffect(() => {
+    const el = panel.current;
+    if (!el) return;
+    const onToggle = (e: Event) => {
+      const open = (e as ToggleEvent).newState === "open";
+      const lenis = getLenis();
+      if (open) lenis?.stop();
+      else lenis?.start();
+      document.documentElement.style.overflow = open ? "hidden" : "";
+    };
+    el.addEventListener("toggle", onToggle);
+    return () => {
+      el.removeEventListener("toggle", onToggle);
+      document.documentElement.style.overflow = "";
+      getLenis()?.start();
+    };
+  }, []);
 
   function closeOnLink(event: MouseEvent<HTMLElement>) {
     if ((event.target as HTMLElement).closest("a"))
@@ -54,6 +75,7 @@ export function MobileNav({
         id="menu-mobile"
         ref={panel}
         popover="auto"
+        data-lenis-prevent
         className="menu-panel surface-dark fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-y-auto bg-espresso-950 p-0 text-ivory"
         onClick={closeOnLink}
       >

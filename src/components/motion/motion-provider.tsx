@@ -27,6 +27,33 @@ type Engine = {
 };
 
 let enginePromise: Promise<Engine> | null = null;
+let activeLenis: Engine["lenis"] = null;
+
+/** The smooth-scroll instance (desktop only), e.g. to pause it under a menu. */
+export function getLenis() {
+  return activeLenis;
+}
+
+/**
+ * Scrolls to the element named in the URL hash (below the fixed header), or
+ * returns false when there is none. Works with or without smooth scrolling.
+ */
+export function scrollToHash(): boolean {
+  const id = decodeURIComponent(window.location.hash.slice(1));
+  const target = id ? document.getElementById(id) : null;
+  if (!target) return false;
+  if (activeLenis) {
+    activeLenis.resize(); // the page may have grown since Lenis measured it
+    activeLenis.scrollTo(target, { immediate: true, force: true });
+  } else target.scrollIntoView();
+  return true;
+}
+
+/** Puts the page (and the smooth scroll) at the top immediately. */
+export function scrollToTop() {
+  activeLenis?.scrollTo(0, { immediate: true, force: true });
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
 
 /** Resolves once the page has loaded and the main thread is idle, so the
  * animation engine never competes with the first render (LCP, TBT). */
@@ -54,7 +81,14 @@ function loadEngine(): Promise<Engine> {
     let lenis: Engine["lenis"] = null;
     if (window.matchMedia("(pointer: fine) and (min-width: 1024px)").matches) {
       const { default: Lenis } = await import("lenis");
-      lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9 });
+      // anchors: in-page links (#studio…) glide to their target; the offset
+      // below the fixed header comes from html { scroll-padding-top }.
+      lenis = new Lenis({
+        lerp: 0.09,
+        wheelMultiplier: 0.9,
+        anchors: true,
+      });
+      activeLenis = lenis;
       lenis.on("scroll", ScrollTrigger.update);
       gsap.ticker.add((time) => lenis!.raf(time * 1000));
       gsap.ticker.lagSmoothing(0);
@@ -187,9 +221,13 @@ export function MotionProvider() {
       .then(async (engine) => {
         await document.fonts?.ready; // SplitText needs final line breaks
         if (cancelled) return;
-        engine.lenis?.scrollTo(0, { immediate: true });
+        // Never force the scroll position: the visitor may already be reading,
+        // and the browser restores it on back/forward. Lenis follows native
+        // scroll changes by itself; only an anchor in the URL needs help.
         ctx.current?.revert();
         ctx.current = bind(engine);
+        engine.lenis?.resize();
+        scrollToHash();
         html.classList.add("motion-ready");
       })
       .catch(() => html.classList.add("motion-off"));

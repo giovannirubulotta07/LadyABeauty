@@ -252,12 +252,7 @@ export default async function HomePage() {
       </Shell>
 
       {/* 5 · About -------------------------------------------------------------- */}
-      <Shell
-        id="a-propos"
-        tone="deep"
-        label="À propos"
-        className="scroll-mt-16"
-      >
+      <Shell id="a-propos" tone="deep" label="À propos">
         <div
           className={`${wrap} relative grid items-center gap-16 py-28 sm:py-40 lg:grid-cols-[1fr_1.1fr] lg:gap-24`}
         >
@@ -443,7 +438,7 @@ export default async function HomePage() {
         id="studio"
         tone="ivory"
         label="Le studio"
-        className="scroll-mt-16 border-t border-espresso-900/10"
+        className="border-t border-espresso-900/10"
       >
         <div>
           <div

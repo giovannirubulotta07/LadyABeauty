@@ -9,6 +9,8 @@
 
   html {
     scroll-behavior: smooth;
+    /* Anchored sections land below the fixed header. */
+    scroll-padding-top: 5rem;
   }
 
   body {
