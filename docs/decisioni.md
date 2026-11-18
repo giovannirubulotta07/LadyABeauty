@@ -2,35 +2,41 @@
 
 Regola data dal committente: **in caso di conflitto tra sito attuale e brief vale il brief.** Per ciò che il brief non specifica restano i dati del sito attuale. Tutto è modificabile dall'admin.
 
-| # | Tema | Decisione | Fonte |
-|---|---|---|---|
-| D1 | Orari | Lun–ven 10:00–14:00 e 14:30–20:00. Sabato 10:00–14:30 (il brief dice solo "chiude prima", quindi l'orario esatto viene dal sito). Domenica chiuso. | brief + sito |
-| D2 | Partenze | 10:00, 12:00, 14:30, 16:00, 18:00; dalle 18:00 "Sur demande" salvo sblocco giornaliero | brief |
-| D3 | Extension Cils | 1 h 45 | brief |
-| D4 | Extension Cils Remplissage | 1 h 30 (posa − 15 min) | brief |
-| D5 | Rehaussement Cils, Browlift | 1 h ciascuno | brief |
-| D5b | Rehaussement Cils Avec Teinture, Browlift Avec Teinture e altre prestazioni | durate del sito (1 h, 1 h 10, …) | sito |
-| D6 | Stili di posa | La struttura a varianti è pronta, ma non creo varianti finché Alessia non comunica i nomi (non li invento). | — |
-| D7 | Catalogo | Tutte le 13 prestazioni del sito, una sola categoria « Prestations » | sito |
-| D8 | Pagamento online | **Non previsto** (il brief non lo chiede). L'importo dell'acconto resta come informazione. | brief |
-| D9 | Prezzi | Prezzi pieni noti: Épilation sourcils 16 €, Teinture sourcils 25 €, Épilation moustache 10 €, Dépose 20 € (10 € se seguita da nuova posa). Per le altre il prezzo resta vuoto e il sito mostra l'acconto ("Acompte 20 €"). Alessia completerà dall'admin. | sito |
-| D10 | Prenotazione | Una prestazione (+ variante) per prenotazione | brief |
-| D11 | Annullamento | Fino a 24 h prima, configurabile | brief |
-| D12 | Finestra / preavviso | 60 giorni / 2 h | brief |
-| D13 | Nome e logo | « Lady A Beauty »; logo attuale finché Alessia non carica il nuovo | brief |
-| D14 | Bio | Testo del sito (diplomata 2019) con refusi corretti | sito |
-| D15 | Indirizzo | « 49 avenue de Verdun, 74100 Annemasse » (registro INSEE/RNE, 18/11/2026) | registro pubblico |
-| D16 | Account | Codice OTP via email (con magic link nella stessa email), password facoltativa | proposta |
-| D17 | Lista d'attesa | Opzione (b): esclusiva di 30 min in ordine di iscrizione, avviso a tutte se lo slot è a meno di 12 h | proposta |
-| D18 | Job | Supabase pg_cron ogni 5 min | proposta |
-| D19 | Testi | Refusi evidenti delle descrizioni corretti senza cambiarne il senso | brief (§3) |
+| #   | Tema                                                                        | Decisione                                                                                                                                                                                                                                                 | Fonte             |
+| --- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| D1  | Orari                                                                       | Lun–ven 10:00–14:00 e 14:30–20:00. Sabato 10:00–14:30 (il brief dice solo "chiude prima", quindi l'orario esatto viene dal sito). Domenica chiuso.                                                                                                        | brief + sito      |
+| D2  | Partenze                                                                    | 10:00, 12:00, 14:30, 16:00, 18:00; dalle 18:00 "Sur demande" salvo sblocco giornaliero                                                                                                                                                                    | brief             |
+| D3  | Extension Cils                                                              | 1 h 45                                                                                                                                                                                                                                                    | brief             |
+| D4  | Extension Cils Remplissage                                                  | 1 h 30 (posa − 15 min)                                                                                                                                                                                                                                    | brief             |
+| D5  | Rehaussement Cils, Browlift                                                 | 1 h ciascuno                                                                                                                                                                                                                                              | brief             |
+| D5b | Rehaussement Cils Avec Teinture, Browlift Avec Teinture e altre prestazioni | durate del sito (1 h, 1 h 10, …)                                                                                                                                                                                                                          | sito              |
+| D6  | Stili di posa                                                               | La struttura a varianti è pronta, ma non creo varianti finché Alessia non comunica i nomi (non li invento).                                                                                                                                               | —                 |
+| D7  | Catalogo                                                                    | Tutte le 13 prestazioni del sito, una sola categoria « Prestations »                                                                                                                                                                                      | sito              |
+| D8  | Pagamento online                                                            | **Non previsto** (il brief non lo chiede). L'importo dell'acconto resta come informazione.                                                                                                                                                                | brief             |
+| D9  | Prezzi                                                                      | Prezzi pieni noti: Épilation sourcils 16 €, Teinture sourcils 25 €, Épilation moustache 10 €, Dépose 20 € (10 € se seguita da nuova posa). Per le altre il prezzo resta vuoto e il sito mostra l'acconto ("Acompte 20 €"). Alessia completerà dall'admin. | sito              |
+| D10 | Prenotazione                                                                | Una prestazione (+ variante) per prenotazione                                                                                                                                                                                                             | brief             |
+| D11 | Annullamento                                                                | Fino a 24 h prima, configurabile                                                                                                                                                                                                                          | brief             |
+| D12 | Finestra / preavviso                                                        | 60 giorni / 2 h                                                                                                                                                                                                                                           | brief             |
+| D13 | Nome e logo                                                                 | « Lady A Beauty »; logo attuale finché Alessia non carica il nuovo                                                                                                                                                                                        | brief             |
+| D14 | Bio                                                                         | Testo del sito (diplomata 2019) con refusi corretti                                                                                                                                                                                                       | sito              |
+| D15 | Indirizzo                                                                   | « 49 avenue de Verdun, 74100 Annemasse » (registro INSEE/RNE, 18/11/2026)                                                                                                                                                                                 | registro pubblico |
+| D16 | Account                                                                     | Codice OTP via email (con magic link nella stessa email), password facoltativa                                                                                                                                                                            | proposta          |
+| D17 | Lista d'attesa                                                              | Opzione (b): esclusiva di 30 min in ordine di iscrizione, avviso a tutte se lo slot è a meno di 12 h                                                                                                                                                      | proposta          |
+| D18 | Job                                                                         | Supabase pg_cron ogni 5 min                                                                                                                                                                                                                               | proposta          |
+| D19 | Testi                                                                       | Refusi evidenti delle descrizioni corretti senza cambiarne il senso                                                                                                                                                                                       | brief (§3)        |
 
 ## Ancora aperti (non bloccanti)
-- Nomi degli stili di posa (varianti dell'Extension).
-- Prezzi pieni di 9 prestazioni.
-- Le descrizioni del sito parlano di « acompte … + 0,94 € de frais de transaction », legati al pagamento online di Book in Beautiful che non avremo. Alessia dovrà decidere come raccogliere l'acconto (es. in DM / bonifico) e aggiornare il testo.
-- Telefono dello studio (facoltativo nelle mentions légales). Numero civico, forma giuridica e SIRET sono risolti: vedi sotto.
-- Dominio e mittente email.
+
+Tutto ciò che il sito attuale contiene è già stato ripreso (vedi `sito-attuale.md`). Restano solo i dati che **non esistono** né sul sito né nel registro pubblico:
+
+- **Prezzi pieni di 9 prestazioni.** Il sito attuale mostra solo l'acconto; nel frattempo il nuovo sito mostra « Acompte 20 € ». Alessia li inserisce dall'admin (Réglages → Prestations).
+- **Telefono dello studio** (facoltativo).
+- **Dominio e indirizzo mittente** delle e-mail: servono per il deploy.
+
+### Chiusi con le informazioni del sito attuale (18/11/2026)
+
+- **Stili di posa:** il sito attuale non ha varianti; la pose si comunica ad Alessia. Il nuovo sito fa lo stesso: niente varianti, e la descrizione dell'Extension invita a indicare la pose nella nota di prenotazione (campo già presente) o su Instagram. Le varianti restano attivabili dall'admin.
+- **Testo dell'acconto:** i « + 0,94 € de frais de transaction » erano la commissione del pagamento online di Book in Beautiful, che il nuovo sito non ha. Il testo diventa « Un acompte de 20 € (50 € per Shading/Microblading) est demandé à la réservation. Il n'est pas remboursable. ». Le modalità di riscossione restano quelle che Alessia usa già, e il testo si modifica dall'admin.
 
 ## Dati legali (dal registro pubblico, 18/11/2026)
 
