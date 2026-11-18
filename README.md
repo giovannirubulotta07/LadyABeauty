@@ -4,7 +4,7 @@ Sito di prenotazione online dello studio **Lady A Beauty** (Annemasse): extensio
 Next.js (App Router) · TypeScript strict · Tailwind CSS v4 · Supabase · Vitest · Playwright.
 
 > Il README completo (deploy su Vercel e Supabase, dominio, SPF/DKIM) arriverà nella fase 7.
-> Analisi e decisioni: [`docs/sito-attuale.md`](docs/sito-attuale.md), [`docs/decisioni.md`](docs/decisioni.md), [`docs/proposta-tecnica.md`](docs/proposta-tecnica.md).
+> Analisi e decisioni: [`docs/sito-attuale.md`](docs/sito-attuale.md), [`docs/decisioni.md`](docs/decisioni.md), [`docs/proposta-tecnica.md`](docs/proposta-tecnica.md), [`docs/motore-slot.md`](docs/motore-slot.md).
 
 ## Avvio in locale
 
@@ -25,7 +25,8 @@ Se il registro ECR di Supabase non è raggiungibile, usa Docker Hub:
 
 | Comando | Cosa fa |
 |---|---|
-| `npm run test` | test unitari (Vitest): logica di dominio, contrasti WCAG dei token |
+| `npm run test` | test unitari (Vitest): motore degli slot, fusi orari, contrasti WCAG dei token |
+| `npm run test:db` | test d'integrazione sul database locale: concorrenza, vincoli, RLS, servizio disponibilità |
 | `npm run test:e2e` | test end-to-end (Playwright, mobile + desktop) su `npm run start` |
 | `npm run typecheck` / `npm run lint` | controlli statici |
 | `npm run db:types` | rigenera i tipi TypeScript dal database locale |
@@ -36,7 +37,7 @@ Se il registro ECR di Supabase non è raggiungibile, usa Docker Hub:
 
 ```
 src/app/            route (sito pubblico in (site)/, poi admin/ e api/)
-src/domain/         logica pura e testata (orari, prezzi; slot e lista d'attesa nelle fasi 2 e 5)
+src/domain/         logica pura e testata (fusi orari, motore degli slot, orari, prezzi)
 src/server/         codice solo server: env, client Supabase, query dei contenuti
 src/components/     ui/ (primitivi) e site/ (header, footer, card…)
 src/styles/         token di design (unica fonte per colori, font, raggi, spaziature)

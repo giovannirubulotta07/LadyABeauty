@@ -15,7 +15,9 @@
     "db:start": "supabase start",
     "db:reset": "supabase db reset",
     "db:types": "supabase gen types typescript --local > src/server/db/database.types.ts",
-    "images:gallery": "tsx scripts/prepare-gallery.mts"
+    "images:gallery": "tsx scripts/prepare-gallery.mts",
+    "test:db": "vitest run --config vitest.db.config.mts",
+    "test:all": "npm run test && npm run test:db"
   },
   "dependencies": {
     "@date-fns/tz": "^1.5.0",
@@ -38,6 +40,7 @@
     "@vitest/coverage-v8": "^5.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
+    "postgres": "^4.1.1",
     "prettier": "^3.10.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "sharp": "^0.35.5",

@@ -331,11 +331,23 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "is_admin":
+            "create_appointment":
+{ Args: { "p_client_id": string,"p_client_note"?: string,"p_created_by"?: string,"p_duration_min": number,"p_hold_offer_id"?: string,"p_price_cents": number,"p_service_id": string,"p_service_name": string,"p_source": Database["public"]['Enums']["appointment_source"],"p_start": string,"p_variant_id": string,"p_variant_name": string }; Returns: string
+                           },
+"create_block":
+{ Args: { "p_created_by"?: string,"p_period": unknown,"p_reason"?: string }; Returns: string
+                           },
+"is_admin":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
 "is_valid_period":
 { Args: { "p": unknown }; Returns: boolean
+                           },
+"lock_calendar_day":
+{ Args: { "p_day": string }; Returns: undefined
+                           },
+"lock_calendar_range":
+{ Args: { "p_period": unknown }; Returns: undefined
                            }
           }
           Enums: {
