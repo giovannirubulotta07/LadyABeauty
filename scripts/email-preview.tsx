@@ -14,7 +14,7 @@ const brand: EmailBrand = {
   name: "Lady A Beauty",
   siteUrl: process.env.PREVIEW_SITE_URL ?? "http://127.0.0.1:3000",
   instagramUrl: "https://www.instagram.com/lady.a_beauty/",
-  addressLine: "Avenue de Verdun, 74100 Annemasse",
+  addressLine: "49 avenue de Verdun, 74100 Annemasse",
 };
 
 const appt: AppointmentEmailData = {
@@ -24,7 +24,7 @@ const appt: AppointmentEmailData = {
   timeLabel: "10:00 – 11:45",
   durationLabel: "1 h 45",
   priceLabel: "Acompte 20 €",
-  address: "Avenue de Verdun, 74100 Annemasse",
+  address: "49 avenue de Verdun, 74100 Annemasse",
   mapsUrl: "https://www.google.com/maps/search/?api=1&query=Lady%20A%20Beauty",
   manageUrl: `${brand.siteUrl}/rdv/exemple`,
   icsUrl: `${brand.siteUrl}/api/ics/exemple`,
