@@ -30,7 +30,7 @@ test.describe("E-mails", () => {
       since,
     );
     expect(confirmation.text).toContain("Teinture sourcils");
-    expect(confirmation.text).toContain("Avenue de Verdun");
+    expect(confirmation.text).toContain("49 avenue de Verdun");
     const owner = await waitForEmail(
       OWNER,
       /^Nouveau rendez-vous .* Cliente Test Emails$/,

@@ -161,19 +161,30 @@ test.describe("Administration — contenus", () => {
     page,
   }) => {
     await adminLogin(page);
-    await page.goto("/admin/reglages/accueil");
-    const field = page.getByLabel("Sous-titre");
-    const original = await field.inputValue();
+    // Fill only once the form is hydrated, and check the value before saving
+    // (an early fill can be merged with the server-rendered value).
+    const openForm = async () => {
+      await page.goto("/admin/reglages/accueil");
+      await page.waitForLoadState("networkidle");
+      return page.getByLabel("Sous-titre");
+    };
+    const field = await openForm();
+    // A previous interrupted run must not become the "original".
+    const original = (await field.inputValue())
+      .replace(/Test E2E \d+/g, "")
+      .trim();
     const marker = `Test E2E ${Date.now() % 1e6}`;
     try {
       await field.fill(marker);
+      await expect(field).toHaveValue(marker);
       await page.getByRole("button", { name: "Enregistrer" }).click();
       await expect(page.getByText("Enregistré.")).toBeVisible();
       await page.goto("/");
       await expect(page.getByText(marker)).toBeVisible();
     } finally {
-      await page.goto("/admin/reglages/accueil");
-      await page.getByLabel("Sous-titre").fill(original);
+      const again = await openForm();
+      await again.fill(original);
+      await expect(again).toHaveValue(original);
       await page.getByRole("button", { name: "Enregistrer" }).click();
       await expect(page.getByText("Enregistré.")).toBeVisible();
     }

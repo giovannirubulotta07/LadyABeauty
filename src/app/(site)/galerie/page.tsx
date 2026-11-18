@@ -17,7 +17,6 @@ export default async function GaleriePage() {
       <PageHero
         label="Galerie"
         title="Les regards"
-        image="/editorial/soie-leopard-2.jpg"
         intro="Les réalisations du studio, sans filtre."
       />
       <section className="surface-dark bg-espresso-950 text-ivory">

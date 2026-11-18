@@ -9,7 +9,8 @@ export type ServiceRow = {
   slug: string;
   name: string;
   meta: string;
-  image: string;
+  /** A real photo of Alessia’s work, shown next to the cursor on desktop. */
+  image: string | null;
 };
 
 /**
@@ -99,19 +100,23 @@ export function ServiceRows({ rows }: { rows: ServiceRow[] }) {
           aria-hidden="true"
           className="pointer-events-none fixed top-0 left-0 z-30 h-[22rem] w-[17rem] overflow-hidden rounded-t-full"
         >
-          {rows.map((row, i) => (
-            <Image
-              key={row.slug}
-              src={row.image}
-              alt=""
-              fill
-              sizes="272px"
-              className={clsx(
-                "object-cover transition-[opacity,transform] duration-700 ease-[var(--ease-expo)]",
-                active === i ? "scale-100 opacity-100" : "scale-110 opacity-0",
-              )}
-            />
-          ))}
+          {rows.map((row, i) =>
+            row.image ? (
+              <Image
+                key={row.slug}
+                src={row.image}
+                alt=""
+                fill
+                sizes="272px"
+                className={clsx(
+                  "object-cover transition-[opacity,transform] duration-700 ease-[var(--ease-expo)]",
+                  active === i
+                    ? "scale-100 opacity-100"
+                    : "scale-110 opacity-0",
+                )}
+              />
+            ) : null,
+          )}
         </div>
       ) : null}
     </div>

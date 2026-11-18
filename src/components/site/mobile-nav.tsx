@@ -102,7 +102,7 @@ export function MobileNav({
             >
               <div className="relative aspect-[4/5] overflow-hidden rounded-t-full">
                 <Image
-                  src="/editorial/soie-leopard-1.jpg"
+                  src="/editorial/regard-04-editorial.jpg"
                   alt=""
                   fill
                   sizes="30vw"

@@ -18,12 +18,6 @@ import { beautySalonJsonLd } from "@/server/content/structured-data";
 import { env } from "@/server/env";
 
 const vars = (v: Record<string, number>) => v as CSSProperties;
-const TEXTURES = [
-  "/editorial/soie-leopard-1.jpg",
-  "/editorial/soie-espresso-1.jpg",
-  "/editorial/satin-sable-1.jpg",
-  "/editorial/soie-leopard-2.jpg",
-];
 
 function Shell({
   id,
@@ -104,24 +98,9 @@ export default async function HomePage() {
         aria-labelledby="hero-title"
         className="surface-dark relative h-svh min-h-[38rem] overflow-hidden bg-espresso-950 text-ivory"
       >
-        <div data-parallax="0.18" className="absolute inset-x-0 -inset-y-[8%]">
-          <Image
-            src="/editorial/hero-soie-paysage.jpg"
-            alt=""
-            fill
-            preload
-            sizes="100vw"
-            className="object-cover object-[62%_50%]"
-          />
-        </div>
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-espresso-950/55 via-espresso-950/10 to-espresso-950/80"
-        />
-
         {gallery[0] ? (
           <div
-            className="absolute top-[17%] right-[6vw] hidden w-[19vw] max-w-[22rem] lg:block"
+            className="absolute top-[13%] right-[7vw] w-[40vw] max-w-[22rem] sm:w-[28vw] lg:top-[17%] lg:right-[6vw] lg:w-[19vw]"
             data-parallax="-0.25"
           >
             {/* CSS entrance on the inner element, GSAP parallax on the outer one: never both on one transform. */}
@@ -131,11 +110,12 @@ export default async function HomePage() {
                   src="/editorial/regard-01-editorial.jpg"
                   alt={gallery[0].alt}
                   fill
-                  sizes="22rem"
+                  preload
+                  sizes="(min-width: 1024px) 19vw, (min-width: 640px) 28vw, 40vw"
                   className="object-cover"
                 />
               </div>
-              <p className="mt-4 text-right text-xs tracking-[0.2em] text-sand-100 uppercase">
+              <p className="mt-4 hidden text-right text-xs tracking-[0.2em] text-sand-100 uppercase sm:block">
                 Extension de cils · le studio
               </p>
             </div>
@@ -254,32 +234,25 @@ export default async function HomePage() {
 
       {/* 4 · Parallax collage -------------------------------------------------- */}
       <Shell tone="mocha" label="L’art du regard" className="min-h-[115svh]">
-        <div aria-hidden="true">
-          <Tile
-            src={TEXTURES[0]!}
-            className="top-[6%] left-[4%] w-[38vw] sm:w-[22vw]"
-            speed={0.55}
-            ratio="aspect-[4/5]"
-          />
-          <Tile
-            src={TEXTURES[2]!}
-            className="top-[10%] right-[6%] w-[30vw] sm:w-[15vw]"
-            speed={0.95}
-            ratio="aspect-[4/5]"
-          />
-          <Tile
-            src={TEXTURES[1]!}
-            className="right-[8%] bottom-[8%] w-[40vw] sm:w-[24vw]"
-            speed={0.7}
-            ratio="aspect-[4/3]"
-          />
-          <Tile
-            src={TEXTURES[3]!}
-            className="bottom-[4%] left-[38%] hidden w-[12vw] sm:block"
-            speed={1.15}
-            ratio="aspect-square"
-          />
-        </div>
+        {gallery[5] ? (
+          <div
+            className="absolute top-[9%] right-[6%] w-[36vw] sm:w-[19vw]"
+            data-parallax="0.6"
+          >
+            <div
+              data-reveal="mask"
+              className="relative aspect-[4/5] overflow-hidden"
+            >
+              <Image
+                src="/editorial/regard-06-editorial.jpg"
+                alt={gallery[5].alt}
+                fill
+                sizes="(min-width: 640px) 19vw, 36vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
+        ) : null}
         {gallery[2] ? (
           <div
             className="absolute bottom-[12%] left-[6%] w-[34vw] sm:w-[17vw]"
@@ -408,7 +381,7 @@ export default async function HomePage() {
                 meta: [formatDuration(s.durationMin), priceLabel(s)]
                   .filter(Boolean)
                   .join(" · "),
-                image: TEXTURES[i % TEXTURES.length]!,
+                image: gallery.length ? gallery[i % gallery.length]!.src : null,
               }))}
             />
           </div>
@@ -509,19 +482,16 @@ export default async function HomePage() {
         className="scroll-mt-16"
       >
         <div className="grid lg:grid-cols-2">
-          <div className="relative min-h-[60svh] overflow-hidden lg:min-h-[90svh]">
-            <div
-              data-parallax="0.2"
-              className="absolute inset-x-0 -inset-y-[10%]"
+          <div
+            aria-hidden="true"
+            className="relative flex min-h-[44svh] items-end overflow-hidden bg-mocha px-gutter pb-10 sm:px-12 lg:min-h-[90svh] lg:px-20 lg:pb-20"
+          >
+            <p
+              data-parallax="0.15"
+              className="font-display text-[clamp(10rem,34vw,26rem)] leading-[0.8] text-ivory/90"
             >
-              <Image
-                src="/editorial/soie-leopard-2.jpg"
-                alt=""
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
-            </div>
+              {business.address.line1.match(/^\d+/)?.[0] ?? "A"}
+            </p>
           </div>
           <div className="flex flex-col justify-center px-gutter py-24 sm:px-12 lg:px-20">
             <p className="label text-sand-100">Le studio</p>
@@ -570,31 +540,5 @@ export default async function HomePage() {
         </div>
       </Shell>
     </>
-  );
-}
-
-function Tile({
-  src,
-  className,
-  speed,
-  ratio,
-}: {
-  src: string;
-  className: string;
-  speed: number;
-  ratio: string;
-}) {
-  return (
-    <div className={`absolute ${className}`} data-parallax={speed}>
-      <div className={`relative ${ratio} overflow-hidden`}>
-        <Image
-          src={src}
-          alt=""
-          fill
-          sizes="(min-width: 640px) 24vw, 40vw"
-          className="object-cover"
-        />
-      </div>
-    </div>
   );
 }

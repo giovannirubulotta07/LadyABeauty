@@ -17,7 +17,7 @@ insert into public.business_settings (
   'Lash maker & brow artist à Annemasse',
   'alessiarubu98@gmail.com',
   'https://www.instagram.com/lady.a_beauty/',
-  '/brand/logo-actuel.jpg',
+  null, -- logo: typographic wordmark until Alessia uploads a new one from the admin
   '49 avenue de Verdun', '74100', 'Annemasse', 'FR',
   -- Public register (INSEE / RNE): sole trader, SIREN 984 040 113, NAF 96.02B.
   'Alessia Rubulotta, entrepreneur individuel (EI)', '98404011300016',
