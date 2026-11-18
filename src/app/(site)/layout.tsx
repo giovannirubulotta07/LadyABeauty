@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageCoat } from "@/components/fur/page-coat";
 import { Footer } from "@/components/site/footer";
 import { Header } from "@/components/site/header";
 import { MotionProvider } from "@/components/motion/motion-provider";
@@ -13,8 +14,9 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       >
         Aller au contenu
       </a>
+      <PageCoat />
       <Header />
-      <main id="contenu" tabIndex={-1} className="outline-none">
+      <main id="contenu" tabIndex={-1} className="site-main outline-none">
         {children}
       </main>
       <Footer />

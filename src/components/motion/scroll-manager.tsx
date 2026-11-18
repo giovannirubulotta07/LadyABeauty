@@ -13,15 +13,16 @@ import { scrollToHash, scrollToTop } from "./motion-provider";
 export function ScrollManager() {
   const pathname = usePathname();
   const first = useRef(true);
-  const historyNav = useRef(false);
+  // Where the last back/forward went: that page keeps the restored position.
+  const popPath = useRef<string | null>(null);
 
   useEffect(() => {
     const onPop = () => {
-      historyNav.current = true;
+      popPath.current = window.location.pathname;
     };
     window.addEventListener("popstate", onPop);
-    // Hash-only changes (typed in the address bar) on the same page.
-    const onHash = () => scrollToHash();
+    // Hash-only changes (an in-page link, or typed in the address bar).
+    const onHash = () => scrollToHash({ smooth: true });
     window.addEventListener("hashchange", onHash);
     return () => {
       window.removeEventListener("popstate", onPop);
@@ -35,12 +36,11 @@ export function ScrollManager() {
       return;
     }
     // Decided on the next frame: the router may re-render inside the
-    // popstate dispatch, before our own listener has flagged it.
+    // popstate dispatch, before our own listener has recorded it.
     const frame = requestAnimationFrame(() => {
-      if (historyNav.current) {
-        historyNav.current = false;
-        return;
-      }
+      const fromHistory = popPath.current === pathname;
+      popPath.current = null; // a stale record never affects a later visit
+      if (fromHistory) return;
       if (!scrollToHash()) scrollToTop();
     });
     return () => cancelAnimationFrame(frame);

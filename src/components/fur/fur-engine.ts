@@ -12,11 +12,16 @@
  * the root of each hair, so the pattern is soft-edged like real fur.
  */
 
-/** leopard: tawny with rosettes · tiger: tawny with stripes · rose: soft pink fur, no marks. */
-export type FurPattern = "leopard" | "tiger" | "rose";
+/**
+ * leopard: tawny with rosettes · tiger: tawny with stripes · rose: soft pink
+ * fur, no marks · snow: ivory snow-leopard coat with faint rosettes (light pages).
+ */
+export type FurPattern = "leopard" | "tiger" | "rose" | "snow";
 
 export type FurOptions = {
   pattern: FurPattern;
+  /** Ignore strokes where this selector covers the fur (a fixed page coat under dark sections). */
+  occludedBy?: string;
   /** No idle swaying; the fur still answers to the visitor's own gestures. */
   reducedMotion: boolean;
 };
@@ -78,7 +83,7 @@ in vec2 vRoot;
 in float vSeed;
 in float vSheen;
 in float vPress;
-uniform float uPattern;   // 0 leopard, 1 tiger, 2 rose
+uniform float uPattern;   // 0 leopard, 1 tiger, 2 rose, 3 snow
 uniform float uScale;     // pattern size in px
 out vec4 outColor;
 
@@ -130,7 +135,15 @@ void main() {
   vec2 p = vRoot / uScale;
   vec3 col;
   vec3 tint = vec3(0.95, 0.78, 0.55);
-  if (uPattern > 1.5) {
+  if (uPattern > 2.5) {
+    // Snow leopard: ivory and warm sand, soft taupe rosettes that never shout.
+    float m = leopard(p);
+    float tone = noise(p * 1.2) * 0.5 + vSeed * 0.5;
+    col = mix(vec3(0.90, 0.84, 0.76), vec3(0.99, 0.96, 0.91), tone);
+    col = mix(col, vec3(0.60, 0.50, 0.41), clamp(m, 0.0, 1.0) * 0.46);
+    col = mix(col, vec3(0.93, 0.83, 0.70), clamp(-m, 0.0, 1.0));
+    tint = vec3(1.0, 0.97, 0.92);
+  } else if (uPattern > 1.5) {
     // Soft pink faux fur: powder pink tips, deeper rose in the hollows, tonal waves.
     float tone = noise(p * 1.4) * 0.65 + noise(p * 4.0) * 0.2 + vSeed * 0.15;
     col = mix(vec3(0.86, 0.52, 0.60), vec3(1.0, 0.82, 0.86), tone);
@@ -144,7 +157,7 @@ void main() {
 
   // Depth: roots in shadow, tips lit; fine strand-to-strand variation.
   // A pale pink coat keeps lighter hollows, or it would read as plum.
-  float rootShade = uPattern > 1.5 ? 0.62 : 0.28;
+  float rootShade = uPattern > 2.5 ? 0.78 : uPattern > 1.5 ? 0.62 : 0.28;
   col *= mix(rootShade, 1.0, smoothstep(0.0, 1.0, vT)) * (0.86 + vSeed * 0.22);
   // Velvet sheen: changes with the hair direction, so strokes leave a trail.
   float sheen = pow(max(vSheen, 0.0), 2.5) * vT;
@@ -169,7 +182,7 @@ function compile(gl: WebGL2RenderingContext, type: number, src: string) {
 export function startFur(
   canvas: HTMLCanvasElement,
   host: HTMLElement,
-  { pattern, reducedMotion }: FurOptions,
+  { pattern, reducedMotion, occludedBy }: FurOptions,
 ): (() => void) | null {
   const gl = canvas.getContext("webgl2", {
     antialias: true,
@@ -209,7 +222,7 @@ export function startFur(
   const uWidth = u("uWidth");
   gl.uniform1f(
     u("uPattern"),
-    pattern === "tiger" ? 1 : pattern === "rose" ? 2 : 0,
+    { leopard: 0, tiger: 1, rose: 2, snow: 3 }[pattern],
   );
   gl.uniform1i(u("uField"), 0);
 
@@ -246,6 +259,7 @@ export function startFur(
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   if (pattern === "rose") gl.clearColor(0.55, 0.3, 0.36, 1);
+  else if (pattern === "snow") gl.clearColor(0.8, 0.73, 0.64, 1);
   else gl.clearColor(0.09, 0.055, 0.035, 1);
 
   let width = 0;
@@ -316,6 +330,13 @@ export function startFur(
 
   function brush(clientX: number, clientY: number) {
     if (performance.now() - lastScroll < 180) return;
+    if (
+      occludedBy &&
+      document.elementFromPoint(clientX, clientY)?.closest(occludedBy)
+    ) {
+      last = null;
+      return;
+    }
     const rect = canvas.getBoundingClientRect();
     const x = clientX - rect.left;
     const y = clientY - rect.top;

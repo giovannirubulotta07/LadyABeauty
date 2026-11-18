@@ -23,12 +23,13 @@ export async function Footer() {
 
   return (
     <footer className="surface-dark relative overflow-hidden bg-espresso-950 text-sand-100">
+      {/* One coat for the whole footer: the invitation and the details. */}
+      <FurLayer pattern="leopard" veil="text" />
       {/* Closing invitation */}
       <section
         aria-labelledby="footer-cta"
         className="relative overflow-hidden border-b border-ivory/10"
       >
-        <FurLayer pattern="leopard" veil="band" />
         <Container className="relative flex max-w-[90rem] flex-col items-start gap-10 py-20 sm:py-28 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="label text-sand-100">Réservation en ligne</p>
@@ -57,7 +58,7 @@ export async function Footer() {
 
       {/* Practical details. The home page already shows them in « Venir au
           studio », so they are hidden there (globals.css: .footer-info). */}
-      <Container className="grid max-w-[90rem] gap-x-12 gap-y-10 py-14 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.4fr]">
+      <Container className="relative grid max-w-[90rem] gap-x-12 gap-y-10 py-14 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.4fr]">
         <div className="footer-info">
           <h2 className="label text-sand-100/80">Le studio</h2>
           <address className="mt-4 leading-relaxed text-ivory not-italic">
@@ -102,7 +103,7 @@ export async function Footer() {
         </nav>
       </Container>
 
-      <div className="border-t border-ivory/10">
+      <div className="relative border-t border-ivory/10">
         <Container className="flex max-w-[90rem] flex-col gap-3 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>
             © <CurrentYear /> {business.name}

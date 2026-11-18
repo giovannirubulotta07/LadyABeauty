@@ -1,7 +1,7 @@
+import { FurLayer } from "@/components/fur/fur-layer";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
-import { BOOKING_LINK } from "@/components/site/navigation";
 import { PageHero } from "@/components/site/page-hero";
 import { priceLabel } from "@/domain/catalog/price";
 import { formatDuration } from "@/lib/format";
@@ -25,8 +25,9 @@ export default async function PrestationsPage() {
         intro="Chaque prestation est réalisée sur mesure, selon votre regard et vos envies."
         fur="rose"
       />
-      <section className="surface-dark bg-espresso-950 text-ivory">
-        <div className="mx-auto w-full max-w-[90rem] px-gutter pb-28 sm:px-8 sm:pb-36">
+      <section className="surface-dark relative overflow-hidden bg-espresso-950 text-ivory">
+        <FurLayer pattern="tiger" veil="text" />
+        <div className="relative mx-auto w-full max-w-[90rem] px-gutter pt-12 pb-28 sm:px-8 sm:pt-16 sm:pb-36">
           {services.length === 0 ? (
             <p className="border-t border-ivory/15 py-16 text-center text-sand-100">
               Les prestations seront bientôt disponibles.
@@ -42,7 +43,7 @@ export default async function PrestationsPage() {
                   <li
                     key={service.id}
                     id={service.slug}
-                    className="scroll-mt-24 border-b border-ivory/15"
+                    className="border-b border-ivory/15"
                     data-reveal="fade"
                     data-delay={Math.min(i, 6) * 0.04}
                   >
@@ -104,14 +105,6 @@ export default async function PrestationsPage() {
               })}
             </ol>
           )}
-          <div className="mt-20 flex justify-center">
-            <Link
-              href={BOOKING_LINK.href}
-              className="inline-flex min-h-14 items-center gap-4 rounded-pill bg-ivory px-9 text-[0.8125rem] tracking-[0.2em] text-espresso-950 uppercase transition-colors duration-500 hover:bg-caramel-300"
-            >
-              {BOOKING_LINK.label} <span aria-hidden="true">→</span>
-            </Link>
-          </div>
         </div>
       </section>
     </>

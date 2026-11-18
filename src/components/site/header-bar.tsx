@@ -36,7 +36,7 @@ export function HeaderBar({
         <div className="justify-self-start">{menu}</div>
         <Link
           href="/"
-          className="justify-self-center font-sans text-[0.75rem] font-light tracking-[0.3em] whitespace-nowrap uppercase min-[400px]:text-[0.8125rem] min-[400px]:tracking-[0.42em] sm:text-sm"
+          className="inline-flex min-h-11 items-center justify-self-center font-sans text-[0.75rem] font-light tracking-[0.3em] whitespace-nowrap uppercase min-[400px]:text-[0.8125rem] min-[400px]:tracking-[0.42em] sm:text-sm"
           aria-label={`${name} — accueil`}
         >
           {name}

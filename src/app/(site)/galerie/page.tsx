@@ -1,3 +1,4 @@
+import { FurLayer } from "@/components/fur/fur-layer";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
@@ -20,8 +21,9 @@ export default async function GaleriePage() {
         title="Les regards"
         intro="Les réalisations du studio, sans filtre."
       />
-      <section className="surface-dark bg-espresso-950 text-ivory">
-        <div className="mx-auto w-full max-w-[90rem] px-gutter pb-28 sm:px-8 sm:pb-36">
+      <section className="surface-dark relative overflow-hidden bg-espresso-950 text-ivory">
+        <FurLayer pattern="leopard" veil="text" />
+        <div className="relative mx-auto w-full max-w-[90rem] px-gutter pt-12 pb-28 sm:px-8 sm:pt-16 sm:pb-36">
           {images.length === 0 ? (
             <p className="py-16 text-center text-sand-100">
               Les photos arrivent très bientôt.

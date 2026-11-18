@@ -121,3 +121,15 @@ Tre manti, tutti interattivi: **leopardato** (marchio), **rosa** (accento morbid
 - **Velo di leggibilità:** è tinto come il manto (marrone sul leopardato, rosa scuro sul rosa). Sul rosa è più leggero, perché il manto resti rosa e non vada sul prugna; un'ombra morbida tiene nitido il titolo.
 - **Fallback:** senza WebGL, o con rendering software, le sezioni restano in tinta unita: `espresso-950` o `rose-950`.
 - **Indirizzi sconosciuti:** mostrano la stessa pagina 404 del sito, con header, pelliccia e footer.
+
+## Nessuna superficie a tinta unita (18/11/2026)
+
+Richiesta del committente: nessuna parte del sito pubblico deve restare a tinta unita.
+
+- **Quattro manti:** leopardo, tigre, rosa e il nuovo **leopardo delle nevi** (`snow`: avorio e sabbia, rosette color tortora tenui) per tutte le parti chiare.
+- **Sezioni scure:** ognuna ha il suo manto interattivo. Hero e piè di pagina in leopardo, citazione in rosa, «À propos» e galleria in leopardo, prestazioni in tigre. Sulle pagine interne, l'elenco delle prestazioni è in tigre e la griglia della galleria in leopardo. Il velo `text` scurisce il centro, così il testo resta leggibile, e il manto si vede ai bordi.
+- **Pagine chiare:** un unico manto di leopardo delle nevi, fisso dietro tutta la pagina (`PageCoat`), su cui il contenuto scorre. Le sezioni chiare della home sono traslucide e lo lasciano vedere. Una carezza sopra una sezione scura non lo muove (`occludedBy`).
+- **Schede (avorio e caffè):** satinate su una traccia del manto, mai piatte.
+- **Immagini fisse dei manti:** `public/fur/*.webp`, renderizzate dallo stesso motore, circa 110 KB l'una. Stanno sempre sotto la pelliccia interattiva, che vi si sovrappone in dissolvenza. Così anche i dispositivi senza WebGL2, o con GPU software, e Lighthouse vedono la pelliccia.
+- **Prestazioni:** la pelliccia interattiva si accende solo quando la sezione è a mezzo schermo di distanza, e si spegne quando se ne allontana. In ogni momento sono attivi al massimo 3 o 4 contesti WebGL, ognuno fermo finché non lo si tocca.
+- **Escluso:** l'area admin, che è uno strumento di lavoro e resta sobria per leggibilità.

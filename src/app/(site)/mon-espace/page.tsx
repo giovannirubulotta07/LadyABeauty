@@ -224,7 +224,13 @@ async function Account({
   const upcoming = appointments
     .filter((a) => a.status === "confirmed" && a.end > now)
     .sort((a, b) => a.start.getTime() - b.start.getTime());
-  const past = appointments.filter((a) => !upcoming.includes(a));
+  // Past ones only; a future appointment she cancelled is listed apart.
+  const past = appointments.filter(
+    (a) => a.start <= now && !upcoming.includes(a),
+  );
+  const cancelledAhead = appointments
+    .filter((a) => a.status === "cancelled" && a.start > now)
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
   const visits = past.filter(
     (a) => a.status === "completed" || a.status === "confirmed",
   );
@@ -340,6 +346,17 @@ async function Account({
             </div>
           </div>
         )}
+
+        {cancelledAhead.length > 0 ? (
+          <section aria-labelledby="annules-titre" className="mt-10">
+            <h3 id="annules-titre" className="label text-espresso-700">
+              Annulés
+            </h3>
+            <div className="mt-2">
+              <HistoryList items={cancelledAhead} canRebook={canRebook} />
+            </div>
+          </section>
+        ) : null}
 
         {waitlist.length > 0 ? (
           <section aria-labelledby="attente-titre" className="mt-10">
@@ -580,7 +597,11 @@ function HistoryList({
                 withYear: true,
                 capitalize: true,
               })}
-              {a.status === "cancelled" ? " · annulé" : ""}
+              {a.status === "cancelled"
+                ? " · annulé"
+                : a.status === "no_show"
+                  ? " · absence"
+                  : ""}
             </p>
             <p className="mt-1 font-display text-xl text-espresso-900">
               {a.serviceName}

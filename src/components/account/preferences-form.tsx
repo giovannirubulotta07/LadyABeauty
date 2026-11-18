@@ -71,7 +71,10 @@ export function PreferencesForm({ initial }: { initial: string }) {
         )}
       </Field>
       {message ? <Alert tone={message.tone}>{message.text}</Alert> : null}
-      <Button type="submit" disabled={pending || value === initial}>
+      <Button
+        type="submit"
+        disabled={pending || value.trim() === initial.trim()}
+      >
         {pending ? <Spinner /> : null}
         Enregistrer
       </Button>

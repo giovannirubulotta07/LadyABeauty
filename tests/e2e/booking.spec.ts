@@ -67,12 +67,12 @@ test.describe("Réservation", () => {
     await expect(
       upcoming.getByText("Aucun rendez-vous prévu pour le moment."),
     ).toBeVisible();
-    const history = page.getByRole("region", { name: "Historique" });
-    await expect(history).toContainText("annulé");
+    const cancelled = upcoming.getByRole("region", { name: "Annulés" });
+    await expect(cancelled).toContainText("annulé");
 
     // …and to book the same service again in one click.
     await expect(
-      history.getByRole("link", { name: "Réserver à nouveau" }),
+      cancelled.getByRole("link", { name: "Réserver à nouveau" }),
     ).toHaveAttribute("href", "/reserver?prestation=rehaussement-cils");
 
     // Her preferences are saved for Alessia.

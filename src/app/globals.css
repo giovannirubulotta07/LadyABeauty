@@ -178,3 +178,30 @@ html.lenis body {
 body:has(#studio) .footer-info {
   display: none;
 }
+
+/* Cards on the public site are never a flat fill: satin over a whisper of the
+   coat (the same still pictures the fur fades in over, already cached). */
+.site-main .rounded-card.bg-ivory {
+  background-image:
+    linear-gradient(
+      160deg,
+      rgb(251 247 240 / 0.95),
+      rgb(251 247 240 / 0.86) 55%,
+      rgb(251 247 240 / 0.93)
+    ),
+    url(/fur/snow.webp);
+  background-position: center;
+  background-size: cover;
+}
+.site-main .rounded-card.bg-espresso-950 {
+  background-image:
+    linear-gradient(
+      160deg,
+      rgb(31 19 13 / 0.72),
+      rgb(31 19 13 / 0.9) 60%,
+      rgb(31 19 13 / 0.8)
+    ),
+    url(/fur/leopard.webp);
+  background-position: center;
+  background-size: cover;
+}

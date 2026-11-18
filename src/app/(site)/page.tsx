@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FurLayer } from "@/components/fur/fur-layer";
+import { type FurPattern, FurLayer } from "@/components/fur/fur-layer";
 import { ServiceRows } from "@/components/home/service-rows";
 import { BOOKING_LINK } from "@/components/site/navigation";
 import { JsonLd } from "@/components/site/json-ld";
@@ -36,6 +36,8 @@ function Shell({
   id,
   label,
   tone = "espresso",
+  fur,
+  veil = "text",
   className = "",
   children,
 }: {
@@ -43,6 +45,9 @@ function Shell({
   label?: string;
   /** Dark tones for the editorial story, light ones for practical information. */
   tone?: "espresso" | "mocha" | "deep" | "rose" | "sand" | "ivory";
+  /** The coat worn by a dark section (light ones show the page's snow coat). */
+  fur?: FurPattern;
+  veil?: "text" | "strong";
   className?: string;
   children: ReactNode;
 }) {
@@ -51,8 +56,9 @@ function Shell({
     mocha: "surface-dark bg-mocha text-ivory",
     deep: "surface-dark bg-espresso-950 text-ivory",
     rose: "surface-dark bg-rose-950 text-ivory",
-    sand: "bg-sand-100 text-ink",
-    ivory: "bg-ivory text-ink",
+    // Translucent: the snow-leopard coat behind the page shows through.
+    sand: "bg-sand-100/55 text-ink",
+    ivory: "bg-ivory/70 text-ink",
   }[tone];
   return (
     <section
@@ -60,7 +66,8 @@ function Shell({
       aria-label={label}
       className={`relative overflow-hidden ${look} ${className}`}
     >
-      {children}
+      {fur ? <FurLayer pattern={fur} veil={veil} /> : null}
+      <div className="relative">{children}</div>
     </section>
   );
 }
@@ -192,9 +199,8 @@ export default async function HomePage() {
       </section>
 
       {/* 3 · L’esprit du studio: quote and two real photos -------------- */}
-      <Shell tone="rose" label="L’esprit du studio">
-        {/* The pink fur: the soft accent of the page, stroked like the hero. */}
-        <FurLayer pattern="rose" veil="strong" />
+      {/* The pink fur: the soft accent of the page, stroked like the hero. */}
+      <Shell tone="rose" fur="rose" veil="strong" label="L’esprit du studio">
         <div className={`${wrap} relative py-24 sm:py-36`}>
           <p className="label text-center text-sand-100">L’esprit du studio</p>
           <blockquote className="mx-auto mt-10 max-w-5xl text-center">
@@ -252,7 +258,7 @@ export default async function HomePage() {
       </Shell>
 
       {/* 5 · About -------------------------------------------------------------- */}
-      <Shell id="a-propos" tone="deep" label="À propos">
+      <Shell id="a-propos" tone="deep" fur="leopard" label="À propos">
         <div
           className={`${wrap} relative grid items-center gap-16 py-28 sm:py-40 lg:grid-cols-[1fr_1.1fr] lg:gap-24`}
         >
@@ -307,7 +313,7 @@ export default async function HomePage() {
       </Shell>
 
       {/* 6 · Services --------------------------------------------------------- */}
-      <Shell id="prestations" tone="espresso" label="Prestations">
+      <Shell id="prestations" tone="espresso" fur="tiger" label="Prestations">
         <div className={`${wrap} py-28 sm:py-36`}>
           <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -342,7 +348,7 @@ export default async function HomePage() {
       </Shell>
 
       {/* 7 · Gallery ---------------------------------------------------------- */}
-      <Shell tone="deep" label="Galerie">
+      <Shell tone="deep" fur="leopard" label="Galerie">
         <div className={`${wrap} py-28 sm:py-36`}>
           <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -367,7 +373,12 @@ export default async function HomePage() {
           >
             Faites glisser →
           </p>
-          <ul className="-mx-gutter mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-gutter pb-4 sm:mx-0 sm:mt-16 sm:grid sm:grid-cols-3 sm:gap-8 sm:overflow-visible sm:px-0">
+          <ul
+            // Scrolls sideways on phones: reachable and scrollable by keyboard.
+            tabIndex={0}
+            aria-label="Aperçu de la galerie"
+            className="-mx-gutter mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-gutter pb-4 sm:mx-0 sm:mt-16 sm:grid sm:grid-cols-3 sm:gap-8 sm:overflow-visible sm:px-0"
+          >
             {gallery.slice(0, 3).map((img, i) => (
               <li
                 key={img.id}

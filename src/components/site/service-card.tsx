@@ -22,7 +22,7 @@ export function ServiceCard({
   return (
     <article
       id={service.slug}
-      className="flex h-full scroll-mt-28 flex-col rounded-card bg-ivory p-6 shadow-card sm:p-7"
+      className="flex h-full flex-col rounded-card bg-ivory p-6 shadow-card sm:p-7"
     >
       <Heading className="text-2xl leading-tight text-espresso-900">
         {service.name}

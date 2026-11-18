@@ -38,14 +38,20 @@ export function getLenis() {
  * Scrolls to the element named in the URL hash (below the fixed header), or
  * returns false when there is none. Works with or without smooth scrolling.
  */
-export function scrollToHash(): boolean {
-  const id = decodeURIComponent(window.location.hash.slice(1));
+export function scrollToHash({ smooth = false } = {}): boolean {
+  const raw = window.location.hash.slice(1);
+  let id = raw;
+  try {
+    id = decodeURIComponent(raw);
+  } catch {
+    // a malformed hash (#50%) is used as is
+  }
   const target = id ? document.getElementById(id) : null;
   if (!target) return false;
   if (activeLenis) {
     activeLenis.resize(); // the page may have grown since Lenis measured it
-    activeLenis.scrollTo(target, { immediate: true, force: true });
-  } else target.scrollIntoView();
+    activeLenis.scrollTo(target, { immediate: !smooth, force: true });
+  } else target.scrollIntoView({ behavior: smooth ? "smooth" : "instant" });
   return true;
 }
 
@@ -207,6 +213,21 @@ function bind({ gsap, ScrollTrigger, SplitText }: Engine) {
 export function MotionProvider() {
   const pathname = usePathname();
   const ctx = useRef<ReturnType<typeof bind> | null>(null);
+  const firstBind = useRef(true);
+  const touched = useRef(false);
+
+  // Whether the visitor has scrolled by herself before the engine started.
+  useEffect(() => {
+    const mark = () => {
+      touched.current = true;
+    };
+    const events = ["wheel", "touchmove", "keydown", "pointerdown"] as const;
+    for (const e of events)
+      window.addEventListener(e, mark, { passive: true, once: true });
+    return () => {
+      for (const e of events) window.removeEventListener(e, mark);
+    };
+  }, []);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -222,12 +243,14 @@ export function MotionProvider() {
         await document.fonts?.ready; // SplitText needs final line breaks
         if (cancelled) return;
         // Never force the scroll position: the visitor may already be reading,
-        // and the browser restores it on back/forward. Lenis follows native
-        // scroll changes by itself; only an anchor in the URL needs help.
+        // and the browser restores it on back/forward (later navigations are
+        // ScrollManager's job). Only a first load with an #anchor needs help,
+        // as the layout may have moved since the browser jumped to it.
         ctx.current?.revert();
         ctx.current = bind(engine);
         engine.lenis?.resize();
-        scrollToHash();
+        if (firstBind.current && !touched.current) scrollToHash();
+        firstBind.current = false;
         html.classList.add("motion-ready");
       })
       .catch(() => html.classList.add("motion-off"));

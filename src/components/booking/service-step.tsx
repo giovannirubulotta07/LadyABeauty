@@ -116,7 +116,7 @@ export function ServiceStep({
       </fieldset>
 
       {selected && selected.variants.length > 0 ? (
-        <fieldset id="variantes" className="scroll-mt-28">
+        <fieldset id="variantes">
           <legend className="font-display text-2xl text-espresso-900">
             Quel style pour « {selected.name} » ?
           </legend>
