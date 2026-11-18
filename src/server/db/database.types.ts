@@ -289,14 +289,14 @@ isOneToOne: false
                   ]
                 },"waitlist_entries": {
                   Row: {
-                    "client_id": string,"created_at": string,"day": string,"duration_min": number,"id": string,"service_id": string,"status": Database["public"]['Enums']["waitlist_status"],"updated_at": string,"variant_id": string | null
+                    "client_id": string,"created_at": string,"day": string,"duration_min": number,"excluded_starts": (string)[],"id": string,"service_id": string,"status": Database["public"]['Enums']["waitlist_status"],"updated_at": string,"variant_id": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "client_id": string,"created_at"?: string,"day": string,"duration_min": number,"id"?: string,"service_id": string,"status"?: Database["public"]['Enums']["waitlist_status"],"updated_at"?: string,"variant_id"?: string | null
+                    "client_id": string,"created_at"?: string,"day": string,"duration_min": number,"excluded_starts"?: (string)[],"id"?: string,"service_id": string,"status"?: Database["public"]['Enums']["waitlist_status"],"updated_at"?: string,"variant_id"?: string | null
                   }
                   Update: {
-                    "client_id"?: string,"created_at"?: string,"day"?: string,"duration_min"?: number,"id"?: string,"service_id"?: string,"status"?: Database["public"]['Enums']["waitlist_status"],"updated_at"?: string,"variant_id"?: string | null
+                    "client_id"?: string,"created_at"?: string,"day"?: string,"duration_min"?: number,"excluded_starts"?: (string)[],"id"?: string,"service_id"?: string,"status"?: Database["public"]['Enums']["waitlist_status"],"updated_at"?: string,"variant_id"?: string | null
                   }
                   Relationships: [
                     {
@@ -354,6 +354,12 @@ isOneToOne: false
 "create_block":
 { Args: { "p_created_by"?: string,"p_period": unknown,"p_reason"?: string }; Returns: string
                            },
+"create_waitlist_offer":
+{ Args: { "p_entry_id": string,"p_exclusive_until": string,"p_period": unknown,"p_token_hash": string }; Returns: string
+                           },
+"expire_waitlist":
+{ Args: Record<PropertyKey, never>; Returns: string[]
+                           },
 "hit_rate_limit":
 { Args: { "p_key": string,"p_limit": number,"p_window_seconds": number }; Returns: boolean
                            },
@@ -368,6 +374,12 @@ isOneToOne: false
                            },
 "lock_calendar_range":
 { Args: { "p_period": unknown }; Returns: undefined
+                           },
+"redeem_waitlist_offer":
+{ Args: { "p_offer_id": string }; Returns: string
+                           },
+"release_waitlist_offer":
+{ Args: { "p_offer_id": string,"p_status": Database["public"]['Enums']["offer_status"] }; Returns: string
                            },
 "schedule_studio_jobs":
 { Args: { "p_site_url": string }; Returns: undefined

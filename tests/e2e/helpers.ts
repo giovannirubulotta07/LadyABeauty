@@ -58,8 +58,8 @@ export async function pickFirstSlot(
   return { time, url: page.url() };
 }
 
-/** Fills the details step, requests the code and types it. */
-export async function signInDuringBooking(
+/** Fills the contact form, requests the e-mailed code and types it. */
+export async function fillDetailsAndCode(
   page: Page,
   email: string,
   name = "Cliente Test E2E",
@@ -74,6 +74,15 @@ export async function signInDuringBooking(
   await page
     .getByLabel("Code reçu par e-mail")
     .fill(await loginCode(email, since));
+}
+
+/** Fills the details step, signs in with the code, and lands on the summary. */
+export async function signInDuringBooking(
+  page: Page,
+  email: string,
+  name = "Cliente Test E2E",
+) {
+  await fillDetailsAndCode(page, email, name);
   await expect(
     page.getByRole("heading", { name: "Récapitulatif" }),
   ).toBeVisible({ timeout: 20_000 });

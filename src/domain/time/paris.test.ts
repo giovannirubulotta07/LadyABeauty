@@ -11,7 +11,12 @@ import {
   parisTime,
   toLocalTime,
 } from "./paris";
-import { overlaps, parseTstzRange, toTstzRange } from "./range";
+import {
+  overlaps,
+  parsePgTimestamp,
+  parseTstzRange,
+  toTstzRange,
+} from "./range";
 
 describe("parisInstant — daylight saving time", () => {
   it("winter: Paris is UTC+1", () => {
@@ -102,6 +107,15 @@ describe("tstzrange", () => {
       end: new Date("2026-11-24T10:45:00Z"),
     };
     expect(parseTstzRange(toTstzRange(r))).toEqual(r);
+  });
+
+  it("parses Postgres timestamps", () => {
+    expect(parsePgTimestamp("2031-03-04 09:00:00+00").toISOString()).toBe(
+      "2031-03-04T09:00:00.000Z",
+    );
+    expect(parsePgTimestamp("2031-03-04T09:00:00+00:00").toISOString()).toBe(
+      "2031-03-04T09:00:00.000Z",
+    );
   });
 
   it("rejects closed ranges", () => {

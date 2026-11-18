@@ -19,6 +19,8 @@ import { formatDayLong } from "@/lib/dates";
 import { signOut } from "@/server/actions/auth";
 import { icsPath } from "@/server/appointments/links";
 import { listMyAppointments } from "@/server/appointments/queries";
+import { listMyWaitlist } from "@/server/waitlist/queries";
+import { LeaveWaitlist } from "@/components/waitlist/leave-waitlist";
 import { getSessionUser } from "@/server/auth/session";
 import { findClientForUser } from "@/server/clients/service";
 import { getBusinessInfo } from "@/server/content/queries";
@@ -126,7 +128,10 @@ async function Account({
     );
   }
 
-  const appointments = await listMyAppointments();
+  const [appointments, waitlist] = await Promise.all([
+    listMyAppointments(),
+    listMyWaitlist(),
+  ]);
   const now = new Date();
   const upcoming = appointments
     .filter((a) => a.status === "confirmed" && a.end > now)
@@ -183,6 +188,34 @@ async function Account({
           </ul>
         )}
       </Section>
+
+      {waitlist.length > 0 ? (
+        <Section id="liste-attente" title="Liste d’attente">
+          <ul className="space-y-3">
+            {waitlist.map((w) => (
+              <li
+                key={w.id}
+                className="rounded-card border border-sand-200 bg-ivory p-5"
+              >
+                <p className="label text-caramel-700">
+                  {formatDayLong(w.day, { withYear: true, capitalize: true })}
+                </p>
+                <p className="mt-2 font-display text-xl text-espresso-900">
+                  {w.serviceName}
+                </p>
+                <p className="mt-1 text-sm text-espresso-500">
+                  {w.status === "notified"
+                    ? "Une place vous a été proposée : consultez vos e-mails pour la réserver."
+                    : "En attente : vous serez prévenue par e-mail si une place se libère."}
+                </p>
+                <div className="mt-3">
+                  <LeaveWaitlist entryId={w.id} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
 
       {past.length > 0 ? (
         <Section id="historique" title="Historique">

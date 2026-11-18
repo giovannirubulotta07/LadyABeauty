@@ -14,6 +14,18 @@ export function contains(outer: Interval, inner: Interval): boolean {
  * `["2026-11-24 09:00:00+00","2026-11-24 10:45:00+00")`.
  * Only bounded ranges are supported (the schema forbids the others).
  */
+/** Postgres timestamptz text ("2026-11-24 09:00:00+00") or ISO → Date. */
+export function parsePgTimestamp(raw: string): Date {
+  const iso = raw
+    .trim()
+    .replace(" ", "T")
+    .replace(/([+-]\d{2})$/, "$1:00");
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime()))
+    throw new Error(`Invalid timestamp: ${raw}`);
+  return date;
+}
+
 export function parseTstzRange(raw: string): Interval {
   const m = /^([[(])"?([^",]+)"?,"?([^",]+)"?([\])])$/.exec(raw.trim());
   if (!m) throw new Error(`Unsupported tstzrange: ${raw}`);

@@ -197,6 +197,14 @@ export async function confirmBooking(input: unknown): Promise<BookingResult> {
     }
 
     const id = appointmentId as string;
+    // She found a slot herself: her waiting entries for that day/service are done.
+    await db
+      .from("waitlist_entries")
+      .update({ status: "booked" })
+      .eq("client_id", client.id)
+      .eq("service_id", service.serviceId)
+      .eq("day", day)
+      .eq("status", "waiting");
     after(() => notifyBookingConfirmed(id));
     return { ok: true, appointmentId: id };
   } catch (error) {

@@ -9,6 +9,7 @@ import { type Details, DetailsStep } from "./details-step";
 import { ServiceStep } from "./service-step";
 import { Stepper } from "./stepper";
 import { SummaryStep } from "./summary-step";
+import { WaitlistStep } from "./waitlist-step";
 import type {
   DayInfo,
   FlowBusiness,
@@ -142,6 +143,8 @@ export function BookingFlow({
 
   // Resolve the current step from the URL.
   const slotPending = Boolean(start) && slots.loading;
+  const waitlistMode =
+    etape === "liste-attente" && Boolean(service && !needsVariant && day);
   let step: Step = "date";
   if (!service || needsVariant) step = "prestation";
   else if (
@@ -241,6 +244,23 @@ export function BookingFlow({
               >
                 <Spinner /> Vérification du créneau…
               </div>
+            ) : waitlistMode && service && day ? (
+              <WaitlistStep
+                serviceId={service.id}
+                variantId={variant?.id ?? null}
+                serviceLabel={
+                  variant ? `${service.name} — ${variant.name}` : service.name
+                }
+                day={day}
+                profile={profile}
+                details={details}
+                getRenderedAt={() => renderedAt.current}
+                onDetailsChange={setDetails}
+                onSignedIn={() =>
+                  setSignedInAs(details.email.trim().toLowerCase())
+                }
+                onBack={() => goToStep({ etape: null })}
+              />
             ) : step === "date" ? (
               <DateStep
                 serviceLabel={
@@ -291,6 +311,9 @@ export function BookingFlow({
                   })
                 }
                 onRetry={() => setReloadKey((k) => k + 1)}
+                onJoinWaitlist={() =>
+                  goToStep({ jour: day, creneau: null, etape: "liste-attente" })
+                }
               />
             ) : step === "coordonnees" ? (
               <DetailsStep

@@ -32,6 +32,12 @@ type Props = {
   onSignedIn: () => void;
   onContinue: () => void;
   onBack: () => void;
+  /** Reused by the waitlist step. */
+  heading?: string;
+  intro?: React.ReactNode;
+  continueLabel?: string;
+  backLabel?: string;
+  busy?: boolean;
 };
 
 function localErrors(d: Details, profile: FlowProfile): Record<string, string> {
@@ -56,6 +62,11 @@ export function DetailsStep({
   onSignedIn,
   onContinue,
   onBack,
+  heading = "Vos coordonnées",
+  intro,
+  continueLabel = "Continuer",
+  backLabel = "Changer d’horaire",
+  busy = false,
 }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string>();
@@ -112,8 +123,13 @@ export function DetailsStep({
     >
       <div>
         <h2 className="font-display text-2xl text-espresso-900 sm:text-3xl">
-          Vos coordonnées
+          {heading}
         </h2>
+        {intro ? (
+          <div className="mt-2 text-sm leading-relaxed text-espresso-700">
+            {intro}
+          </div>
+        ) : null}
         <p className="mt-2 text-sm leading-relaxed text-espresso-500">
           {profile.signedIn ? (
             <>
@@ -213,11 +229,11 @@ export function DetailsStep({
           onClick={onBack}
           className="min-h-11 px-1 text-sm text-espresso-700 underline underline-offset-4"
         >
-          Changer d’horaire
+          {backLabel}
         </button>
-        <Button type="submit" size="lg" disabled={pending}>
-          {pending ? <Spinner /> : null}
-          {profile.signedIn ? "Continuer" : "Recevoir mon code"}
+        <Button type="submit" size="lg" disabled={pending || busy}>
+          {pending || busy ? <Spinner /> : null}
+          {profile.signedIn ? continueLabel : "Recevoir mon code"}
         </Button>
       </div>
     </form>

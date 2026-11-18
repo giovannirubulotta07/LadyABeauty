@@ -225,6 +225,7 @@ type Props = {
   onSelectSlot: (slot: PublicSlot) => void;
   onChangeService: () => void;
   onRetry: () => void;
+  onJoinWaitlist: () => void;
 };
 
 export function DateStep(props: Props) {
@@ -287,12 +288,10 @@ export function DateStep(props: Props) {
             />
           ))}
         </div>
-      ) : bookableDays.every(
-          (d) => d.status === "closed" || d.status === "full",
-        ) ? (
-        <Alert tone="info" title="Agenda complet">
-          Aucun créneau n’est disponible pour cette prestation dans les semaines
-          à venir. Écrivez-moi sur Instagram pour trouver une solution.
+      ) : bookableDays.every((d) => d.status === "closed") ? (
+        <Alert tone="info" title="Agenda fermé">
+          Aucune date n’est ouverte à la réservation pour le moment. Écrivez-moi
+          sur Instagram pour trouver une solution.
         </Alert>
       ) : (
         <DayStrip
@@ -348,16 +347,32 @@ export function DateStep(props: Props) {
                       ? "Plus aucun créneau ce jour-là pour cette prestation."
                       : "Ce jour-là, seuls des créneaux en soirée sont possibles, sur demande."}
                   </p>
-                  {nextAvailable ? (
-                    <Button
-                      variant="outline"
-                      onClick={() => props.onSelectDay(nextAvailable.day)}
-                    >
-                      Prochaine date : {formatDayLong(nextAvailable.day)}
+                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                    <Button onClick={props.onJoinWaitlist}>
+                      Être prévenue si une place se libère
                     </Button>
-                  ) : null}
+                    {nextAvailable ? (
+                      <Button
+                        variant="outline"
+                        onClick={() => props.onSelectDay(nextAvailable.day)}
+                      >
+                        Prochaine date : {formatDayLong(nextAvailable.day)}
+                      </Button>
+                    ) : null}
+                  </div>
                 </div>
-              ) : null}
+              ) : (
+                <p className="text-sm text-espresso-500">
+                  Aucun horaire ne vous convient ?{" "}
+                  <button
+                    type="button"
+                    onClick={props.onJoinWaitlist}
+                    className="min-h-11 text-caramel-700 underline underline-offset-4"
+                  >
+                    Être prévenue si une place se libère ce jour-là
+                  </button>
+                </p>
+              )}
               {hasOnRequest ? (
                 <p className="text-sm leading-relaxed text-espresso-500">
                   Les rendez-vous en soirée sont possibles sur demande

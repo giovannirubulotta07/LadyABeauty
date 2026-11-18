@@ -4,7 +4,7 @@ Sito di prenotazione online dello studio **Lady A Beauty** (Annemasse): extensio
 Next.js (App Router) · TypeScript strict · Tailwind CSS v4 · Supabase · Vitest · Playwright.
 
 > Il README completo (deploy su Vercel e Supabase, dominio, SPF/DKIM) arriverà nella fase 7.
-> Analisi e decisioni: [`docs/sito-attuale.md`](docs/sito-attuale.md), [`docs/decisioni.md`](docs/decisioni.md), [`docs/proposta-tecnica.md`](docs/proposta-tecnica.md), [`docs/motore-slot.md`](docs/motore-slot.md), [`docs/notifiche.md`](docs/notifiche.md).
+> Analisi e decisioni: [`docs/sito-attuale.md`](docs/sito-attuale.md), [`docs/decisioni.md`](docs/decisioni.md), [`docs/proposta-tecnica.md`](docs/proposta-tecnica.md), [`docs/motore-slot.md`](docs/motore-slot.md), [`docs/notifiche.md`](docs/notifiche.md), [`docs/lista-attesa.md`](docs/lista-attesa.md).
 
 ## Avvio in locale
 

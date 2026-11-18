@@ -4,6 +4,10 @@ import { toLocalTime } from "@/domain/time/paris";
 import { parseTstzRange, toTstzRange } from "@/domain/time/range";
 import { createAdminClient } from "@/server/db/admin-client";
 import { sendReminder } from "@/server/notifications/events";
+import {
+  expireWaitlist,
+  processAllWaitlistDays,
+} from "@/server/waitlist/service";
 
 const HOUR = 3_600_000;
 
@@ -59,8 +63,16 @@ export async function purgeExpiredData(now = new Date()) {
   return { rateLimits: limits.count ?? 0, notificationLogs: logs.count ?? 0 };
 }
 
+/** Waitlist: close expired offers and past days, then serve whoever is next. */
+export async function runWaitlist(now = new Date()) {
+  const expiredDays = await expireWaitlist();
+  const processed = await processAllWaitlistDays(now);
+  return { expiredDays: expiredDays.length, ...processed };
+}
+
 export async function runScheduledTasks(now = new Date()) {
   const reminders = await sendDueReminders(now);
+  const waitlist = await runWaitlist(now);
   const purged = await purgeExpiredData(now);
-  return { at: now.toISOString(), reminders, purged };
+  return { at: now.toISOString(), reminders, waitlist, purged };
 }

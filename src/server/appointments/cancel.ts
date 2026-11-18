@@ -1,10 +1,12 @@
 import "server-only";
 import { after } from "next/server";
 import { canClientCancel } from "@/domain/booking/cancellation";
+import { parisDate } from "@/domain/time/paris";
 import { parseTstzRange } from "@/domain/time/range";
 import { getBusinessInfo } from "@/server/content/queries";
 import { createAdminClient } from "@/server/db/admin-client";
 import { notifyAppointmentCancelled } from "@/server/notifications/events";
+import { processWaitlistDay } from "@/server/waitlist/service";
 
 export type CancelOutcome = { ok: true } | { ok: false; error: string };
 
@@ -62,6 +64,10 @@ export async function cancelAsClient(
   if (!updated?.length)
     return { ok: false, error: "Ce rendez-vous est déjà annulé." };
 
-  after(() => notifyAppointmentCancelled(appointment.id, { by: "client" }));
+  after(async () => {
+    await notifyAppointmentCancelled(appointment.id, { by: "client" });
+    // The freed slot goes to the waitlist straight away.
+    await processWaitlistDay(parisDate(start));
+  });
   return { ok: true };
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { z } from "zod";
 import { parseTstzRange } from "@/domain/time/range";
 import { fullNameSchema, phoneSchema } from "@/lib/validation";
@@ -14,6 +15,7 @@ import { cancelAsClient } from "@/server/appointments/cancel";
 import { createAdminClient } from "@/server/db/admin-client";
 import { notifyAppointmentCancelled } from "@/server/notifications/events";
 import { readLinkToken } from "@/server/security/tokens";
+import { processAllWaitlistDays } from "@/server/waitlist/service";
 import {
   RATE_RULES,
   underIpLimit,
@@ -150,7 +152,8 @@ export async function deleteMyAccount(input: unknown): Promise<ActionResult> {
             cancellation_reason: "Compte supprimé par la cliente",
           })
           .in("id", futureIds);
-        // Tell Alessia now, while the client's name is still known.
+        // Tell Alessia now, while the client's name is still known; then
+        // offer the freed slots to the waitlist.
         await Promise.all(
           futureIds.map((id) =>
             notifyAppointmentCancelled(id, {
@@ -168,6 +171,7 @@ export async function deleteMyAccount(input: unknown): Promise<ActionResult> {
           .update({ recipient: "supprimé" })
           .eq("recipient", client.email);
     }
+    after(() => processAllWaitlistDays());
     const { error } = await db.auth.admin.deleteUser(user.id);
     if (error) throw error;
   } catch (error) {
