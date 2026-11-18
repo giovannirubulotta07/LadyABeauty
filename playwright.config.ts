@@ -4,7 +4,11 @@ const PORT = Number(process.env.PORT ?? 3000);
 
 export default defineConfig({
   testDir: "tests/e2e",
+  globalSetup: "./tests/e2e/global-setup.ts",
+  // One worker: booking tests share the same real calendar.
+  workers: 1,
   fullyParallel: false,
+  timeout: 60_000,
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? "github" : "list",
   use: {

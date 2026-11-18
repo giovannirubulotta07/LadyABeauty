@@ -28,6 +28,11 @@ export type BusinessInfo = {
   geo: { latitude: number; longitude: number } | null;
   legal: { legalName: string | null; siret: string | null };
   home: HomeContent;
+  policy: {
+    cancellationCutoffHours: number;
+    minNoticeMinutes: number;
+    maxAdvanceDays: number;
+  };
 };
 
 const homeContentSchema = z.object({
@@ -84,7 +89,7 @@ export async function getBusinessInfo(): Promise<BusinessInfo> {
   const { data, error } = await createPublicClient()
     .from("business_settings")
     .select(
-      "name, tagline, email, phone, instagram_url, logo_url, address_line1, address_line2, postal_code, city, country_code, latitude, longitude, legal_name, siret, home_content",
+      "name, tagline, email, phone, instagram_url, logo_url, address_line1, address_line2, postal_code, city, country_code, latitude, longitude, legal_name, siret, home_content, cancellation_cutoff_hours, min_notice_minutes, max_advance_days",
     )
     .single();
   if (error) throw new ContentError("les informations du studio", error);
@@ -109,6 +114,11 @@ export async function getBusinessInfo(): Promise<BusinessInfo> {
         : null,
     legal: { legalName: data.legal_name, siret: data.siret },
     home: homeContentSchema.parse(data.home_content ?? {}),
+    policy: {
+      cancellationCutoffHours: data.cancellation_cutoff_hours,
+      minNoticeMinutes: data.min_notice_minutes,
+      maxAdvanceDays: data.max_advance_days,
+    },
   };
 }
 

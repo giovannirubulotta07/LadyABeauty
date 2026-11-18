@@ -1,7 +1,15 @@
 import type { MetadataRoute } from "next";
 import { env } from "@/server/env";
 
-const PUBLIC_PATHS = ["/", "/prestations", "/galerie"] as const;
+const PUBLIC_PATHS = [
+  "/",
+  "/prestations",
+  "/galerie",
+  "/reserver",
+  "/mentions-legales",
+  "/confidentialite",
+  "/cookies",
+] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return PUBLIC_PATHS.map((path) => ({

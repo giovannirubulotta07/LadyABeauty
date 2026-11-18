@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Votre code de connexion</title>
+  </head>
+  <body style="margin:0;padding:0;background:#eadccb;font-family:'Avenir Next','Segoe UI',Helvetica,Arial,sans-serif;color:#16100c;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eadccb;padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background:#fbf7f0;border-radius:8px;overflow:hidden;">
+            <tr>
+              <td style="background:#2b1a12;padding:28px 32px;text-align:center;">
+                <span style="font-family:Didot,'Bodoni 72',Georgia,serif;font-size:28px;color:#fbf7f0;">Lady A Beauty</span>
+              </td>
+            </tr>
+            <tr><td style="height:8px;background:#c08a55;"></td></tr>
+            <tr>
+              <td style="padding:32px;">
+                <p style="margin:0 0 16px;font-size:16px;line-height:1.6;">Bonjour,</p>
+                <p style="margin:0 0 24px;font-size:16px;line-height:1.6;">Voici votre code pour continuer sur le site de Lady A Beauty :</p>
+                <p style="margin:0 0 24px;text-align:center;font-size:36px;letter-spacing:10px;font-weight:600;color:#2b1a12;">{{ .Token }}</p>
+                <p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#614839;">Ce code est valable 10 minutes. Vous pouvez aussi vous connecter en un clic :</p>
+                <p style="margin:0 0 28px;text-align:center;">
+                  <a href="{{ .SiteURL }}/auth/confirmer?token_hash={{ .TokenHash }}&amp;type=email&amp;next=/mon-espace" style="display:inline-block;background:#2b1a12;color:#fbf7f0;text-decoration:none;padding:14px 28px;border-radius:4px;font-size:13px;letter-spacing:2px;text-transform:uppercase;">Me connecter</a>
+                </p>
+                <p style="margin:0;font-size:13px;line-height:1.6;color:#614839;">Si vous n'êtes pas à l'origine de cette demande, ignorez simplement ce message.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

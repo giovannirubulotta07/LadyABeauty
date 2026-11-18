@@ -1,8 +1,9 @@
 import clsx from "clsx";
+import Link from "next/link";
 import { priceLabel } from "@/domain/catalog/price";
 import { formatDuration, isoDuration } from "@/lib/format";
 import type { Service } from "@/server/content/queries";
-import { ClockIcon } from "@/components/ui/icons";
+import { ArrowIcon, ClockIcon } from "@/components/ui/icons";
 
 type Props = {
   service: Service;
@@ -54,6 +55,17 @@ export function ServiceCard({
             </li>
           ))}
         </ul>
+      ) : null}
+
+      {service.bookableOnline ? (
+        <Link
+          href={`/reserver?prestation=${service.slug}`}
+          className="label mt-auto inline-flex min-h-11 items-center gap-2 self-start pt-5 text-caramel-700 transition-colors hover:text-espresso-900"
+          aria-label={`Réserver : ${service.name}`}
+        >
+          Réserver
+          <ArrowIcon width={16} height={16} />
+        </Link>
       ) : null}
 
       {withDescription && paragraphs.length > 0 ? (

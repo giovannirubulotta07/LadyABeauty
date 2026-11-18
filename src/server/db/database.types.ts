@@ -337,6 +337,9 @@ isOneToOne: false
 "create_block":
 { Args: { "p_created_by"?: string,"p_period": unknown,"p_reason"?: string }; Returns: string
                            },
+"hit_rate_limit":
+{ Args: { "p_key": string,"p_limit": number,"p_window_seconds": number }; Returns: boolean
+                           },
 "is_admin":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
