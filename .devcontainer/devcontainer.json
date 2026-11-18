@@ -1,0 +1,21 @@
+{
+  // GitHub Codespace: the whole site (Next.js + local Supabase in Docker)
+  // with test data, opened in the browser on port 3000.
+  "name": "Lady A Beauty",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "hostRequirements": { "cpus": 4, "memory": "8gb" },
+  "forwardPorts": [3000, 54324],
+  "portsAttributes": {
+    "3000": { "label": "Site Lady A Beauty", "onAutoForward": "openBrowser" },
+    "54324": { "label": "E-mails de test (Mailpit)", "onAutoForward": "silent" }
+  },
+  "postCreateCommand": "npm ci",
+  "postStartCommand": "bash scripts/codespace-start.sh",
+  "customizations": {
+    "codespaces": { "openFiles": ["docs/codespace.md"] }
+  }
+}

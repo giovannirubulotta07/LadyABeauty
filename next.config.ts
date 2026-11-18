@@ -17,7 +17,13 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     // Photos are resized in the browser first (≤ 2400 px JPEG), so 4 MB is ample.
-    serverActions: { bodySizeLimit: "4mb" },
+    serverActions: {
+      bodySizeLimit: "4mb",
+      // GitHub Codespaces serves the site through its own forwarding domain.
+      ...(process.env.CODESPACES === "true"
+        ? { allowedOrigins: ["*.app.github.dev"] }
+        : {}),
+    },
   },
   partialPrefetching: true,
   turbopack: {

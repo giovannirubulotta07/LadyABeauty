@@ -51,3 +51,6 @@ supabase/.branches
 
 !.env.example
 .email-preview/
+
+# Codespace: test admin password generated at start
+.codespace-admin.txt
