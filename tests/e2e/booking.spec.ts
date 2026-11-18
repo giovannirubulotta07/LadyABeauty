@@ -53,10 +53,13 @@ test.describe("Réservation", () => {
 
     // Mon espace lists it and lets her cancel (more than 24 h ahead, or refuses politely).
     await page.getByRole("link", { name: "Mes rendez-vous" }).click();
-    const upcoming = page.getByRole("region", { name: "À venir" });
-    await expect(upcoming.getByRole("heading", { level: 3 })).toContainText(
-      "Rehaussement de cils",
-    );
+    const upcoming = page.getByRole("region", { name: "Mes rendez-vous" });
+    await expect(
+      upcoming.getByRole("article", { name: "Prochain rendez-vous" }),
+    ).toContainText("Rehaussement de cils");
+    await expect(
+      upcoming.getByRole("article", { name: "Prochain rendez-vous" }),
+    ).toContainText(time);
     await upcoming
       .getByRole("button", { name: "Annuler ce rendez-vous" })
       .click();
@@ -64,9 +67,33 @@ test.describe("Réservation", () => {
     await expect(
       upcoming.getByText("Aucun rendez-vous prévu pour le moment."),
     ).toBeVisible();
+    const history = page.getByRole("region", { name: "Historique" });
+    await expect(history).toContainText("annulé");
+
+    // …and to book the same service again in one click.
     await expect(
-      page.getByRole("region", { name: "Historique" }),
-    ).toContainText("annulé");
+      history.getByRole("link", { name: "Réserver à nouveau" }),
+    ).toHaveAttribute("href", "/reserver?prestation=rehaussement-cils");
+
+    // Her preferences are saved for Alessia.
+    const prefs = page.getByRole("region", { name: "Mes préférences" });
+    await prefs.getByLabel("Vos préférences").fill("Effet naturel, courbure C");
+    await prefs.getByRole("button", { name: "Enregistrer" }).click();
+    await expect(prefs.getByText("Alessia en tiendra compte")).toBeVisible();
+    await page.reload();
+    await expect(
+      page
+        .getByRole("region", { name: "Mes préférences" })
+        .getByLabel("Vos préférences"),
+    ).toHaveValue("Effet naturel, courbure C");
+
+    // The header always leads back to her space.
+    await page.goto("/");
+    await page.getByRole("link", { name: "Mon espace" }).first().click();
+    await expect(page).toHaveURL(/\/mon-espace$/);
+    await expect(
+      page.getByRole("region", { name: "Mes rendez-vous" }),
+    ).toBeVisible();
   });
 
   test("conflit : deux clientes confirment le même créneau, la seconde est prévenue et voit les horaires à jour", async ({

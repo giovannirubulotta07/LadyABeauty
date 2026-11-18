@@ -75,7 +75,7 @@ export async function getClientFile(id: string) {
     db
       .from("clients")
       .select(
-        "id, full_name, email, phone, user_id, marketing_email, privacy_accepted_at, created_at",
+        "id, full_name, email, phone, preferences, user_id, marketing_email, privacy_accepted_at, created_at",
       )
       .eq("id", id)
       .maybeSingle(),
@@ -106,6 +106,7 @@ export async function getClientFile(id: string) {
     fullName: c.full_name,
     email: c.email,
     phone: c.phone,
+    preferences: c.preferences,
     hasAccount: c.user_id != null,
     privacyAcceptedAt: c.privacy_accepted_at
       ? new Date(c.privacy_accepted_at)

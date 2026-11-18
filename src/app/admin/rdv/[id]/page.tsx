@@ -142,6 +142,11 @@ async function Appointment({
             ...(appt.note
               ? ([["Note", appt.note]] as Array<[string, string]>)
               : []),
+            ...(appt.client?.preferences
+              ? ([["Ses préférences", appt.client.preferences]] as Array<
+                  [string, string]
+                >)
+              : []),
             ...(appt.cancelledAt
               ? ([
                   ["Annulé le", dateTime.format(appt.cancelledAt)],

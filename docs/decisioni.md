@@ -48,3 +48,11 @@ Fonte: scheda indicata dal committente (Le Figaro Entreprises), verificata sull'
 - **Attività:** NAF 96.02B (soins de beauté). Data di creazione: 19/02/2024. Stato: attiva.
 - **Non pubblicati:** la data di nascita e gli altri dati personali del registro non vengono mostrati sul sito.
 - **Partita IVA:** non indicata nel registro. Se Alessia è in franchigia (micro-impresa), sulle fatture va « TVA non applicable, art. 293 B du CGI ». Il sito non la mostra finché non è confermata.
+
+## Area clienti (18/11/2026)
+
+- **Accesso visibile:** icona « Mon espace » nell'header su tutte le pagine (con la scritta dai 1280 px), oltre al menu e al piè di pagina.
+- **Cruscotto:** saluto per nome, prossimo appuntamento in evidenza (data, ora, conto alla rovescia, indirizzo e itinerario, calendario, annullamento nei termini), altri appuntamenti, lista d'attesa.
+- **Storico:** con « Réserver à nouveau », che apre la prenotazione con la stessa prestazione già scelta (solo se è ancora prenotabile online). Oltre 5 voci, il resto è in un « Voir tout ».
+- **Preferenze:** testo libero di 600 caratteri al massimo (effetto, curvatura, lunghezza, stile delle sopracciglia). Alessia le vede nella scheda cliente e nella scheda dell'appuntamento. Il modulo chiede di **non** scriverci allergie o dati di salute (dati sensibili secondo l'art. 9 del RGPD): se ne parla di persona. Le preferenze sono incluse nell'export RGPD e cancellate con l'account.
+- **Sicurezza:** la cliente modifica le preferenze con la propria sessione: RLS (solo la sua riga) e permesso sulla sola colonna `preferences`.

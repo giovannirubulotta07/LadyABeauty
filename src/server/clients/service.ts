@@ -9,6 +9,8 @@ export type ClientProfile = {
   phone: string | null;
   marketingEmail: boolean;
   privacyAcceptedAt: string | null;
+  /** Her own notes for Alessia: effect, curl, length, brow style… */
+  preferences: string | null;
 };
 
 type Row = {
@@ -18,10 +20,11 @@ type Row = {
   phone: string | null;
   marketing_email: boolean;
   privacy_accepted_at: string | null;
+  preferences: string | null;
 };
 
 const COLUMNS =
-  "id, full_name, email, phone, marketing_email, privacy_accepted_at";
+  "id, full_name, email, phone, marketing_email, privacy_accepted_at, preferences";
 
 const toProfile = (r: Row): ClientProfile => ({
   id: r.id,
@@ -30,6 +33,7 @@ const toProfile = (r: Row): ClientProfile => ({
   phone: r.phone,
   marketingEmail: r.marketing_email,
   privacyAcceptedAt: r.privacy_accepted_at,
+  preferences: r.preferences,
 });
 
 /**

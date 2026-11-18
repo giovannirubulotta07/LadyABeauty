@@ -50,3 +50,15 @@ export const dayParts = (day: LocalDate) => ({
 /** "novembre 2026" */
 export const formatMonth = (day: LocalDate) =>
   capitalise(MONTH_YEAR.format(asUtcNoon(day)));
+
+/** "Aujourd’hui", "Demain", "Dans 5 jours", "Dans 3 semaines" (days ahead of today). */
+export function relativeDay(day: LocalDate, today: LocalDate): string {
+  const n = Math.round(
+    (asUtcNoon(day).getTime() - asUtcNoon(today).getTime()) / 86_400_000,
+  );
+  if (n <= 0) return "Aujourd’hui";
+  if (n === 1) return "Demain";
+  if (n < 14) return `Dans ${n} jours`;
+  if (n < 60) return `Dans ${Math.floor(n / 7)} semaines`;
+  return `Dans ${Math.floor(n / 30)} mois`;
+}

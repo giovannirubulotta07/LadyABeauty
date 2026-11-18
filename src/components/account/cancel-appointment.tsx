@@ -9,8 +9,11 @@ import { cancelMyAppointment } from "@/server/actions/account";
 /** Two-step cancel: a deliberate confirmation avoids accidental taps on a phone. */
 export function CancelAppointment({
   appointmentId,
+  tone = "light",
 }: {
   appointmentId: string;
+  /** "dark" on an espresso card. */
+  tone?: "light" | "dark";
 }) {
   const router = useRouter();
   const [confirming, setConfirming] = useState(false);
@@ -19,7 +22,10 @@ export function CancelAppointment({
 
   if (!confirming) {
     return (
-      <Button variant="outline" onClick={() => setConfirming(true)}>
+      <Button
+        variant={tone === "dark" ? "outline-light" : "outline"}
+        onClick={() => setConfirming(true)}
+      >
         Annuler ce rendez-vous
       </Button>
     );

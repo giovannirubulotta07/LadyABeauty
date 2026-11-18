@@ -12,7 +12,7 @@ export async function GET() {
     supabase
       .from("clients")
       .select(
-        "full_name, email, phone, marketing_email, privacy_accepted_at, created_at",
+        "full_name, email, phone, preferences, marketing_email, privacy_accepted_at, created_at",
       )
       .maybeSingle(),
     supabase

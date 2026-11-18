@@ -129,6 +129,21 @@ async function ClientFile({
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">
+          <Card aria-labelledby="preferences-titre">
+            <CardTitle id="preferences-titre">Ses préférences</CardTitle>
+            {client.preferences ? (
+              <p className="text-sm whitespace-pre-line text-espresso-900">
+                {client.preferences}
+              </p>
+            ) : (
+              <Empty>
+                {client.hasAccount
+                  ? "Elle n’a pas encore indiqué de préférences."
+                  : "Les préférences se remplissent depuis l’espace cliente en ligne."}
+              </Empty>
+            )}
+          </Card>
+
           <Card aria-labelledby="notes-titre">
             <CardTitle id="notes-titre">Notes</CardTitle>
             {client.notes.length ? (

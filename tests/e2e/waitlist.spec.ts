@@ -62,7 +62,7 @@ test.describe("Liste d'attente", () => {
     // 3. Alice cancels → the freed slot is offered to Béa by e-mail.
     const since = Date.now() - 1_000;
     await alice.goto("/mon-espace");
-    const upcoming = alice.getByRole("region", { name: "À venir" });
+    const upcoming = alice.getByRole("region", { name: "Mes rendez-vous" });
     await upcoming
       .getByRole("button", { name: "Annuler ce rendez-vous" })
       .click();

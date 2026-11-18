@@ -73,6 +73,37 @@ export async function saveProfile(input: unknown): Promise<ActionResult> {
   }
 }
 
+/** Her preferences for Alessia (effect, curl, length…), on her own row. */
+export async function savePreferences(input: unknown): Promise<ActionResult> {
+  const parsed = z
+    .object({
+      preferences: z.string().trim().max(600, "600 caractères au maximum."),
+    })
+    .safeParse(input);
+  if (!parsed.success)
+    return fail("Vérifiez le texte.", fieldErrorsOf(parsed.error.issues));
+
+  const user = await requireUser();
+  if (!user) return fail(SESSION_EXPIRED);
+  if (user === "limited") return fail(TOO_MANY);
+
+  try {
+    // Session client: RLS (own row) and the column grant both apply.
+    const supabase = await createSessionClient();
+    const { data, error } = await supabase
+      .from("clients")
+      .update({ preferences: parsed.data.preferences || null })
+      .eq("user_id", user.id)
+      .select("id");
+    if (error) throw error;
+    if (!data.length) return fail("Complétez d’abord vos informations.");
+    return { ok: true };
+  } catch (error) {
+    console.error("savePreferences", error);
+    return fail(GENERIC_ERROR);
+  }
+}
+
 export async function cancelMyAppointment(
   input: unknown,
 ): Promise<ActionResult> {

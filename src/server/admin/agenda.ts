@@ -322,7 +322,7 @@ export async function getAppointment(id: string) {
   const { data, error } = await db
     .from("appointments")
     .select(
-      "id, period, status, source, service_id, variant_id, service_name, variant_name, duration_min, price_cents, client_note, cancelled_at, cancellation_reason, created_at, client_id, clients (id, full_name, phone, email)",
+      "id, period, status, source, service_id, variant_id, service_name, variant_name, duration_min, price_cents, client_note, cancelled_at, cancellation_reason, created_at, client_id, clients (id, full_name, phone, email, preferences)",
     )
     .eq("id", id)
     .maybeSingle();
@@ -353,6 +353,7 @@ export async function getAppointment(id: string) {
           fullName: data.clients.full_name,
           phone: data.clients.phone,
           email: data.clients.email,
+          preferences: data.clients.preferences,
         }
       : null,
   };

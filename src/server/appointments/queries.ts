@@ -6,6 +6,8 @@ import type { Database } from "@/server/db/database.types";
 
 export type AppointmentView = {
   id: string;
+  /** Slug of the service when it still exists (to book it again). */
+  serviceSlug: string | null;
   serviceName: string;
   variantName: string | null;
   durationMin: number;
@@ -18,7 +20,7 @@ export type AppointmentView = {
 };
 
 const COLUMNS =
-  "id, service_name, variant_name, duration_min, price_cents, period, status, client_note, cancelled_at";
+  "id, service_name, variant_name, duration_min, price_cents, period, status, client_note, cancelled_at, services (slug)";
 
 type Row = {
   id: string;
@@ -30,12 +32,14 @@ type Row = {
   status: AppointmentView["status"];
   client_note: string | null;
   cancelled_at: string | null;
+  services: { slug: string } | null;
 };
 
 function toView(row: Row): AppointmentView {
   const { start, end } = parseTstzRange(row.period as string);
   return {
     id: row.id,
+    serviceSlug: row.services?.slug ?? null,
     serviceName: row.service_name,
     variantName: row.variant_name,
     durationMin: row.duration_min,
