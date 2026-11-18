@@ -16,7 +16,14 @@ import { CodeVerification } from "./code-verification";
 type Mode = "code" | "password";
 
 /** Login for "Mon espace": e-mail code by default, password if she set one. */
-export function LoginPanel({ expiredLink = false }: { expiredLink?: boolean }) {
+export function LoginPanel({
+  expiredLink = false,
+  studio = false,
+}: {
+  expiredLink?: boolean;
+  /** Admin sign-in: no "account created automatically" hint. */
+  studio?: boolean;
+}) {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("code");
   const [email, setEmail] = useState("");
@@ -130,7 +137,7 @@ export function LoginPanel({ expiredLink = false }: { expiredLink?: boolean }) {
             : "Recevoir plutôt un code par e-mail"}
         </button>
       </div>
-      {mode === "code" ? (
+      {mode === "code" && !studio ? (
         <p className="text-sm text-espresso-500">
           Pas encore de compte ? Il est créé automatiquement à la première
           connexion.

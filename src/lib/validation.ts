@@ -50,3 +50,27 @@ export function safeNext(
     return fallback;
   return value;
 }
+
+/** "2026-11-24" — a real calendar date. */
+export const localDateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Date invalide.")
+  .refine((v) => {
+    const d = new Date(`${v}T12:00:00Z`);
+    return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
+  }, "Date invalide.");
+
+/** "09:30" (24 h). */
+export const localTimeSchema = z
+  .string()
+  .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Heure invalide (HH:MM).");
+
+/** Empty string → undefined, for optional form fields. */
+export const blankToUndefined = (v: unknown) =>
+  typeof v === "string" && v.trim() === "" ? undefined : v;
+
+/** Checkbox / "true"/"false" from FormData or JSON → boolean. */
+export const booleanish = z.preprocess(
+  (v) => v === true || v === "true" || v === "on" || v === "1",
+  z.boolean(),
+);

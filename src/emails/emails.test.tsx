@@ -8,6 +8,7 @@ import BookingConfirmedEmail, {
 import BookingReminderEmail, {
   bookingReminderSubject,
 } from "./booking-reminder";
+import BookingMovedEmail, { bookingMovedSubject } from "./booking-moved";
 import OwnerNotificationEmail, {
   ownerNotificationSubject,
 } from "./owner-notification";
@@ -105,6 +106,22 @@ describe("templates e-mail", () => {
     expect(ownerMail.text).toContain("Cils sensibles");
     expect(ownerNotificationSubject(owner)).toBe(
       "Nouveau rendez-vous · Mardi 24 novembre 10:00 · Camille Exemple",
+    );
+  });
+
+  it("déplacement : ancien et nouvel horaire, liens", async () => {
+    const props = {
+      brand,
+      appt,
+      previousLabel: "lundi 23 novembre à 14:30",
+      cancellationCutoffHours: 24,
+    };
+    const { html, text } = await renderEmail(<BookingMovedEmail {...props} />);
+    expect(text).toContain("lundi 23 novembre à 14:30");
+    expect(text).toContain("Mardi 24 novembre 2026");
+    expect(html).toContain("https://example.test/rdv/TOKEN");
+    expect(bookingMovedSubject(props)).toBe(
+      "Rendez-vous déplacé : Mardi 24 novembre 2026 à 10:00",
     );
   });
 

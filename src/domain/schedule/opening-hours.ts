@@ -108,3 +108,26 @@ export function toSchemaOrg(windows: OpeningWindow[]) {
     })),
   );
 }
+
+/**
+ * Problems in a weekly schedule being edited, as French messages keyed by
+ * weekday (empty object = valid): a window must close after it opens, and
+ * the windows of one day must not overlap.
+ */
+export function weeklyHoursProblems(
+  windows: Array<{ weekday: number; opens: string; closes: string }>,
+): Partial<Record<IsoWeekday, string>> {
+  const problems: Partial<Record<IsoWeekday, string>> = {};
+  for (let weekday = 1 as IsoWeekday; weekday <= 7; weekday++) {
+    const day = windows
+      .filter((w) => w.weekday === weekday)
+      .sort((a, b) => a.opens.localeCompare(b.opens));
+    if (day.some((w) => w.closes <= w.opens)) {
+      problems[weekday] = "L’heure de fin doit être après l’heure de début.";
+      continue;
+    }
+    if (day.some((w, i) => i > 0 && w.opens < day[i - 1]!.closes))
+      problems[weekday] = "Deux plages se chevauchent.";
+  }
+  return problems;
+}

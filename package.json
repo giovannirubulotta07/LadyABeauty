@@ -19,7 +19,8 @@
     "test:db": "vitest run --config vitest.db.config.mts",
     "test:all": "npm run test && npm run test:db",
     "cron": "tsx scripts/run-cron.mts",
-    "email:preview": "tsx scripts/email-preview.tsx"
+    "email:preview": "tsx scripts/email-preview.tsx",
+    "admin:create": "tsx scripts/create-admin.mts"
   },
   "dependencies": {
     "@date-fns/tz": "^1.5.0",
@@ -36,6 +37,7 @@
     "react-dom": "19.3.0",
     "resend": "^6.38.1",
     "server-only": "^0.0.1",
+    "sharp": "^0.35.5",
     "zod": "^4.6.7"
   },
   "devDependencies": {
@@ -50,7 +52,6 @@
     "postgres": "^4.1.1",
     "prettier": "^3.10.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "sharp": "^0.35.5",
     "supabase": "^3.2.0",
     "tailwindcss": "4.3.3",
     "tsx": "^4.23.15",

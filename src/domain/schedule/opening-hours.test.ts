@@ -4,6 +4,7 @@ import {
   groupLabel,
   groupWeek,
   toSchemaOrg,
+  weeklyHoursProblems,
   type OpeningWindow,
 } from "./opening-hours";
 
@@ -73,6 +74,33 @@ describe("toSchemaOrg", () => {
       dayOfWeek: "https://schema.org/Monday",
       opens: "10:00",
       closes: "14:00",
+    });
+  });
+});
+
+describe("weeklyHoursProblems", () => {
+  it("accepts breaks and closed days", () => {
+    expect(
+      weeklyHoursProblems([
+        { weekday: 1, opens: "10:00", closes: "14:00" },
+        { weekday: 1, opens: "14:30", closes: "20:00" },
+        { weekday: 6, opens: "10:00", closes: "14:30" },
+      ]),
+    ).toEqual({});
+  });
+
+  it("flags inverted and overlapping windows, per day", () => {
+    expect(
+      weeklyHoursProblems([
+        { weekday: 2, opens: "14:00", closes: "10:00" },
+        { weekday: 3, opens: "14:30", closes: "20:00" },
+        { weekday: 3, opens: "10:00", closes: "15:00" },
+        { weekday: 4, opens: "10:00", closes: "14:00" },
+        { weekday: 4, opens: "14:00", closes: "18:00" },
+      ]),
+    ).toEqual({
+      2: "L’heure de fin doit être après l’heure de début.",
+      3: "Deux plages se chevauchent.",
     });
   });
 });

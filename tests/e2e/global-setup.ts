@@ -1,5 +1,7 @@
 import { existsSync } from "node:fs";
+import { createClient } from "@supabase/supabase-js";
 import postgres from "postgres";
+import { ADMIN_EMAIL, ADMIN_PASSWORD } from "./helpers";
 
 const url = () =>
   process.env.DATABASE_URL ??
@@ -10,7 +12,8 @@ const url = () =>
  *  - empty rate-limit counters (tests sign in many times);
  *  - no leftover waitlist from previous runs (it would be served first);
  *  - quiet hours disabled (otherwise a run at night defers waitlist e-mails
- *    to the morning, by design). Restored in the teardown below.
+ *    to the morning, by design). Restored in the teardown below;
+ *  - a local admin account (password sign-in) for the admin tests.
  */
 export default async function globalSetup() {
   if (existsSync(".env.local")) process.loadEnvFile(".env.local");
@@ -23,6 +26,7 @@ export default async function globalSetup() {
     select waitlist_quiet_start::text as start, waitlist_quiet_end::text as end from public.business_settings`;
   await sql`update public.business_settings set waitlist_quiet_start = '00:00', waitlist_quiet_end = '00:00'`;
   await sql.end();
+  await ensureAdmin();
 
   return async () => {
     const restore = postgres(url(), { max: 1 });
@@ -30,4 +34,29 @@ export default async function globalSetup() {
       set waitlist_quiet_start = ${settings!.start}, waitlist_quiet_end = ${settings!.end}`;
     await restore.end();
   };
+}
+
+/** Creates (or re-enables) the local test admin. Local stack only. */
+async function ensureAdmin() {
+  const db = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SECRET_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false } },
+  );
+  const attributes = {
+    password: ADMIN_PASSWORD,
+    email_confirm: true,
+    app_metadata: { role: "admin" },
+    user_metadata: { has_password: true },
+  };
+  const { error } = await db.auth.admin.createUser({
+    email: ADMIN_EMAIL,
+    ...attributes,
+  });
+  if (!error) return;
+  const { data } = await db.auth.admin.listUsers({ perPage: 1000 });
+  const user = data.users.find((u) => u.email === ADMIN_EMAIL);
+  if (!user) throw error;
+  const update = await db.auth.admin.updateUserById(user.id, attributes);
+  if (update.error) throw update.error;
 }

@@ -227,19 +227,23 @@ export async function registerOnWaitlist(params: {
   return { ok: true, alreadyRegistered: false };
 }
 
-/** Removes her entry; an open offer is released so the next client can be served. Returns the day. */
+/**
+ * Removes an entry; an open offer is released so the next client can be
+ * served. Returns the day. `clientId` restricts it to her own entries; null is
+ * reserved for the studio (admin).
+ */
 export async function leaveWaitlist(
   entryId: string,
-  clientId: string,
+  clientId: string | null,
 ): Promise<LocalDate | null> {
   const db = createAdminClient();
-  const { data: entry } = await db
+  let query = db
     .from("waitlist_entries")
     .select("id, day, status")
     .eq("id", entryId)
-    .eq("client_id", clientId)
-    .in("status", ["waiting", "notified"])
-    .maybeSingle();
+    .in("status", ["waiting", "notified"]);
+  if (clientId !== null) query = query.eq("client_id", clientId);
+  const { data: entry } = await query.maybeSingle();
   if (!entry) return null;
 
   const { data: open } = await db

@@ -375,11 +375,17 @@ isOneToOne: false
 "lock_calendar_range":
 { Args: { "p_period": unknown }; Returns: undefined
                            },
+"move_appointment":
+{ Args: { "p_appointment_id": string,"p_duration_min": number,"p_start": string }; Returns: unknown
+                           },
 "redeem_waitlist_offer":
 { Args: { "p_offer_id": string }; Returns: string
                            },
 "release_waitlist_offer":
 { Args: { "p_offer_id": string,"p_status": Database["public"]['Enums']["offer_status"] }; Returns: string
+                           },
+"replace_opening_hours":
+{ Args: { "p_hours": Json }; Returns: undefined
                            },
 "schedule_studio_jobs":
 { Args: { "p_site_url": string }; Returns: undefined

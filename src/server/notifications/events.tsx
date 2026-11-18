@@ -5,6 +5,7 @@ import BookingCancelledEmail, {
 import BookingConfirmedEmail, {
   bookingConfirmedSubject,
 } from "@/emails/booking-confirmed";
+import BookingMovedEmail, { bookingMovedSubject } from "@/emails/booking-moved";
 import BookingReminderEmail, {
   bookingReminderSubject,
 } from "@/emails/booking-reminder";
@@ -149,14 +150,23 @@ async function safely(
   }
 }
 
-/** Confirmation to the client + "new booking" to Alessia. */
-export function notifyBookingConfirmed(appointmentId: string) {
+/**
+ * Confirmation to the client + "new booking" to Alessia. When Alessia books
+ * herself (admin), she is not notified and may choose not to e-mail the client.
+ */
+export function notifyBookingConfirmed(
+  appointmentId: string,
+  {
+    notifyClient = true,
+    notifyOwner = true,
+  }: { notifyClient?: boolean; notifyOwner?: boolean } = {},
+) {
   return safely("booking confirmed", async () => {
     const ctx = await loadContext(appointmentId);
     if (!ctx || ctx.row.status !== "confirmed") return [];
     const outcomes: Promise<DeliveryOutcome>[] = [];
 
-    if (ctx.client?.email) {
+    if (notifyClient && ctx.client?.email) {
       const props = {
         brand: brandOf(ctx),
         appt: appointmentData(ctx, { withLinks: true }),
@@ -177,7 +187,11 @@ export function notifyBookingConfirmed(appointmentId: string) {
       );
     }
 
-    if (ctx.owner?.notification_email && ctx.owner.notify_owner_on_booking) {
+    if (
+      notifyOwner &&
+      ctx.owner?.notification_email &&
+      ctx.owner.notify_owner_on_booking
+    ) {
       const props = ownerProps(ctx, "new_booking");
       outcomes.push(
         deliver({
@@ -261,6 +275,37 @@ export function notifyAppointmentCancelled(
       );
     }
     return Promise.all(outcomes);
+  });
+}
+
+/** New date and time after Alessia moved the appointment. */
+export function notifyAppointmentMoved(
+  appointmentId: string,
+  previousStart: Date,
+) {
+  return safely("appointment moved", async () => {
+    const ctx = await loadContext(appointmentId);
+    if (!ctx || ctx.row.status !== "confirmed" || !ctx.client?.email) return [];
+    const props = {
+      brand: brandOf(ctx),
+      appt: appointmentData(ctx, { withLinks: true }),
+      previousLabel: `${formatDayLong(parisDate(previousStart))} à ${parisTime(previousStart)}`,
+      cancellationCutoffHours: ctx.business.policy.cancellationCutoffHours,
+    };
+    return [
+      await deliver({
+        // One message per new start: moving twice sends twice, a retry does not.
+        key: `moved:${appointmentId}:${ctx.start.toISOString()}`,
+        kind: "booking_moved",
+        to: ctx.client.email,
+        appointmentId,
+        build: async () => ({
+          to: ctx.client!.email!,
+          subject: bookingMovedSubject(props),
+          ...(await renderEmail(<BookingMovedEmail {...props} />)),
+        }),
+      }),
+    ];
   });
 }
 

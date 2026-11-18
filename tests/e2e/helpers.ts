@@ -2,6 +2,24 @@ import { type Page, expect } from "@playwright/test";
 
 const MAILPIT = process.env.MAILPIT_URL ?? "http://127.0.0.1:54324";
 
+/** Local test admin (created by the global setup on the local stack only). */
+export const ADMIN_EMAIL = "admin@lady-a-beauty.test";
+export const ADMIN_PASSWORD =
+  process.env.E2E_ADMIN_PASSWORD ?? "Admin-local-2026";
+
+/** Signs in on /admin with the password form (waits past the anti-bot timer). */
+export async function adminLogin(page: Page) {
+  await page.goto("/admin");
+  await page.getByRole("button", { name: "J’ai un mot de passe" }).click();
+  await page.getByLabel("Adresse e-mail").fill(ADMIN_EMAIL);
+  await page.getByLabel("Mot de passe").fill(ADMIN_PASSWORD);
+  await page.waitForTimeout(2600);
+  await page.getByRole("button", { name: "Se connecter" }).click();
+  await expect(page.getByRole("heading", { name: "Planning" })).toBeVisible({
+    timeout: 15_000,
+  });
+}
+
 export const uniqueEmail = (label: string) =>
   `e2e.${label}.${Date.now()}.${Math.floor(Math.random() * 1e4)}@example.test`;
 
