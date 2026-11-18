@@ -8,9 +8,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/mentions-legales" },
 };
 
+/** "98404011300016" → "984 040 113 00016" */
+const formatSiret = (siret: string) =>
+  siret.replace(/^(\d{3})(\d{3})(\d{3})(\d{5})$/, "$1 $2 $3 $4");
+
 export default async function MentionsLegalesPage() {
   const business = await getBusinessInfo();
   const { legalName, siret } = business.legal;
+  const siren = siret ? formatSiret(siret).slice(0, 11) : null;
 
   return (
     <LegalPage title="Mentions légales" updated="18 novembre 2026">
@@ -24,7 +29,12 @@ export default async function MentionsLegalesPage() {
           {siret ? (
             <>
               <br />
-              SIRET : {siret}
+              SIRET : {formatSiret(siret)}
+              <br />
+              Immatriculée au Registre national des entreprises (RNE), SIREN{" "}
+              {siren}
+              <br />
+              Activité : soins de beauté (code NAF 96.02B)
             </>
           ) : null}
           {business.email ? (
@@ -41,7 +51,9 @@ export default async function MentionsLegalesPage() {
           ) : null}
         </p>
         <p>
-          Directrice de la publication : Alessia, fondatrice de {business.name}.
+          Directrice de la publication :{" "}
+          {legalName ? "Alessia Rubulotta" : "Alessia"}, fondatrice de{" "}
+          {business.name}.
         </p>
       </section>
       <section>

@@ -9,6 +9,7 @@
 insert into public.business_settings (
   id, name, tagline, email, instagram_url, logo_url,
   address_line1, postal_code, city, country_code,
+  legal_name, siret, latitude, longitude,
   home_content
 ) values (
   true,
@@ -17,7 +18,10 @@ insert into public.business_settings (
   'alessiarubu98@gmail.com',
   'https://www.instagram.com/lady.a_beauty/',
   '/brand/logo-actuel.jpg',
-  'Avenue de Verdun', '74100', 'Annemasse', 'FR',
+  '49 avenue de Verdun', '74100', 'Annemasse', 'FR',
+  -- Public register (INSEE / RNE): sole trader, SIREN 984 040 113, NAF 96.02B.
+  'Alessia Rubulotta, entrepreneur individuel (EI)', '98404011300016',
+  46.1826218514486, 6.24021231874929,
   jsonb_build_object(
     'heroTitle', 'Lady A Beauty',
     'heroSubtitle', 'Lash maker & brow artist à Annemasse',

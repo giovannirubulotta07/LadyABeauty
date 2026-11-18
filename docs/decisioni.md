@@ -19,7 +19,7 @@ Regola data dal committente: **in caso di conflitto tra sito attuale e brief val
 | D12 | Finestra / preavviso | 60 giorni / 2 h | brief |
 | D13 | Nome e logo | « Lady A Beauty »; logo attuale finché Alessia non carica il nuovo | brief |
 | D14 | Bio | Testo del sito (diplomata 2019) con refusi corretti | sito |
-| D15 | Indirizzo | « Avenue de Verdun, 74100 Annemasse », da completare con il civico dall'admin | sito |
+| D15 | Indirizzo | « 49 avenue de Verdun, 74100 Annemasse » (registro INSEE/RNE, 18/11/2026) | registro pubblico |
 | D16 | Account | Codice OTP via email (con magic link nella stessa email), password facoltativa | proposta |
 | D17 | Lista d'attesa | Opzione (b): esclusiva di 30 min in ordine di iscrizione, avviso a tutte se lo slot è a meno di 12 h | proposta |
 | D18 | Job | Supabase pg_cron ogni 5 min | proposta |
@@ -29,5 +29,16 @@ Regola data dal committente: **in caso di conflitto tra sito attuale e brief val
 - Nomi degli stili di posa (varianti dell'Extension).
 - Prezzi pieni di 9 prestazioni.
 - Le descrizioni del sito parlano di « acompte … + 0,94 € de frais de transaction », legati al pagamento online di Book in Beautiful che non avremo. Alessia dovrà decidere come raccogliere l'acconto (es. in DM / bonifico) e aggiornare il testo.
-- Numero civico, telefono, forma giuridica e SIRET per le mentions légales.
+- Telefono dello studio (facoltativo nelle mentions légales). Numero civico, forma giuridica e SIRET sono risolti: vedi sotto.
 - Dominio e mittente email.
+
+## Dati legali (dal registro pubblico, 18/11/2026)
+
+Fonte: scheda indicata dal committente (Le Figaro Entreprises), verificata sull'API ufficiale « Recherche d'entreprises » (INSEE/RNE).
+
+- **Forma giuridica:** entrepreneur individuel (EI), titolare Alessia Rubulotta. Dal 2022 la menzione « EI » deve comparire accanto al nome.
+- **SIREN:** 984 040 113. **SIRET** della sede: 984 040 113 00016.
+- **Sede:** 49 avenue de Verdun, 74100 Annemasse. Le coordinate GPS del registro alimentano schema.org e la mappa.
+- **Attività:** NAF 96.02B (soins de beauté). Data di creazione: 19/02/2024. Stato: attiva.
+- **Non pubblicati:** la data di nascita e gli altri dati personali del registro non vengono mostrati sul sito.
+- **Partita IVA:** non indicata nel registro. Se Alessia è in franchigia (micro-impresa), sulle fatture va « TVA non applicable, art. 293 B du CGI ». Il sito non la mostra finché non è confermata.
