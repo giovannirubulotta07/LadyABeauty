@@ -207,7 +207,7 @@ test.describe("Administration — galerie", () => {
     await page.goto("/admin/reglages/galerie");
     await page
       .getByLabel("Photos", { exact: true })
-      .setInputFiles("public/editorial/regard-01-editorial.jpg");
+      .setInputFiles("public/galerie/regard-01.jpg");
     await page.getByLabel("Description de la photo").fill(alt);
     await page.getByRole("button", { name: "Envoyer" }).click();
     await expect(page.getByText("Photo enregistrée.")).toBeVisible({

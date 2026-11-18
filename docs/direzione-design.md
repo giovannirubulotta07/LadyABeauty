@@ -40,7 +40,7 @@ Il look di ever si regge su **fotografia editoriale professionale** (ritratti in
 1. Più avanti ci sarà un **servizio fotografico professionale**. Tutte le immagini editoriali sono in `public/editorial/` e si sostituiscono senza toccare il codice: stesso nome file, stesso formato.
 2. ~~Per l'atmosfera si usano solo texture.~~ **Aggiornamento del 18/11/2026:** il committente non vuole elementi generati. Le texture sono state tolte; restano solo le foto reali di Alessia, il colore pieno e la tipografia. Anche il vecchio logo è stato ritirato (vedi `crediti-immagini.md`).
 
-   Le texture sono **originali**, generate con uno shader WebGL (`scripts/textures/`), quindi senza problemi di licenza. Le foto dei lavori sono quelle reali di Alessia, ritoccate nel colore (`scripts/grade-photos.mts`). Le provenienze sono in `docs/crediti-immagini.md`.
+   Le texture sono **originali**, generate con uno shader WebGL (`scripts/textures/`), quindi senza problemi di licenza. Le foto dei lavori sono quelle reali di Alessia (galleria); le foto d'atmosfera vengono da Pexels (vedi crediti). Le provenienze sono in `docs/crediti-immagini.md`.
 
 ## Cosa è stato realizzato
 

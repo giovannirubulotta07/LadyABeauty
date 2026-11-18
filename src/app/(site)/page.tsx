@@ -20,6 +20,18 @@ import { env } from "@/server/env";
 
 const vars = (v: Record<string, number>) => v as CSSProperties;
 
+/**
+ * Atmosphere photos (licensed from Pexels, see docs/crediti-immagini.md):
+ * gestures, tools and a salon — never another studio's results. Alessia's own
+ * work stays in the gallery.
+ */
+const SERVICE_IMAGES = [
+  "/editorial/ambiance-pose.jpg",
+  "/editorial/ambiance-pose-gants.jpg",
+  "/editorial/ambiance-sourcils.jpg",
+  "/editorial/ambiance-mains.jpg",
+];
+
 function Shell({
   id,
   label,
@@ -111,29 +123,28 @@ export default async function HomePage() {
       >
         {/* Fur that the visitor strokes with the pointer or a finger. */}
         <FurLayer pattern="leopard" veil="hero" />
-        {gallery[0] ? (
-          <div
-            className="absolute top-[13%] right-[7vw] w-[40vw] max-w-[22rem] sm:w-[28vw] lg:top-[17%] lg:right-[6vw] lg:w-[19vw]"
-            data-parallax="-0.25"
-          >
-            {/* CSS entrance on the inner element, GSAP parallax on the outer one: never both on one transform. */}
-            <div className="hero-fade" style={vars({ "--i": 2 })}>
-              <div className="relative aspect-[3/4] overflow-hidden rounded-t-full ring-1 ring-caramel-300/30">
-                <Image
-                  src="/editorial/regard-01-editorial.jpg"
-                  alt={gallery[0].alt}
-                  fill
-                  preload
-                  sizes="(min-width: 1024px) 19vw, (min-width: 640px) 28vw, 40vw"
-                  className="object-cover"
-                />
-              </div>
-              <p className="mt-4 hidden text-right text-xs tracking-[0.2em] text-sand-100 uppercase sm:block">
-                Extension de cils · le studio
-              </p>
+
+        <div
+          className="absolute top-[13%] right-[7vw] w-[40vw] max-w-[22rem] sm:w-[28vw] lg:top-[17%] lg:right-[6vw] lg:w-[19vw]"
+          data-parallax="-0.25"
+        >
+          {/* CSS entrance on the inner element, GSAP parallax on the outer one: never both on one transform. */}
+          <div className="hero-fade" style={vars({ "--i": 2 })}>
+            <div className="relative aspect-[3/4] overflow-hidden rounded-t-full ring-1 ring-caramel-300/30">
+              <Image
+                src="/editorial/ambiance-pose.jpg"
+                alt="Pose d’extensions de cils à la pince, les yeux fermés"
+                fill
+                preload
+                sizes="(min-width: 1024px) 19vw, (min-width: 640px) 28vw, 40vw"
+                className="object-cover"
+              />
             </div>
+            <p className="mt-4 hidden text-right text-xs tracking-[0.2em] text-sand-100 uppercase sm:block">
+              Le geste juste
+            </p>
           </div>
-        ) : null}
+        </div>
 
         <div
           className={`${wrap} relative flex h-full flex-col justify-end pt-24 pb-8 sm:pb-12`}
@@ -202,42 +213,41 @@ export default async function HomePage() {
               Alessia
             </footer>
           </blockquote>
-          {gallery[2] && gallery[5] ? (
-            <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 items-start gap-4 sm:mt-24 sm:gap-10">
-              {[
-                {
-                  src: "/editorial/regard-03-editorial.jpg",
-                  alt: gallery[2].alt,
-                  position: "object-[55%_50%]",
-                },
-                {
-                  src: "/editorial/regard-06-editorial.jpg",
-                  alt: gallery[5].alt,
-                  position: "object-[52%_32%]",
-                },
-              ].map((photo, i) => (
+
+          <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 items-start gap-4 sm:mt-24 sm:gap-10">
+            {[
+              {
+                src: "/editorial/ambiance-outils.jpg",
+                alt: "Pinces à extensions de cils sur un plateau doré",
+                position: "object-center",
+              },
+              {
+                src: "/editorial/ambiance-salon-rose.jpg",
+                alt: "Salon aux fauteuils de velours rose et dorures",
+                position: "object-center",
+              },
+            ].map((photo, i) => (
+              <div
+                key={photo.src}
+                className={i === 1 ? "mt-12 sm:mt-24" : ""}
+                data-parallax={i === 1 ? "0.2" : undefined}
+              >
                 <div
-                  key={photo.src}
-                  className={i === 1 ? "mt-12 sm:mt-24" : ""}
-                  data-parallax={i === 1 ? "0.2" : undefined}
+                  data-reveal="mask"
+                  data-delay={i * 0.12}
+                  className="relative aspect-[4/5] overflow-hidden"
                 >
-                  <div
-                    data-reveal="mask"
-                    data-delay={i * 0.12}
-                    className="relative aspect-[4/5] overflow-hidden"
-                  >
-                    <Image
-                      src={photo.src}
-                      alt={photo.alt}
-                      fill
-                      sizes="(min-width: 896px) 26rem, 46vw"
-                      className={`object-cover ${photo.position}`}
-                    />
-                  </div>
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    sizes="(min-width: 896px) 26rem, 46vw"
+                    className={`object-cover ${photo.position}`}
+                  />
                 </div>
-              ))}
-            </div>
-          ) : null}
+              </div>
+            ))}
+          </div>
         </div>
       </Shell>
 
@@ -260,8 +270,8 @@ export default async function HomePage() {
               className="relative aspect-[3/4] overflow-hidden rounded-t-full"
             >
               <Image
-                src="/editorial/regard-04-editorial.jpg"
-                alt={gallery[3]?.alt ?? ""}
+                src="/editorial/ambiance-mains.jpg"
+                alt="Mains d’une lash artist tenant une pince au-dessus d’un plateau de cils"
                 fill
                 sizes="(min-width: 1024px) 28rem, 90vw"
                 className="object-cover"
@@ -329,7 +339,7 @@ export default async function HomePage() {
                 meta: [formatDuration(s.durationMin), priceLabel(s)]
                   .filter(Boolean)
                   .join(" · "),
-                image: gallery.length ? gallery[i % gallery.length]!.src : null,
+                image: SERVICE_IMAGES[i % SERVICE_IMAGES.length]!,
               }))}
             />
           </div>
