@@ -17,6 +17,9 @@ echo "▶ Base de données (Supabase local, 2 à 4 minutes au premier démarrage
 for _ in $(seq 1 30); do docker info >/dev/null 2>&1 && break; sleep 2; done
 npx supabase start -x vector,logflare,imgproxy,supavisor,postgres-meta >"$LOG_DIR/supabase.log" 2>&1 \
   || { echo "Échec de Supabase : voir $LOG_DIR/supabase.log"; exit 1; }
+# A database created by an earlier start gets the newer migrations (contents, schema).
+npx supabase migration up >>"$LOG_DIR/supabase.log" 2>&1 \
+  || { echo "Échec de la mise à jour de la base : voir $LOG_DIR/supabase.log"; exit 1; }
 
 if [ ! -f .env.local ]; then
   echo "▶ Configuration (.env.local)…"
