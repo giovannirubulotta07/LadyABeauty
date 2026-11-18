@@ -1,0 +1,58 @@
+/*
+ * Lady A Beauty — design tokens (single source of truth).
+ * Palette: espresso (dominant), sand (background), caramel (the only accent),
+ * ink (text), ivory (cards). Text/background pairs are checked against
+ * WCAG AA in src/styles/tokens.test.ts.
+ */
+@theme {
+  /* Colours ---------------------------------------------------------------- */
+  --color-espresso-950: #1f130d;
+  --color-espresso-900: #2b1a12; /* dominant: bands, navigation, primary buttons */
+  --color-espresso-700: #4a3226;
+  --color-espresso-500: #614839; /* muted text on light surfaces */
+
+  --color-sand-50: #f4ece2;
+  --color-sand-100: #eadccb; /* page background */
+  --color-sand-200: #dcc8b1; /* dividers, subtle borders */
+
+  --color-ivory: #fbf7f0; /* cards and light surfaces */
+
+  --color-caramel-300: #d9ae7e; /* accent on dark backgrounds */
+  --color-caramel-500: #b9824c; /* decorative only (leopard, rules) */
+  --color-caramel-700: #7a4b20; /* accent text / focus on light backgrounds */
+
+  --color-ink: #16100c; /* body text */
+
+  /* Status colours stay inside the palette: no red/green. */
+  --color-danger: #7a2e1c;
+
+  /* Typography ------------------------------------------------------------- */
+  --font-display: var(--font-bodoni), "Didot", "Bodoni 72", Georgia, serif;
+  --font-sans:
+    var(--font-jost), "Avenir Next", "Segoe UI", system-ui, sans-serif;
+
+  --text-display: clamp(2.75rem, 7vw + 1rem, 5.5rem);
+  --text-display--line-height: 1;
+  --text-title: clamp(2rem, 3vw + 1.25rem, 3.25rem);
+  --text-title--line-height: 1.08;
+
+  --tracking-label: 0.22em;
+
+  /* Radii ------------------------------------------------------------------ */
+  --radius-control: 0.25rem;
+  --radius-card: 0.5rem;
+  --radius-pill: 999px;
+
+  /* Spacing ---------------------------------------------------------------- */
+  --spacing-section: clamp(4.5rem, 8vw, 8rem);
+  --spacing-gutter: 1.25rem;
+  --container-content: 72rem;
+  --container-prose: 38rem;
+
+  /* Elevation -------------------------------------------------------------- */
+  --shadow-card:
+    0 1px 2px rgb(43 26 18 / 0.06), 0 12px 32px -12px rgb(43 26 18 / 0.18);
+
+  /* Motion ----------------------------------------------------------------- */
+  --ease-elegant: cubic-bezier(0.22, 1, 0.36, 1);
+}

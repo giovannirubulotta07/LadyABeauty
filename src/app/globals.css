@@ -1,0 +1,103 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+@layer base {
+  :root {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-sand-100);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "kern", "liga";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible, on-brand focus everywhere. Dark surfaces switch the ring colour. */
+  :focus-visible {
+    outline: 2px solid var(--color-caramel-700);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .surface-dark :focus-visible,
+  .surface-dark:focus-visible {
+    outline-color: var(--color-caramel-300);
+  }
+
+  ::selection {
+    background-color: var(--color-caramel-300);
+    color: var(--color-espresso-950);
+  }
+}
+
+@layer components {
+  /* Leopard pattern: thin bands, frames and details only — never behind text. */
+  .leopard {
+    background-color: #c08a55;
+    background-image: url("/patterns/leopard.svg");
+    background-size: 360px 360px;
+    background-repeat: repeat;
+  }
+
+  /* Thin separators: a smaller tile so a few-pixel slice still reads as leopard. */
+  .leopard-band {
+    background-size: 150px 150px;
+    background-position: 0 -38px;
+  }
+
+  .label {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+}
+
+/* The site's single micro-animation: the hero title settles in. */
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+    letter-spacing: 0.04em;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    letter-spacing: normal;
+  }
+}
+
+@utility animate-settle {
+  animation: settle 1.1s var(--ease-elegant) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

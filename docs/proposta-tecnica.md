@@ -1,6 +1,6 @@
 # Proposta tecnica — prima di scrivere codice
 
-Stato: **in attesa di approvazione.** Le scelte marcate *(da confermare)* dipendono dalle risposte alle domande in fondo a `docs/sito-attuale.md` §10–11.
+Stato: **approvata** il 18/11/2026 con la regola "vale il brief". Le decisioni puntuali sono in `docs/decisioni.md`.
 
 ---
 
@@ -13,7 +13,7 @@ Lo stack del brief resta invariato. Tre precisazioni:
 | **Job pianificati** | **Supabase `pg_cron` + `pg_net`** che chiamano le route `/api/cron/*` ogni 5 minuti (protette da segreto) | Sul piano Vercel Hobby i cron girano al massimo **una volta al giorno**: non basta per le scadenze della lista d'attesa (finestre di 30 min). `pg_cron` è gratuito e indipendente dal piano Vercel. |
 | **Date e fusi orari** | `date-fns` v4 + `@date-fns/tz` (`TZDate`) | Leggero, ben tipizzato, gestisce Europe/Paris e l'ora legale. Tutta la conversione è in un solo modulo `domain/time`. |
 | **Login cliente** | Supabase Auth con **codice OTP a 6 cifre via email** (la stessa email contiene anche il magic link) + password facoltativa | Le clienti arrivano da Instagram: il browser interno di Instagram apre i magic link in **un altro browser** e la prenotazione in corso si perde. Con il codice da digitare la cliente resta nella stessa pagina. È la scelta di Planity. |
-| **Pagamento acconto** *(da confermare, D8)* | Stripe Checkout (pagina ospitata) + webhook | Solo se Alessia vuole mantenere l'acconto online. È un'aggiunta allo stack. |
+| **Pagamento acconto** | Non previsto (D8). Se servirà: Stripe Checkout + webhook, con stato `pending_payment`. | Il brief non lo chiede. |
 
 ---
 
@@ -23,13 +23,12 @@ Convenzioni: `uuid` come chiavi, `timestamptz` in UTC, intervalli `tstzrange` se
 
 ### Tipi enumerati
 ```sql
-create type appointment_status as enum ('pending_payment','confirmed','cancelled','completed','no_show');
+create type appointment_status as enum ('confirmed','cancelled','completed','no_show');
 create type appointment_source as enum ('online','admin','waitlist');
 create type waitlist_status    as enum ('waiting','notified','booked','expired','cancelled');
 create type offer_status       as enum ('offered','accepted','expired','superseded');
 create type notification_status as enum ('queued','sent','failed','skipped');
 ```
-(`pending_payment` serve solo se si tiene l'acconto Stripe.)
 
 ### Catalogo
 ```sql
@@ -41,7 +40,7 @@ services (
   duration_min int check (duration_min between 5 and 480),
   price_cents int null,                    -- null = "sur devis"
   price_is_from bool default false,        -- "à partir de"
-  deposit_cents int null,                  -- acconto (D8)
+  deposit_cents int null,                  -- acconto, solo informativo (D8)
   bookable_online bool default true,
   is_active bool, sort_order int, created_at, updated_at)
 
@@ -60,7 +59,7 @@ business_settings (                         -- riga unica (id = true)
   address_line1, address_line2, postal_code, city, country, lat, lng,
   timezone text default 'Europe/Paris',
   min_notice_minutes int default 120,
-  max_advance_days   int default 60,        -- sito attuale: 56 (D12)
+  max_advance_days   int default 60,
   cancellation_cutoff_hours int default 24,
   reference_starts time[] default '{10:00,12:00,14:30,16:00,18:00}',
   evening_lock_from time default '18:00',
@@ -97,23 +96,18 @@ Il ruolo admin **non** è una colonna modificabile: sta in `auth.users.app_metad
 ```sql
 appointments (
   id, client_id → profiles,
+  service_id, variant_id null,             -- una prestazione per prenotazione (D10)
+  service_name, variant_name,              -- snapshot: lo storico resta corretto
+  duration_min, price_cents,
   period tstzrange not null,
   status appointment_status not null default 'confirmed',
   source appointment_source not null,
-  total_price_cents int, deposit_cents int,
   client_note text, admin_note text,
-  payment_expires_at timestamptz null,     -- solo pending_payment
   cancelled_at, cancelled_by uuid, cancellation_reason text,
   created_at, updated_at,
   constraint no_overlap exclude using gist (period with &&)
-    where (status in ('pending_payment','confirmed'))
+    where (status = 'confirmed')
 )
-
-appointment_items (                         -- 1..N prestazioni (D10)
-  id, appointment_id → appointments on delete cascade,
-  service_id, variant_id null,
-  service_name, variant_name,              -- snapshot: lo storico resta corretto
-  duration_min, price_cents, position)
 ```
 
 ### Lista d'attesa
@@ -167,7 +161,7 @@ rate_limits (key text, window_start timestamptz, hits int, primary key (key, win
 | services, variants, categories, opening_hours, gallery_images | lettura righe attive | lettura righe attive | tutto |
 | business_settings | lettura (vista pubblica senza campi interni) | idem | tutto |
 | profiles | select/update **solo la propria** riga | — | tutto |
-| appointments, appointment_items | select **solo i propri**; nessun insert/update diretto (solo via RPC) | — | tutto |
+| appointments | select **solo i propri**; nessun insert/update diretto (solo via RPC) | — | tutto |
 | waitlist_entries | select/insert/annulla **i propri** | — | tutto |
 | day_overrides, blocks, slot_holds, waitlist_offers, client_notes, notification_log, rate_limits | — | — | tutto (offers/holds anche via service role) |
 
@@ -193,8 +187,7 @@ La disponibilità non si legge mai dalle tabelle lato client: la calcola il serv
 │  │  ├─ admin/                       # agenda, rdv, clientes, liste, réglages, emails
 │  │  ├─ api/
 │  │  │  ├─ cron/reminders/  cron/waitlist/  cron/cleanup/
-│  │  │  ├─ ics/[token]/
-│  │  │  └─ stripe/webhook/           # solo se acconto
+│  │  │  └─ ics/[token]/
 │  │  ├─ auth/callback/
 │  │  ├─ sitemap.ts  robots.ts  opengraph-image.tsx
 │  ├─ domain/                         # TypeScript puro, zero dipendenze da Next/Supabase
@@ -263,13 +256,13 @@ funzione slotsDelGiorno(giorno, durata, ora_attuale, contesto):
 **Note di progetto**
 - Funzione **pura**: riceve tutto in input, compreso `ora_attuale`. I test sono deterministici e possono simulare qualunque data, inclusi i cambi d'ora.
 - Aggiungo come candidati anche i bordi dei **blocchi** e degli **hold** (sono occupazioni come le altre): fa lo stesso "incastro" attorno a una fascia bloccata.
-- La durata è la somma delle prestazioni scelte (se si mantiene la prenotazione multipla).
+- La durata è quella della prestazione, o della variante se ne ha una propria.
 - Il server ricalcola tutto alla conferma; la funzione SQL di prenotazione verifica sotto lock.
 
-**Test obbligatori** (con le durate reali: Extension 1h50, Rehaussement 45 min, ecc.):
-1. Giorno feriale vuoto, Extension 1h50 → 10:00, 12:00, 14:30, 16:00; 18:00 `sur demande` (solo se la chiusura lo permette, vedi D1/D2).
-2. Extension 10:00–11:50, Rehaussement 45 min → 11:50, 12:00, …; dopo aver prenotato 11:50–12:35 viene proposto 12:35, e due prestazioni da 45 min entrano tra 11:50 e 14:00.
-3. Extension 10:00–11:50, nuova Extension → 12:00 (12:00–13:50); nessuno slot attraversa 14:00–14:30.
+**Test obbligatori** (durate del brief: Extension 1h45, Rehaussement 1h):
+1. Giorno feriale vuoto, Extension 1h45 → 10:00, 12:00, 14:30, 16:00; 18:00 `sur demande`.
+2. Extension 10:00–11:45, Rehaussement 1h → 11:45, 12:00, …; dopo aver prenotato 11:45–12:45 viene proposto 12:45, e due prestazioni da 1h entrano tra 11:45 e 14:00.
+3. Extension 10:00–11:45, nuova Extension → 12:00 (12:00–13:45); nessuno slot attraversa 14:00–14:30.
 4. Nessuna prestazione che sfora la pausa o la chiusura.
 5. Sabato: niente oltre la chiusura.
 6. Giorno con 18:00 sbloccato → 18:00 prenotabile.
