@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { getBusinessInfo } from "@/server/content/queries";
 import { env } from "@/server/env";
+import { MOTION_BOOT_SCRIPT } from "@/components/motion/boot-script";
 import { bodoni, jost } from "./fonts";
 import "./globals.css";
 
@@ -35,7 +36,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={`${bodoni.variable} ${jost.variable}`}>
+    <html
+      lang="fr"
+      className={`${bodoni.variable} ${jost.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: MOTION_BOOT_SCRIPT }} />
+      </head>
       <body className="min-h-dvh">{children}</body>
     </html>
   );

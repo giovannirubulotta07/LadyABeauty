@@ -10,6 +10,7 @@
   --color-espresso-900: #2b1a12; /* dominant: bands, navigation, primary buttons */
   --color-espresso-700: #4a3226;
   --color-espresso-500: #614839; /* muted text on light surfaces */
+  --color-mocha: #664a34; /* cinematic mid-brown sections (ivory/sand text) */
 
   --color-sand-50: #f4ece2;
   --color-sand-100: #eadccb; /* page background */
@@ -35,6 +36,13 @@
   --text-display--line-height: 1;
   --text-title: clamp(2rem, 3vw + 1.25rem, 3.25rem);
   --text-title--line-height: 1.08;
+  /* Editorial scale (redesign) */
+  --text-mega: clamp(4.25rem, 15vw, 14rem);
+  --text-mega--line-height: 0.88;
+  --text-headline: clamp(2.6rem, 7.5vw, 6.5rem); /* Jost Light, uppercase */
+  --text-headline--line-height: 1;
+  --text-quote: clamp(1.9rem, 4.2vw, 3.6rem);
+  --text-quote--line-height: 1.18;
 
   --tracking-label: 0.22em;
 
@@ -55,4 +63,5 @@
 
   /* Motion ----------------------------------------------------------------- */
   --ease-elegant: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }

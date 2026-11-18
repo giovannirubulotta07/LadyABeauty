@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { BOOKING_LINK } from "@/components/site/navigation";
-import { ServiceCard } from "@/components/site/service-card";
-import { ButtonLink } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { PageHero } from "@/components/site/page-hero";
+import { priceLabel } from "@/domain/catalog/price";
+import { formatDuration } from "@/lib/format";
 import { getServices } from "@/server/content/queries";
 
 export const metadata: Metadata = {
@@ -17,35 +17,104 @@ export default async function PrestationsPage() {
   const services = await getServices();
 
   return (
-    <Container className="py-section">
-      <SectionHeading
-        as="h1"
+    <>
+      <PageHero
         label="Prestations"
         title="Prestations & tarifs"
         intro="Chaque prestation est réalisée sur mesure, selon votre regard et vos envies."
       />
-      {services.length === 0 ? (
-        <p className="mt-12 rounded-card border border-dashed border-sand-200 p-10 text-center text-espresso-500">
-          Les prestations seront bientôt disponibles.
-        </p>
-      ) : (
-        <ul className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((service) => (
-            <li key={service.id}>
-              <ServiceCard
-                service={service}
-                withDescription
-                headingLevel="h2"
-              />
-            </li>
-          ))}
-        </ul>
-      )}
-      <div className="mt-16 flex justify-center">
-        <ButtonLink href={BOOKING_LINK.href} size="lg">
-          {BOOKING_LINK.label}
-        </ButtonLink>
-      </div>
-    </Container>
+      <section className="surface-dark bg-espresso-950 text-ivory">
+        <div className="mx-auto w-full max-w-[90rem] px-gutter pb-28 sm:px-8 sm:pb-36">
+          {services.length === 0 ? (
+            <p className="border-t border-ivory/15 py-16 text-center text-sand-100">
+              Les prestations seront bientôt disponibles.
+            </p>
+          ) : (
+            <ol className="border-t border-ivory/15">
+              {services.map((service, i) => {
+                const price = priceLabel(service);
+                const paragraphs = service.description
+                  .split(/\n{2,}/)
+                  .filter(Boolean);
+                return (
+                  <li
+                    key={service.id}
+                    id={service.slug}
+                    className="scroll-mt-24 border-b border-ivory/15"
+                    data-reveal="fade"
+                    data-delay={Math.min(i, 6) * 0.04}
+                  >
+                    <details className="group">
+                      <summary className="grid min-h-20 cursor-pointer list-none grid-cols-[2.5rem_1fr_auto] items-baseline gap-4 py-7 sm:grid-cols-[4rem_1fr_auto_auto] [&::-webkit-details-marker]:hidden">
+                        <span className="font-sans text-xs tracking-[0.2em] text-sand-100/70">
+                          {String(i + 1).padStart(3, "0")}
+                        </span>
+                        <h2 className="font-sans text-[clamp(1.35rem,3.2vw,2.6rem)] leading-tight font-light tracking-wide text-ivory uppercase">
+                          {service.name}
+                        </h2>
+                        <span className="hidden text-sm text-sand-100 sm:block">
+                          {[formatDuration(service.durationMin), price]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className="text-2xl font-light text-ivory transition-transform duration-500 group-open:rotate-45"
+                        >
+                          +
+                        </span>
+                        <span className="col-span-2 col-start-2 -mt-2 text-sm text-sand-100 sm:hidden">
+                          {[formatDuration(service.durationMin), price]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </span>
+                      </summary>
+                      <div className="grid gap-8 pb-10 sm:grid-cols-[4rem_1fr_auto] sm:gap-4">
+                        <div className="max-w-2xl space-y-3 leading-relaxed text-sand-100 sm:col-start-2">
+                          {paragraphs.length > 0 ? (
+                            paragraphs.map((p) => <p key={p}>{p}</p>)
+                          ) : (
+                            <p>Sur rendez-vous, au studio.</p>
+                          )}
+                          {service.variants.length > 0 ? (
+                            <ul className="flex flex-wrap gap-2 pt-2">
+                              {service.variants.map((v) => (
+                                <li
+                                  key={v.id}
+                                  className="rounded-pill border border-ivory/25 px-3 py-1 text-xs text-ivory"
+                                >
+                                  {v.name}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : null}
+                        </div>
+                        {service.bookableOnline ? (
+                          <Link
+                            href={`/reserver?prestation=${service.slug}`}
+                            className="inline-flex min-h-12 items-center gap-3 self-start justify-self-start rounded-pill border border-ivory/40 px-6 text-[0.75rem] tracking-[0.2em] uppercase transition-colors duration-500 hover:bg-ivory hover:text-espresso-950 sm:justify-self-end"
+                            aria-label={`Réserver : ${service.name}`}
+                          >
+                            Réserver <span aria-hidden="true">→</span>
+                          </Link>
+                        ) : null}
+                      </div>
+                    </details>
+                  </li>
+                );
+              })}
+            </ol>
+          )}
+          <div className="mt-20 flex justify-center">
+            <Link
+              href={BOOKING_LINK.href}
+              className="inline-flex min-h-14 items-center gap-4 rounded-pill bg-ivory px-9 text-[0.8125rem] tracking-[0.2em] text-espresso-950 uppercase transition-colors duration-500 hover:bg-caramel-300"
+            >
+              {BOOKING_LINK.label} <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

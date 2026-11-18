@@ -1,8 +1,7 @@
 import { cacheLife } from "next/cache";
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
-import { InstagramIcon } from "@/components/ui/icons";
-import { LeopardBand } from "@/components/ui/leopard-band";
 import { addressLines, instagramHandle, mapsUrl } from "@/lib/address";
 import { getBusinessInfo, getOpeningHours } from "@/server/content/queries";
 import { ACCOUNT_LINK, BOOKING_LINK, LEGAL_NAV, MAIN_NAV } from "./navigation";
@@ -19,31 +18,46 @@ export async function Footer() {
     getBusinessInfo(),
     getOpeningHours(),
   ]);
-  const linkClass =
-    "inline-flex min-h-11 items-center text-sand-100 transition-colors hover:text-caramel-300";
+  const link =
+    "link-underline inline-flex min-h-11 items-center text-sand-100 transition-colors hover:text-ivory";
 
   return (
-    <footer className="surface-dark bg-espresso-950 text-sand-100">
-      <LeopardBand />
-      <Container className="grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <p className="font-display text-3xl text-ivory">{business.name}</p>
-          <p className="mt-3 text-sm leading-relaxed">{business.tagline}</p>
-          {business.instagramUrl ? (
-            <a
-              href={business.instagramUrl}
-              className={`${linkClass} mt-4 gap-2`}
-              rel="noopener"
+    <footer className="surface-dark relative overflow-hidden bg-espresso-950 text-sand-100">
+      {/* Closing invitation */}
+      <section
+        aria-labelledby="footer-cta"
+        className="border-b border-ivory/10"
+      >
+        <Container className="flex max-w-[90rem] flex-col items-start gap-10 py-20 sm:py-28 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="label text-sand-100">Réservation en ligne</p>
+            <h2
+              id="footer-cta"
+              data-reveal="lines"
+              className="mt-6 max-w-3xl text-quote text-ivory"
             >
-              <InstagramIcon />
-              {instagramHandle(business.instagramUrl)}
-            </a>
-          ) : null}
-        </div>
+              Votre regard, sublimé dans le moindre détail.
+            </h2>
+          </div>
+          <Link
+            href={BOOKING_LINK.href}
+            className="group inline-flex min-h-14 shrink-0 items-center gap-4 rounded-pill border border-ivory/40 px-8 text-[0.8125rem] tracking-[0.2em] text-ivory uppercase transition-colors duration-500 hover:border-ivory hover:bg-ivory hover:text-espresso-950"
+          >
+            {BOOKING_LINK.label}
+            <span
+              aria-hidden="true"
+              className="transition-transform duration-500 group-hover:translate-x-1"
+            >
+              →
+            </span>
+          </Link>
+        </Container>
+      </section>
 
+      <Container className="grid max-w-[90rem] gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <h2 className="label text-caramel-300">Le studio</h2>
-          <address className="mt-4 text-sm leading-relaxed not-italic">
+          <h2 className="label text-sand-100/80">Le studio</h2>
+          <address className="mt-5 leading-relaxed text-ivory not-italic">
             {addressLines(business.address).map((line) => (
               <span key={line} className="block">
                 {line}
@@ -52,7 +66,7 @@ export async function Footer() {
           </address>
           <a
             href={mapsUrl(business.name, business.address)}
-            className={`${linkClass} text-sm underline underline-offset-4`}
+            className={`${link} text-sm`}
             rel="noopener"
           >
             Itinéraire
@@ -60,38 +74,86 @@ export async function Footer() {
         </div>
 
         <div>
-          <h2 className="label text-caramel-300">Horaires</h2>
+          <h2 className="label text-sand-100/80">Horaires</h2>
           <OpeningHoursList
             hours={hours}
             tone="dark"
-            className="mt-2 text-sm"
+            className="mt-3 text-sm"
           />
         </div>
 
         <nav aria-label="Liens du pied de page">
-          <h2 className="label text-caramel-300">Navigation</h2>
-          <ul className="mt-2 text-sm">
-            {[BOOKING_LINK, ...MAIN_NAV, ACCOUNT_LINK].map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className={linkClass}>
-                  {link.label}
+          <h2 className="label text-sand-100/80">Navigation</h2>
+          <ul className="mt-3 text-sm">
+            {[BOOKING_LINK, ...MAIN_NAV, ACCOUNT_LINK].map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className={link}>
+                  {l.label}
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
+
+        <div>
+          <h2 className="label text-sand-100/80">Suivre</h2>
+          {business.instagramUrl ? (
+            <a
+              href={business.instagramUrl}
+              className={`${link} mt-3 text-sm`}
+              rel="noopener"
+            >
+              {instagramHandle(business.instagramUrl)}
+            </a>
+          ) : null}
+          <p className="mt-6 text-sm leading-relaxed">{business.tagline}</p>
+        </div>
       </Container>
 
-      <div className="border-t border-sand-100/15">
-        <Container className="flex flex-col gap-2 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
-          <p>
+      {/* Giant wordmark, purely decorative */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none overflow-hidden select-none"
+      >
+        {/* SVG text: decorative, so it is not held to text contrast rules */}
+        <svg
+          data-parallax-x="-0.08"
+          viewBox="0 0 1000 205"
+          className="block w-[110%] font-display text-caramel-500/25"
+          role="presentation"
+          focusable="false"
+        >
+          <text
+            x="0"
+            y="190"
+            fill="currentColor"
+            fontSize="262"
+            letterSpacing="-6"
+          >
+            Lady A
+          </text>
+        </svg>
+      </div>
+
+      <div className="border-t border-ivory/10">
+        <Container className="flex max-w-[90rem] flex-col gap-3 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+          <p className="flex items-center gap-3">
+            {business.logoUrl ? (
+              <Image
+                src={business.logoUrl}
+                alt=""
+                width={24}
+                height={24}
+                className="rounded-[2px] opacity-80"
+              />
+            ) : null}
             © <CurrentYear /> {business.name}
           </p>
           <ul className="flex flex-wrap gap-x-6">
-            {LEGAL_NAV.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className={linkClass}>
-                  {link.label}
+            {LEGAL_NAV.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className={link}>
+                  {l.label}
                 </Link>
               </li>
             ))}

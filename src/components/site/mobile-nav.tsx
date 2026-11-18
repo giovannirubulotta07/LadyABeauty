@@ -1,18 +1,32 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRef, type MouseEvent } from "react";
-import { buttonClasses } from "@/components/ui/button";
-import { CloseIcon, MenuIcon } from "@/components/ui/icons";
+import { CloseIcon } from "@/components/ui/icons";
 import type { NavLink } from "./navigation";
 
-type Props = { links: NavLink[]; account: NavLink; booking: NavLink };
+type Props = {
+  links: NavLink[];
+  account: NavLink;
+  booking: NavLink;
+  addressLines: string[];
+  instagramUrl: string | null;
+  logoUrl: string | null;
+};
 
 /**
- * Full-screen menu built on the native Popover API: light-dismiss, Escape and
- * focus return are handled by the browser. JS only closes it after a link click.
+ * Full-screen menu on the native Popover API (light-dismiss, Escape and focus
+ * return handled by the browser). Opening is animated in CSS (@starting-style).
  */
-export function MobileNav({ links, account, booking }: Props) {
+export function MobileNav({
+  links,
+  account,
+  booking,
+  addressLines,
+  instagramUrl,
+  logoUrl,
+}: Props) {
   const panel = useRef<HTMLDivElement>(null);
 
   function closeOnLink(event: MouseEvent<HTMLElement>) {
@@ -20,64 +34,121 @@ export function MobileNav({ links, account, booking }: Props) {
       panel.current?.hidePopover();
   }
 
+  const items = [...links, account];
+
   return (
     <>
       <button
         type="button"
         popoverTarget="menu-mobile"
-        className="inline-flex size-11 items-center justify-center rounded-control text-ivory lg:hidden"
+        className="group inline-flex min-h-11 items-center gap-3 text-[0.75rem] tracking-[0.2em] uppercase"
         aria-label="Ouvrir le menu"
       >
-        <MenuIcon width={24} height={24} />
+        <span aria-hidden="true" className="flex w-7 flex-col gap-[7px]">
+          <span className="h-px w-full bg-current transition-transform duration-500 group-hover:translate-x-1" />
+          <span className="h-px w-2/3 bg-current transition-[width] duration-500 group-hover:w-full" />
+        </span>
+        <span className="hidden sm:inline">Menu</span>
       </button>
 
       <div
         id="menu-mobile"
         ref={panel}
         popover="auto"
-        className="surface-dark fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none bg-espresso-950 p-0 text-ivory backdrop:bg-espresso-950/60"
+        className="menu-panel surface-dark fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-y-auto bg-espresso-950 p-0 text-ivory"
         onClick={closeOnLink}
       >
-        <div className="flex h-full flex-col px-gutter pt-3 pb-10">
-          <div className="flex justify-end">
+        <div className="mx-auto grid min-h-full max-w-[90rem] grid-rows-[auto_1fr_auto] px-gutter sm:px-8">
+          <div className="flex h-16 items-center lg:h-20">
             <button
               type="button"
               popoverTarget="menu-mobile"
               popoverTargetAction="hide"
-              className="inline-flex size-11 items-center justify-center rounded-control"
+              className="inline-flex min-h-11 items-center gap-3 text-[0.75rem] tracking-[0.2em] uppercase"
               aria-label="Fermer le menu"
             >
-              <CloseIcon width={24} height={24} />
+              <CloseIcon width={22} height={22} />
+              <span className="hidden sm:inline">Fermer</span>
             </button>
           </div>
-          <nav aria-label="Menu" className="mt-8 flex-1">
-            <ul className="space-y-1">
-              {links.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="block py-3 font-display text-4xl text-ivory transition-colors hover:text-caramel-300"
+
+          <div className="grid items-center gap-12 py-8 lg:grid-cols-[1.4fr_1fr]">
+            <nav aria-label="Menu">
+              <ol className="space-y-1 sm:space-y-2">
+                {items.map((link, i) => (
+                  <li
+                    key={link.href}
+                    className="menu-item"
+                    style={{ "--i": i } as React.CSSProperties}
                   >
-                    {link.label}
-                  </Link>
-                </li>
+                    <Link
+                      href={link.href}
+                      className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2.5rem,8vw,5.5rem)] leading-[1.05] transition-colors hover:text-caramel-300"
+                    >
+                      <span className="font-sans text-xs tracking-[0.2em] text-sand-100/70">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="transition-transform duration-700 group-hover:translate-x-3">
+                        {link.label}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+            <div
+              className="menu-item hidden lg:block"
+              style={{ "--i": items.length } as React.CSSProperties}
+            >
+              <div className="relative aspect-[4/5] overflow-hidden rounded-t-full">
+                <Image
+                  src="/editorial/soie-leopard-1.jpg"
+                  alt=""
+                  fill
+                  sizes="30vw"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-6 border-t border-ivory/10 py-8 text-sm text-sand-100 sm:grid-cols-3 sm:items-end">
+            <address className="not-italic">
+              {addressLines.map((l) => (
+                <span key={l} className="block">
+                  {l}
+                </span>
               ))}
-              <li>
-                <Link
-                  href={account.href}
-                  className="block py-3 font-display text-4xl text-ivory transition-colors hover:text-caramel-300"
-                >
-                  {account.label}
-                </Link>
-              </li>
-            </ul>
-          </nav>
-          <Link
-            href={booking.href}
-            className={buttonClasses("light", "lg", "w-full")}
-          >
-            {booking.label}
-          </Link>
+            </address>
+            {instagramUrl ? (
+              <a
+                href={instagramUrl}
+                rel="noopener"
+                className="min-h-11 self-center justify-self-start link-underline sm:justify-self-center"
+              >
+                Instagram
+              </a>
+            ) : (
+              <span />
+            )}
+            <div className="flex items-center gap-4 sm:justify-self-end">
+              {logoUrl ? (
+                <Image
+                  src={logoUrl}
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="rounded-[3px] opacity-90"
+                />
+              ) : null}
+              <Link
+                href={booking.href}
+                className="inline-flex min-h-12 items-center rounded-pill border border-ivory/40 px-6 text-[0.75rem] tracking-[0.2em] uppercase transition-colors hover:border-caramel-300 hover:text-caramel-300"
+              >
+                {booking.label}
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -35,4 +35,50 @@ Restano invariati: accessibilità AA, `prefers-reduced-motion`, mobile first, Li
 ## Il nodo delle foto
 
 Il look di ever si regge su **fotografia editoriale professionale** (ritratti in studio, macro, texture, video). Le 6 foto attuali sono screenshot di telefono: vanno bene come prova del lavoro, ma non reggono un hero a tutto schermo.
-Le opzioni sono nella risposta in chat; la decisione spetta al committente.
+**Decisione del committente: "1+2".**
+
+1. Più avanti ci sarà un **servizio fotografico professionale**. Tutte le immagini editoriali sono in `public/editorial/` e si sostituiscono senza toccare il codice: stesso nome file, stesso formato.
+2. Per l'atmosfera si usano solo **texture** (seta, satin, leopardato drappeggiato). Mai volti stock né risultati spacciati per lavori di Alessia.
+
+   Le texture sono **originali**, generate con uno shader WebGL (`scripts/textures/`), quindi senza problemi di licenza. Le foto dei lavori sono quelle reali di Alessia, ritoccate nel colore (`scripts/grade-photos.mts`). Le provenienze sono in `docs/crediti-immagini.md`.
+
+## Cosa è stato realizzato
+
+- **Header sovrapposto all'hero, che diventa pieno durante lo scorrimento:**
+  - menu a schermo intero (Popover API) con voci numerate in Bodoni, immagine, indirizzo e CTA;
+  - la logica è in CSS (`body:has([data-hero])`), così non serve JavaScript per il layout.
+- **Home:**
+  - hero con seta in parallasse, titolo che sale riga per riga e foto ad arco;
+  - marquee e manifesto;
+  - collage parallasse « L'art du regard » e sezione « Je suis Alessia » con filigrana;
+  - prestazioni numerate con immagine che segue il cursore (solo desktop);
+  - galleria con aperture a maschera, FAQ e « Venir au studio ».
+- **Prestations e Galerie:** apertura scura comune (`PageHero`), elenco editoriale numerato a fisarmonica con « Réserver » per ogni prestazione, griglia sfalsata.
+- **Footer:** invito finale, quattro colonne e "Lady A" gigante (SVG decorativo) che scorre in orizzontale.
+- **Prenotazione, Mon espace, pagine legali:** restano su fondo sabbia, sobrie e senza animazioni decorative.
+
+## Motore delle animazioni
+
+`src/components/motion/` contiene:
+
+- `boot-script.ts`, eseguito prima del primo rendering: aggiunge la classe `motion` solo se l'utente non ha chiesto di ridurre le animazioni; se il motore non parte entro 4 s, mostra tutto;
+- `motion-provider.tsx`: GSAP, ScrollTrigger, SplitText e Lenis, caricati **dopo il `load`, quando il thread principale è libero**.
+
+Le pagine restano server component e attivano le animazioni con attributi `data-reveal="lines|fade|mask"`, `data-parallax` e `data-parallax-x`.
+
+## Verifiche (18/11/2026)
+
+- **Lighthouse mobile:**
+
+  | Pagina | Performance | Accessibilità | Best practices | SEO |
+  |---|---|---|---|---|
+  | Accueil | 94–97 (varia tra le misure) | 100 | 100 | 100 |
+  | Prestations | 96 | 100 | 100 | 100 |
+  | Galerie | 96 | 100 | 100 | 100 |
+  | Réserver | 95 | 100 | 100 | 100 |
+
+  L'LCP reale misurato (Moto G4, CPU ×4) è di 0,18 s: il titolo viene dipinto al primo frame.
+- **Test E2E:**
+  - i test funzionali girano con `reducedMotion: "reduce"`;
+  - `tests/e2e/motion.spec.ts` verifica la versione animata: tutte le sezioni compaiono scorrendo e nulla resta nascosto con « réduire les animations ».
+- **Screenshot e video di scorrimento:** `docs/screenshots/redesign/`.

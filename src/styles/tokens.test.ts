@@ -51,6 +51,14 @@ const TEXT_PAIRS: Array<[text: string, background: string]> = [
   ["caramel-300", "espresso-900"],
   ["caramel-300", "espresso-950"],
   ["ivory", "caramel-700"],
+  ["ivory", "mocha"],
+  ["sand-100", "mocha"],
+];
+
+/** Large text only (≥ 24 px, or ≥ 18.66 px bold): 3:1 is AA. */
+const LARGE_TEXT_PAIRS: Array<[text: string, background: string]> = [
+  ["caramel-300", "mocha"],
+  ["caramel-500", "espresso-950"],
 ];
 
 /** Non-text UI (focus rings, input borders) needs 3:1 (WCAG 1.4.11). */
@@ -64,6 +72,10 @@ const UI_PAIRS: Array<[ui: string, background: string]> = [
 describe("design tokens — WCAG AA contrast", () => {
   it.each(TEXT_PAIRS)("text %s on %s ≥ 4.5:1", (text, bg) => {
     expect(contrast(token(text), token(bg))).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it.each(LARGE_TEXT_PAIRS)("large text %s on %s ≥ 3:1", (text, bg) => {
+    expect(contrast(token(text), token(bg))).toBeGreaterThanOrEqual(3);
   });
 
   it.each(UI_PAIRS)("ui %s on %s ≥ 3:1", (ui, bg) => {

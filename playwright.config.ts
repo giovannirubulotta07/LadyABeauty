@@ -16,6 +16,9 @@ export default defineConfig({
     locale: "fr-FR",
     timezoneId: "Europe/Paris",
     trace: "off",
+    // Functional tests use the reduced-motion version (content visible at once);
+    // tests/e2e/motion.spec.ts covers the animated version.
+    reducedMotion: "reduce",
   },
   projects: [
     {

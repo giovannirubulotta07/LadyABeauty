@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { Footer } from "@/components/site/footer";
 import { Header } from "@/components/site/header";
+import { MotionProvider } from "@/components/motion/motion-provider";
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
@@ -15,6 +17,10 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <Footer />
+      {/* Reads the route to re-bind animations after client navigations. */}
+      <Suspense fallback={null}>
+        <MotionProvider />
+      </Suspense>
     </>
   );
 }

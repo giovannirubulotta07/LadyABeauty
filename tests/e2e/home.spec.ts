@@ -10,20 +10,25 @@ test.describe("Accueil", () => {
 
     const cta = page
       .getByRole("main")
-      .getByRole("link", { name: "Prendre rendez-vous" });
+      .getByRole("link", { name: "Prendre rendez-vous" })
+      .first();
     await expect(cta).toHaveAttribute("href", "/reserver");
 
     for (const section of [
-      "La beauté du regard",
-      "Je suis Alessia",
-      "Les regards",
-      "Venir au studio",
+      /L’art\s*du regard/,
+      /Je suis Alessia/,
+      /Sur mesure\s*pour votre regard/,
+      /Les regards/,
+      /Questions fréquentes/,
+      /Venir au studio/,
     ]) {
       await expect(
         page.getByRole("heading", { level: 2, name: section }),
       ).toBeVisible();
     }
-    await expect(page.getByText("Avenue de Verdun").first()).toBeVisible();
+    await expect(
+      page.getByRole("main").getByText("Avenue de Verdun").first(),
+    ).toBeVisible();
   });
 
   test("expose des données structurées BeautySalon valides", async ({
