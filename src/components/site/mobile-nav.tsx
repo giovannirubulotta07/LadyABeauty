@@ -85,9 +85,6 @@ export function MobileNav({
                       href={link.href}
                       className="group flex items-baseline gap-4 py-1 font-display text-[clamp(2.5rem,8vw,5.5rem)] leading-[1.05] transition-colors hover:text-caramel-300"
                     >
-                      <span className="font-sans text-xs tracking-[0.2em] text-sand-100/70">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
                       <span className="transition-transform duration-700 group-hover:translate-x-3">
                         {link.label}
                       </span>

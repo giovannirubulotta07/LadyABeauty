@@ -1,4 +1,5 @@
 import { type Page, expect } from "@playwright/test";
+import postgres from "postgres";
 
 const MAILPIT = process.env.MAILPIT_URL ?? "http://127.0.0.1:54324";
 
@@ -7,8 +8,27 @@ export const ADMIN_EMAIL = "admin@lady-a-beauty.test";
 export const ADMIN_PASSWORD =
   process.env.E2E_ADMIN_PASSWORD ?? "Admin-local-2026";
 
+/**
+ * The whole suite signs in far more often than a real visitor could, from one
+ * IP: reset the anti-abuse counters before each sign-in so the tests never
+ * depend on their order. (Local database only.)
+ */
+export async function resetRateLimits() {
+  const sql = postgres(
+    process.env.DATABASE_URL ??
+      "postgresql://postgres:postgres@127.0.0.1:54322/postgres",
+    { max: 1, onnotice: () => {} },
+  );
+  try {
+    await sql`delete from public.rate_limits`;
+  } finally {
+    await sql.end();
+  }
+}
+
 /** Signs in on /admin with the password form (waits past the anti-bot timer). */
 export async function adminLogin(page: Page) {
+  await resetRateLimits();
   await page.goto("/admin");
   await page.getByRole("button", { name: "J’ai un mot de passe" }).click();
   await page.getByLabel("Adresse e-mail").fill(ADMIN_EMAIL);
@@ -82,6 +102,7 @@ export async function fillDetailsAndCode(
   email: string,
   name = "Cliente Test E2E",
 ) {
+  await resetRateLimits();
   await page.getByLabel("Prénom et nom").fill(name);
   await page.getByLabel("Adresse e-mail").fill(email);
   await page.getByLabel("Téléphone").fill("06 00 00 00 42");

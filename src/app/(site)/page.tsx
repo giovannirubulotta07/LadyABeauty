@@ -146,25 +146,13 @@ export default async function HomePage() {
               </span>
             ))}
           </h1>
-          <div className="mt-10 grid grid-cols-2 items-center gap-6 border-t border-ivory/20 pt-6 sm:grid-cols-3">
+          <div className="mt-10 grid grid-cols-2 items-center gap-6 border-t border-ivory/20 pt-6">
             <p
               className="hero-fade text-sm tracking-[0.12em] text-sand-100 uppercase"
               style={vars({ "--i": 1 })}
             >
               {business.home.heroSubtitle}
             </p>
-            <div
-              className="hero-fade hidden flex-col items-center gap-3 sm:flex"
-              style={vars({ "--i": 2 })}
-              aria-hidden="true"
-            >
-              <span className="text-[0.6875rem] tracking-[0.3em] text-sand-100 uppercase">
-                Défiler
-              </span>
-              <span className="block h-10 w-px overflow-hidden bg-ivory/20">
-                <span className="block h-full w-full animate-scroll-cue bg-ivory" />
-              </span>
-            </div>
             <Link
               href={BOOKING_LINK.href}
               aria-label={BOOKING_LINK.label}
@@ -178,36 +166,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* 2 · Marquee ---------------------------------------------------------- */}
-      <div
-        className="surface-dark overflow-hidden border-y border-ivory/10 bg-espresso-950 py-5 text-sand-100"
-        aria-label="Prestations phares"
-      >
-        <div className="flex w-max animate-marquee">
-          {[0, 1].map((copy) => (
-            <ul
-              key={copy}
-              aria-hidden={copy === 1}
-              className="flex shrink-0 items-center"
-            >
-              {[...featured.map((s) => s.name), "Annemasse — Genève"].map(
-                (item) => (
-                  <li
-                    key={item}
-                    className="flex items-center font-sans text-[clamp(1.1rem,2.2vw,1.6rem)] font-light tracking-[0.18em] whitespace-nowrap uppercase"
-                  >
-                    <span className="px-8">{item}</span>
-                    <span aria-hidden="true" className="text-caramel-500">
-                      ✦
-                    </span>
-                  </li>
-                ),
-              )}
-            </ul>
-          ))}
-        </div>
-      </div>
 
       {/* 3 · Manifesto -------------------------------------------------------- */}
       <Shell tone="mocha" label="L’esprit du studio">
@@ -291,13 +249,6 @@ export default async function HomePage() {
         label="À propos"
         className="scroll-mt-16"
       >
-        <p
-          aria-hidden="true"
-          data-parallax-x="0.12"
-          className="pointer-events-none absolute top-[8%] left-0 font-display text-[22vw] leading-none whitespace-nowrap text-ivory/[0.05] select-none"
-        >
-          Alessia
-        </p>
         <div
           className={`${wrap} relative grid items-center gap-16 py-28 sm:py-40 lg:grid-cols-[1fr_1.1fr] lg:gap-24`}
         >
@@ -481,19 +432,8 @@ export default async function HomePage() {
         label="Le studio"
         className="scroll-mt-16"
       >
-        <div className="grid lg:grid-cols-2">
-          <div
-            aria-hidden="true"
-            className="relative flex min-h-[44svh] items-end overflow-hidden bg-mocha px-gutter pb-10 sm:px-12 lg:min-h-[90svh] lg:px-20 lg:pb-20"
-          >
-            <p
-              data-parallax="0.15"
-              className="font-display text-[clamp(10rem,34vw,26rem)] leading-[0.8] text-ivory/90"
-            >
-              {business.address.line1.match(/^\d+/)?.[0] ?? "A"}
-            </p>
-          </div>
-          <div className="flex flex-col justify-center px-gutter py-24 sm:px-12 lg:px-20">
+        <div>
+          <div className={`${wrap} flex flex-col py-24 sm:py-32`}>
             <p className="label text-sand-100">Le studio</p>
             <h2
               data-reveal="lines"

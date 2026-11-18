@@ -8,7 +8,15 @@
 
 ## Regole (decisione del committente, 18/11/2026)
 
-- **Nessun elemento generato:** niente texture, sfondi « fotografici » sintetici o immagini create con l'IA. Le sete e i satin generati in precedenza sono stati eliminati. Dove c'erano, ora ci sono il colore pieno e la tipografia, oppure le foto reali di Alessia.
+- **Nessun elemento generato o puramente decorativo:** niente texture, sfondi « fotografici » sintetici o immagini create con l'IA. Sono stati tolti:
+  - le sete e i satin generati;
+  - il motivo leopardato generato (cornice della prenotazione, fascia delle e-mail, immagine di condivisione);
+  - la fascia di testo che scorre e la linea animata « Défiler »;
+  - le scritte giganti in filigrana (« Alessia », « Lady A »);
+  - la numerazione decorativa (001, 01…).
+
+  Restano: il colore pieno, la tipografia, le foto reali di Alessia e le animazioni di comparsa dei contenuti.
+
 - **Niente vecchio logo:** il logo « Lady A Cils – Beauty Studio » non compare più da nessuna parte, favicon compresa.
   - Il marchio è il nome in Bodoni (« Lady A Beauty »).
   - La favicon è una « A » tipografica generata dal codice (`src/lib/monogram.tsx`).

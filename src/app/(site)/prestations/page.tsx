@@ -45,10 +45,7 @@ export default async function PrestationsPage() {
                     data-delay={Math.min(i, 6) * 0.04}
                   >
                     <details className="group">
-                      <summary className="grid min-h-20 cursor-pointer list-none grid-cols-[2.5rem_1fr_auto] items-baseline gap-4 py-7 sm:grid-cols-[4rem_1fr_auto_auto] [&::-webkit-details-marker]:hidden">
-                        <span className="font-sans text-xs tracking-[0.2em] text-sand-100/70">
-                          {String(i + 1).padStart(3, "0")}
-                        </span>
+                      <summary className="grid min-h-20 cursor-pointer list-none grid-cols-[1fr_auto] items-baseline gap-4 py-7 sm:grid-cols-[1fr_auto_auto] [&::-webkit-details-marker]:hidden">
                         <h2 className="font-sans text-[clamp(1.35rem,3.2vw,2.6rem)] leading-tight font-light tracking-wide text-ivory uppercase">
                           {service.name}
                         </h2>
@@ -63,14 +60,14 @@ export default async function PrestationsPage() {
                         >
                           +
                         </span>
-                        <span className="col-span-2 col-start-2 -mt-2 text-sm text-sand-100 sm:hidden">
+                        <span className="col-span-2 -mt-2 text-sm text-sand-100 sm:hidden">
                           {[formatDuration(service.durationMin), price]
                             .filter(Boolean)
                             .join(" · ")}
                         </span>
                       </summary>
-                      <div className="grid gap-8 pb-10 sm:grid-cols-[4rem_1fr_auto] sm:gap-4">
-                        <div className="max-w-2xl space-y-3 leading-relaxed text-sand-100 sm:col-start-2">
+                      <div className="grid gap-8 pb-10 sm:grid-cols-[1fr_auto] sm:gap-4">
+                        <div className="max-w-2xl space-y-3 leading-relaxed text-sand-100">
                           {paragraphs.length > 0 ? (
                             paragraphs.map((p) => <p key={p}>{p}</p>)
                           ) : (

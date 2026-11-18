@@ -62,8 +62,10 @@ async function Confirmation({
     <div className="text-center">
       <div
         aria-hidden="true"
-        className="leopard mx-auto size-16 rounded-full ring-4 ring-ivory"
-      />
+        className="mx-auto flex size-16 items-center justify-center rounded-full bg-espresso-900 text-2xl text-ivory"
+      >
+        ✓
+      </div>
       <p className="label mt-8 text-caramel-700">C’est confirmé</p>
       <h1 className="mt-3 text-title text-espresso-900">À très bientôt !</h1>
       <p className="mx-auto mt-4 max-w-md leading-relaxed text-espresso-700">

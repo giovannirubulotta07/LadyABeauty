@@ -7,8 +7,8 @@ export const alt = "Lady A Beauty — lash maker & brow artist à Annemasse";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// Literal paths keep file tracing scoped to these four files.
-const [bodoni, jost, photo, leopard] = await Promise.all([
+// Literal paths keep file tracing scoped to these three files.
+const [bodoni, jost, photo] = await Promise.all([
   readFile(
     join(
       process.cwd(),
@@ -20,10 +20,8 @@ const [bodoni, jost, photo, leopard] = await Promise.all([
   ),
   readFile(join(process.cwd(), "src", "assets", "fonts", "Jost-Medium.ttf")),
   readFile(join(process.cwd(), "public", "galerie", "regard-01.jpg")),
-  readFile(join(process.cwd(), "public", "patterns", "leopard.svg")),
 ]);
 const photoSrc = `data:image/jpeg;base64,${photo.toString("base64")}`;
-const leopardSrc = `data:image/svg+xml;base64,${leopard.toString("base64")}`;
 
 export default async function OpenGraphImage() {
   const business = await getBusinessInfo();
@@ -93,28 +91,6 @@ export default async function OpenGraphImage() {
           height={630}
           style={{ objectFit: "cover" }}
         />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          position: "absolute",
-          left: 0,
-          bottom: 0,
-          width: 1200,
-          height: 16,
-          overflow: "hidden",
-        }}
-      >
-        {[0, 1, 2, 3].map((i) => (
-          <img
-            key={i}
-            src={leopardSrc}
-            alt=""
-            width={360}
-            height={360}
-            style={{ marginTop: -52 }}
-          />
-        ))}
       </div>
     </div>,
     {

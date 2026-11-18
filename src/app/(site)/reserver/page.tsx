@@ -89,11 +89,11 @@ async function BookingLoader() {
 function FlowSkeleton() {
   return (
     <div
-      className="leopard rounded-card p-1.5 shadow-card sm:p-2"
+      className="rounded-card border border-sand-200 shadow-card"
       role="status"
       aria-busy="true"
     >
-      <div className="min-h-[34rem] space-y-4 rounded-[calc(var(--radius-card)-2px)] bg-ivory px-5 py-7 sm:px-8 sm:py-9">
+      <div className="min-h-[34rem] space-y-4 rounded-card bg-ivory px-5 py-7 sm:px-8 sm:py-9">
         <span className="sr-only">Chargement de la réservation…</span>
         <div className="h-1 rounded-full bg-sand-200" />
         <div className="h-8 w-2/3 rounded bg-sand-50" />

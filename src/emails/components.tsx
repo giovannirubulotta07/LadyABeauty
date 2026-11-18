@@ -5,7 +5,6 @@ import {
   Head,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
   Section,
@@ -72,18 +71,15 @@ export function EmailLayout({
               {brand.name}
             </Link>
           </Section>
-          <Img
-            src={`${brand.siteUrl}/email/bande-leopard.png`}
-            width="560"
-            height="12"
-            alt=""
+          <Section
             style={{
-              display: "block",
-              width: "100%",
-              height: 12,
-              objectFit: "cover",
+              height: 3,
+              backgroundColor: colors.caramelLight,
+              lineHeight: "3px",
             }}
-          />
+          >
+            &nbsp;
+          </Section>
           <Section style={{ padding: "32px 32px 8px" }}>{children}</Section>
           <Section style={{ padding: "8px 32px 32px" }}>
             <Hr style={{ borderColor: colors.sandLine, margin: "16px 0" }} />

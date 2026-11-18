@@ -69,11 +69,8 @@ export function ServiceRows({ rows }: { rows: ServiceRow[] }) {
             <Link
               href={`/reserver?prestation=${row.slug}`}
               onPointerEnter={() => setActive(i)}
-              className="group grid grid-cols-[2.5rem_1fr_auto] items-baseline gap-4 py-7 transition-colors duration-500 sm:grid-cols-[4rem_1fr_auto_auto] sm:py-9"
+              className="group grid grid-cols-[1fr_auto] items-baseline gap-4 py-7 transition-colors duration-500 sm:grid-cols-[1fr_auto_auto] sm:py-9"
             >
-              <span className="font-sans text-xs tracking-[0.2em] text-sand-100/70">
-                {String(i + 1).padStart(3, "0")}
-              </span>
               <span className="font-sans text-[clamp(1.5rem,4vw,3.25rem)] leading-tight font-light tracking-wide text-ivory uppercase transition-transform duration-700 ease-[var(--ease-expo)] group-hover:translate-x-3">
                 {row.name}
               </span>
@@ -86,7 +83,7 @@ export function ServiceRows({ rows }: { rows: ServiceRow[] }) {
               >
                 →
               </span>
-              <span className="col-span-2 col-start-2 -mt-2 text-sm text-sand-100 sm:hidden">
+              <span className="col-span-2 -mt-2 text-sm text-sand-100 sm:hidden">
                 {row.meta}
               </span>
             </Link>

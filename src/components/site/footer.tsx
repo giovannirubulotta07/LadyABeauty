@@ -110,31 +110,6 @@ export async function Footer() {
         </div>
       </Container>
 
-      {/* Giant wordmark, purely decorative */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none overflow-hidden select-none"
-      >
-        {/* SVG text: decorative, so it is not held to text contrast rules */}
-        <svg
-          data-parallax-x="-0.08"
-          viewBox="0 0 1000 205"
-          className="block w-[110%] font-display text-caramel-500/25"
-          role="presentation"
-          focusable="false"
-        >
-          <text
-            x="0"
-            y="190"
-            fill="currentColor"
-            fontSize="262"
-            letterSpacing="-6"
-          >
-            Lady A
-          </text>
-        </svg>
-      </div>
-
       <div className="border-t border-ivory/10">
         <Container className="flex max-w-[90rem] flex-col gap-3 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p className="flex items-center gap-3">

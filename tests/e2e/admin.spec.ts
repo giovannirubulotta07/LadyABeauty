@@ -165,7 +165,8 @@ test.describe("Administration — contenus", () => {
     // (an early fill can be merged with the server-rendered value).
     const openForm = async () => {
       await page.goto("/admin/reglages/accueil");
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("load");
+      await page.waitForTimeout(800); // let React hydrate the form
       return page.getByLabel("Sous-titre");
     };
     const field = await openForm();

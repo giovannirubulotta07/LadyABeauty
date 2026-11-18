@@ -206,8 +206,8 @@ export function BookingFlow({
 
   return (
     <div ref={top} className="scroll-mt-24">
-      <div className="leopard rounded-card p-1.5 shadow-card sm:p-2">
-        <div className="min-h-[34rem] rounded-[calc(var(--radius-card)-2px)] bg-ivory px-5 py-7 sm:px-8 sm:py-9">
+      <div className="rounded-card border border-sand-200 shadow-card">
+        <div className="min-h-[34rem] rounded-card bg-ivory px-5 py-7 sm:px-8 sm:py-9">
           <Stepper current={step} />
           <div className="mt-8">
             {step === "prestation" ? (

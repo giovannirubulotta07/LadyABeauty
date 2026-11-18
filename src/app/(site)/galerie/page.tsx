@@ -52,9 +52,6 @@ export default async function GaleriePage() {
                         className="object-cover transition-transform duration-[1.6s] ease-[var(--ease-expo)] hover:scale-[1.04]"
                       />
                     </div>
-                    <figcaption className="mt-3 text-xs tracking-[0.2em] text-sand-100/80 uppercase">
-                      {String(i + 1).padStart(2, "0")}
-                    </figcaption>
                   </figure>
                 </li>
               ))}
