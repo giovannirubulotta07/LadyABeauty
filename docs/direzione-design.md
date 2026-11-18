@@ -6,16 +6,16 @@ Restano invariati: accessibilità AA, `prefers-reduced-motion`, mobile first, Li
 
 ## Cosa rende ever.co.id "da agenzia" (analisi)
 
-| Elemento | Come lo fa ever | Come lo traduco per Lady A Beauty |
-|---|---|---|
-| **Colore** | Un solo fondo pieno, marrone caldo (#7A6047), testo bianco ovunque: effetto cinematografico | Fondo **espresso/cammello** a tutta pagina e testo avorio; il sabbia resta per le sezioni "carta" (prenotazione, Mon espace). Il leopardato diventa una **texture fotografica** (tessuto) nelle composizioni, non un motivo grafico |
-| **Tipografia** | Serif editoriale enorme (Bradford, 126 px) + sans light maiuscolo con molta aria (Maax Light 80 px) | Bodoni Moda per i titoli giganti (fino a 9–10 rem), **Jost Light maiuscolo** con interlinea ampia per i titoli secondari, etichette piccolissime spaziate |
-| **Header** | Hamburger a sinistra, wordmark spaziato al centro, "Make an appointment" piccolo a destra; menu a schermo intero | Stessa struttura; menu a schermo intero con voci in Bodoni enorme e immagine che cambia al passaggio |
-| **Hero** | Ritratto editoriale a tutto schermo (anche video), titolo serif sovrapposto, "scroll to explore" | Foto o video a tutto schermo, "Lady A Beauty" in serif gigante con apparizione riga per riga, indicazione di scorrimento |
-| **Scroll storytelling** | GSAP ScrollTrigger: collage di texture che scorrono a velocità diverse (parallasse) attorno a un titolo; testo gigante semitrasparente dietro ai ritratti | Collage parallasse (texture: seta, leopardato, ciglia in macro) attorno a "L'ART DU REGARD"; "LADY A" gigante in filigrana dietro alla foto |
-| **Movimento** | Lenis (scroll fluido), SplitType (testi che si rivelano riga per riga), maschere sulle immagini, marquee | Lenis + GSAP/ScrollTrigger + SplitText: titoli rivelati, immagini che si "aprono" con una maschera, marquee « Lash maker · Brow artist · Annemasse », numeri 01/02/03 sulle prestazioni |
-| **Prestazioni** | Elenco numerato (001, 002…), immagine che appare al passaggio del mouse | Elenco editoriale numerato con durata e prezzo; su desktop l'immagine segue il cursore, su mobile card fotografiche |
-| **Chiusura** | FAQ a fisarmonica, footer con wordmark gigante | FAQ (acconto, annullamento, remplissage entro 3 settimane…), footer con "LADY A" gigante e CTA prenotazione |
+| Elemento                | Come lo fa ever                                                                                                                                           | Come lo traduco per Lady A Beauty                                                                                                                                                                                                   |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Colore**              | Un solo fondo pieno, marrone caldo (#7A6047), testo bianco ovunque: effetto cinematografico                                                               | Fondo **espresso/cammello** a tutta pagina e testo avorio; il sabbia resta per le sezioni "carta" (prenotazione, Mon espace). Il leopardato diventa una **texture fotografica** (tessuto) nelle composizioni, non un motivo grafico |
+| **Tipografia**          | Serif editoriale enorme (Bradford, 126 px) + sans light maiuscolo con molta aria (Maax Light 80 px)                                                       | Bodoni Moda per i titoli giganti (fino a 9–10 rem), **Jost Light maiuscolo** con interlinea ampia per i titoli secondari, etichette piccolissime spaziate                                                                           |
+| **Header**              | Hamburger a sinistra, wordmark spaziato al centro, "Make an appointment" piccolo a destra; menu a schermo intero                                          | Stessa struttura; menu a schermo intero con voci in Bodoni enorme e immagine che cambia al passaggio                                                                                                                                |
+| **Hero**                | Ritratto editoriale a tutto schermo (anche video), titolo serif sovrapposto, "scroll to explore"                                                          | Foto o video a tutto schermo, "Lady A Beauty" in serif gigante con apparizione riga per riga, indicazione di scorrimento                                                                                                            |
+| **Scroll storytelling** | GSAP ScrollTrigger: collage di texture che scorrono a velocità diverse (parallasse) attorno a un titolo; testo gigante semitrasparente dietro ai ritratti | Collage parallasse (texture: seta, leopardato, ciglia in macro) attorno a "L'ART DU REGARD"; "LADY A" gigante in filigrana dietro alla foto                                                                                         |
+| **Movimento**           | Lenis (scroll fluido), SplitType (testi che si rivelano riga per riga), maschere sulle immagini, marquee                                                  | Lenis + GSAP/ScrollTrigger + SplitText: titoli rivelati, immagini che si "aprono" con una maschera, marquee « Lash maker · Brow artist · Annemasse », numeri 01/02/03 sulle prestazioni                                             |
+| **Prestazioni**         | Elenco numerato (001, 002…), immagine che appare al passaggio del mouse                                                                                   | Elenco editoriale numerato con durata e prezzo; su desktop l'immagine segue il cursore, su mobile card fotografiche                                                                                                                 |
+| **Chiusura**            | FAQ a fisarmonica, footer con wordmark gigante                                                                                                            | FAQ (acconto, annullamento, remplissage entro 3 settimane…), footer con "LADY A" gigante e CTA prenotazione                                                                                                                         |
 
 ## Tecnica (performance e accessibilità)
 
@@ -70,14 +70,15 @@ Le pagine restano server component e attivano le animazioni con attributi `data-
 
 - **Lighthouse mobile:**
 
-  | Pagina | Performance | Accessibilità | Best practices | SEO |
-  |---|---|---|---|---|
-  | Accueil | 94–97 (varia tra le misure) | 100 | 100 | 100 |
-  | Prestations | 96 | 100 | 100 | 100 |
-  | Galerie | 96 | 100 | 100 | 100 |
-  | Réserver | 95 | 100 | 100 | 100 |
+  | Pagina      | Performance                 | Accessibilità | Best practices | SEO |
+  | ----------- | --------------------------- | ------------- | -------------- | --- |
+  | Accueil     | 94–97 (varia tra le misure) | 100           | 100            | 100 |
+  | Prestations | 96                          | 100           | 100            | 100 |
+  | Galerie     | 96                          | 100           | 100            | 100 |
+  | Réserver    | 95                          | 100           | 100            | 100 |
 
   L'LCP reale misurato (Moto G4, CPU ×4) è di 0,18 s: il titolo viene dipinto al primo frame.
+
 - **Test E2E:**
   - i test funzionali girano con `reducedMotion: "reduce"`;
   - `tests/e2e/motion.spec.ts` verifica la versione animata: tutte le sezioni compaiono scorrendo e nulla resta nascosto con « réduire les animations ».
