@@ -25,9 +25,9 @@ export async function Footer() {
       {/* Closing invitation */}
       <section
         aria-labelledby="footer-cta"
-        className="border-b border-ivory/10"
+        className="relative overflow-hidden border-b border-ivory/10"
       >
-        <Container className="flex max-w-[90rem] flex-col items-start gap-10 py-20 sm:py-28 lg:flex-row lg:items-end lg:justify-between">
+        <Container className="relative flex max-w-[90rem] flex-col items-start gap-10 py-20 sm:py-28 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="label text-sand-100">Réservation en ligne</p>
             <h2

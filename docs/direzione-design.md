@@ -83,3 +83,23 @@ Le pagine restano server component e attivano le animazioni con attributi `data-
   - i test funzionali girano con `reducedMotion: "reduce"`;
   - `tests/e2e/motion.spec.ts` verifica la versione animata: tutte le sezioni compaiono scorrendo e nulla resta nascosto con « réduire les animations ».
 - **Screenshot e video di scorrimento:** `docs/screenshots/redesign/`.
+
+## Pelliccia interattiva (18/11/2026)
+
+Richiesta del committente: sulla prima schermata, passando il puntatore deve sembrare di toccare una pelliccia (« morbida, pelosa, tigrata »).
+
+- **Come è fatta:** WebGL2, `src/components/home/fur-engine.ts`.
+  - Circa 20–40 000 peli disegnati dalla scheda grafica in un'unica chiamata.
+  - Il puntatore (o il dito) li pettina nella direzione del movimento e li apre un poco attorno alla punta. Il riflesso cambia con la direzione del pelo, come il velluto spazzolato al contrario.
+  - Il pelo torna a posto lentamente.
+- **Il manto:** rosette leopardate disegnate dallo shader sulla radice di ogni pelo, quindi con bordi morbidi come una pelliccia vera. È disponibile anche il manto tigrato (`pattern="tiger"`). È un effetto interattivo, non un'immagine generata.
+- **Prestazioni:**
+  - parte dopo il caricamento (non rallenta la prima visualizzazione);
+  - da ferma disegna un solo fotogramma e poi si spegne, e torna attiva solo quando la si tocca;
+  - sui dispositivi lenti riduce da sola il numero di peli;
+  - senza scheda grafica vera (rendering software, robot come PageSpeed) non parte e l'hero resta tinta unita.
+  - Per forzarla in prova: `/?fourrure`.
+- **Accessibilità:**
+  - con « riduci movimento » i peli non oscillano, ma rispondono comunque ai gesti del visitatore;
+  - un velo scuro graduato mantiene leggibili titolo e pulsanti;
+  - il canvas è nascosto ai lettori di schermo.
